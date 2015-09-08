@@ -1,4 +1,4 @@
-package com.skyhouse.projectrpg.graphics.tile;
+package com.skyhouse.projectrpg.graphics;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

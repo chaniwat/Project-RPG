@@ -9,18 +9,17 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.math.Vector2;
-import com.skyhouse.projectrpg.graphics.tile.TileTexture;
-import com.skyhouse.projectrpg.graphics.tile.TileTexture.TileTexturePosition;
+import com.skyhouse.projectrpg.graphics.TileTexture;
+import com.skyhouse.projectrpg.graphics.TileTexture.TileTexturePosition;
 import com.skyhouse.projectrpg.input.GameplayInputProcess;
-import com.skyhouse.projectrpg.objects.character.Character;
-import com.skyhouse.projectrpg.objects.structure.Structure;
+import com.skyhouse.projectrpg.objects.BackgroundGlobal;
+import com.skyhouse.projectrpg.objects.Character;
+import com.skyhouse.projectrpg.objects.Structure;
 import com.skyhouse.projectrpg.physics.PhysicGlobal;
 import com.skyhouse.projectrpg.utils.spriter.SpriterGlobal;
 
@@ -39,8 +38,6 @@ public class ProjectRPGGame extends ApplicationAdapter {
 	Character playercharacter;
 	BitmapFont font;
 	
-	Sprite environmentBackground;
-	
 	Structure ground;
 	List<Structure> box;
 	
@@ -49,6 +46,7 @@ public class ProjectRPGGame extends ApplicationAdapter {
 		
 		PhysicGlobal.init(0f, -10f,  true);
 		SpriterGlobal.init();
+		BackgroundGlobal.init();
 		
 		environmentBatch = new SpriteBatch();
 		UIbatch = new SpriteBatch();
@@ -56,9 +54,8 @@ public class ProjectRPGGame extends ApplicationAdapter {
 		mainCam = new OrthographicCamera();
 		UICam = new OrthographicCamera();
 		
-		environmentBackground = new Sprite(new Texture(Gdx.files.internal("background.png")));
-		environmentBackground.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		environmentBackground.setSize(17 * (environmentBackground.getWidth() / environmentBackground.getHeight()), 17);
+		BackgroundGlobal.setBackground(new Texture(Gdx.files.internal("background.png")));
+		BackgroundGlobal.setSizeByHeight(17);
 		
 		playercharacter = new Character("entities/GreyGuy/player.scml", new Vector2(-7, 3) ,2.7f);
 		
@@ -126,19 +123,16 @@ public class ProjectRPGGame extends ApplicationAdapter {
 		SpriterGlobal.setProjectionMatrix(mainCam.combined);
 		environmentBatch.setProjectionMatrix(mainCam.combined);
 		
-		environmentBackground.setPosition(-(environmentBackground.getWidth() / 2f) + (playercharacter.getX() * 0.35f), -2f + (playercharacter.getY() * 0.35f));
+		BackgroundGlobal.setPosition(-(BackgroundGlobal.getWidth() / 2f) + (playercharacter.getX() * 0.35f), -2f + (playercharacter.getY() * 0.35f));
 		
-		// Render
-		
+		// Render		
 		// Background - Layer 0
-		environmentBatch.begin();
-			environmentBackground.draw(environmentBatch);
-			environmentBatch.end();
-		// Structure (eg. Ladder) - Layer 1
+		BackgroundGlobal.draw(environmentBatch);
+		// Structure (eg. Ladder, background object) - Layer 1
 		environmentBatch.begin();
 			
 		environmentBatch.end();
-		// Entities & Objects - Layer 2
+		// Entities (eg. Character, Monster) - Layer 2
 		SpriterGlobal.updateAndDraw();
 		// Structure (eg. floor, platforms) - Layer 3
 		environmentBatch.begin();
@@ -147,7 +141,7 @@ public class ProjectRPGGame extends ApplicationAdapter {
 				box.render(environmentBatch);
 			}
 		environmentBatch.end();
-		PhysicGlobal.debugRender(mainCam);		
+		PhysicGlobal.debugRender(mainCam);
 		
 		// UI - Layer 4
 		UIbatch.begin();

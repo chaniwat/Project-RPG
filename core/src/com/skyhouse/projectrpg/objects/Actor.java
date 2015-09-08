@@ -1,4 +1,4 @@
-package com.skyhouse.projectrpg.objects.actor;
+package com.skyhouse.projectrpg.objects;
 
 import com.badlogic.gdx.Gdx;
 import com.brashmonkey.spriter.Spriter;

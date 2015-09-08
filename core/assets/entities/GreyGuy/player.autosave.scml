@@ -2533,7 +2533,7 @@
             </timeline>
             <timeline id="6" name="p_forearm_idle_0">
                 <key id="0" spin="0">
-                    <object folder="2" file="3" x="64.106427" y="0" angle="355.763605" scale_x="8.023151"/>
+                    <object folder="2" file="3" x="64.106427" angle="355.763605" scale_x="8.023151"/>
                 </key>
             </timeline>
             <timeline id="7" name="p_hand_idle_0">
@@ -2627,7 +2627,7 @@
             </timeline>
             <timeline id="20" obj="5" name="front_hand" object_type="bone">
                 <key id="0" spin="0">
-                    <bone x="228.571429" y="-0" angle="358.210089" scale_x="1.524553"/>
+                    <bone x="228.571429" angle="358.210089" scale_x="1.524553"/>
                 </key>
                 <key id="1" time="246" spin="0">
                     <bone x="228.571429" angle="358.210089" scale_x="2.24657"/>

@@ -3,7 +3,7 @@ package com.skyhouse.projectrpg.input;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Input.Keys;
-import com.skyhouse.projectrpg.objects.character.Character;
+import com.skyhouse.projectrpg.objects.Character;
 
 public class GameplayInputProcess extends InputAdapter {
 	

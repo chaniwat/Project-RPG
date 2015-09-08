@@ -1,9 +1,8 @@
-package com.skyhouse.projectrpg.objects.character;
+package com.skyhouse.projectrpg.objects;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.brashmonkey.spriter.Animation;
-import com.skyhouse.projectrpg.objects.actor.AnimateActor;
 import com.skyhouse.projectrpg.physics.Box2DSquareShape;
 import com.skyhouse.projectrpg.utils.spriter.SpriterPlayerListener;
 
@@ -54,7 +53,7 @@ public class Character {
 					actor.getPlayer().setWeight(0.0f);
 					if(newAnim.name.equals("walk")) actor.changeAnimationTo("walk");
 					else if(newAnim.name.equals("idle")) actor.changeAnimationTo("idle");
-				} 
+				}
 			}
 		});
 	}
@@ -147,10 +146,5 @@ public class Character {
 	
 	public float getY() {
 		return actor.getPlayer().getY();
-	}
-	
-	// Debug
-	public Vector2 getDebug() {
-		return characterBody.getLinearVelocity();
 	}
 }

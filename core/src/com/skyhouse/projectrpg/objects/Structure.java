@@ -1,9 +1,9 @@
-package com.skyhouse.projectrpg.objects.structure;
+package com.skyhouse.projectrpg.objects;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.skyhouse.projectrpg.graphics.tile.TileTexture;
+import com.skyhouse.projectrpg.graphics.TileTexture;
 import com.skyhouse.projectrpg.physics.StructureBody;
 
 public class Structure {
