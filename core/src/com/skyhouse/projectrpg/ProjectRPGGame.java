@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.profiling.GL30Profiler;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.math.Vector2;
 import com.skyhouse.projectrpg.graphics.GameplayViewport;
@@ -51,7 +50,7 @@ public class ProjectRPGGame extends ApplicationAdapter {
 		SpriterGlobal.init(batch);
 		BackgroundGlobal.init(batch);
 		
-		gameViewport = new GameplayViewport(12f, 12f);
+		gameViewport = new GameplayViewport(12f);
 		uiViewport = new UIViewport();
 		
 		BackgroundGlobal.setBackground(new Texture(Gdx.files.internal("background.png")));
@@ -107,7 +106,7 @@ public class ProjectRPGGame extends ApplicationAdapter {
 		
 		// Update & Process
 		PhysicGlobal.getWorld().step(1/60f, 8, 3);
-		gameViewport.setCenterToCharacter(playercharacter, 0, 2.4f);
+		gameViewport.setViewCenterToCharacter(playercharacter, 0, 2.4f);
 		playercharacter.update();
 		
 		BackgroundGlobal.setPosition(-(BackgroundGlobal.getWidth() / 2f) + (playercharacter.getX() * 0.35f), -2f + (playercharacter.getY() * 0.35f));
