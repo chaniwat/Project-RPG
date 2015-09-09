@@ -11,20 +11,24 @@ import com.skyhouse.projectrpg.ProjectRPGGame.ProjectRPG;
 public class BackgroundGlobal {
 	
 	static boolean isBackgroundSet;
-	static boolean isInitSprite;
+	static boolean isInit;
 	
-	static Sprite sprite;
+	private static Sprite sprite;
+	private static SpriteBatch batch;
 	
 	private BackgroundGlobal() {}
 	
-	public static void init() {
-		if(!isInitSprite) sprite = new Sprite();
+	public static void init(SpriteBatch batch) {
+		if(!isInit) {
+			sprite = new Sprite();
+			BackgroundGlobal.batch  = batch;
+		}
 		else Gdx.app.log(ProjectRPG.TITLE, "Already initial background");
-		isInitSprite = true;
+		isInit = true;
 	}
 	
 	public static void setBackground(Texture texture) {
-		if(!isInitSprite) return;
+		if(!isInit) return;
 		sprite.setBounds(0, 0, -texture.getWidth(), -texture.getHeight());
 		sprite.setRegion(texture);
 		sprite.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -32,14 +36,14 @@ public class BackgroundGlobal {
 	}
 	
 	public static void removeBackground() {
-		if(isInitSprite && isBackgroundSet) {
+		if(isInit && isBackgroundSet) {
 			sprite.setTexture(null);
 			isBackgroundSet = false;
 		}
 	}
 	
 	public static void setSize(Vector2 size) {
-		if(!isInitSprite || !isBackgroundSet) return;
+		if(!isInit || !isBackgroundSet) return;
 		sprite.setSize(size.x, size.y);
 	}
 	
@@ -56,7 +60,7 @@ public class BackgroundGlobal {
 	}
 
 	public static void setPosition(Vector2 position) {
-		if(!isInitSprite || !isBackgroundSet) return;
+		if(!isInit || !isBackgroundSet) return;
 		sprite.setPosition(position.x, position.y);
 	}
 	
@@ -72,8 +76,8 @@ public class BackgroundGlobal {
 		return sprite.getHeight();
 	}
 	
-	public static void draw(SpriteBatch batch) {
-		if(!isInitSprite || !isBackgroundSet) return;
+	public static void draw() {
+		if(!isInit || !isBackgroundSet) return;
 		batch.begin();
 			sprite.draw(batch);
 		batch.end();

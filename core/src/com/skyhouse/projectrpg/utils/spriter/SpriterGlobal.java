@@ -7,13 +7,14 @@ import com.brashmonkey.spriter.Spriter;
 
 public class SpriterGlobal extends Spriter {
 	
-	static SpriteBatch batch;
-	static ShapeRenderer renderer;
+	private static SpriteBatch batch;
+	private static ShapeRenderer renderer;
 	
 	private SpriterGlobal() {}
 	
-	public static void init() {
-		batch = new SpriteBatch();
+	public static void init(SpriteBatch batch) {
+		//batch = new SpriteBatch();
+		SpriterGlobal.batch = batch;
 		renderer = new ShapeRenderer();
 		
 		Spriter.setDrawerDependencies(batch, renderer);

@@ -7,16 +7,17 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.profiling.GL30Profiler;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.math.Vector2;
 import com.skyhouse.projectrpg.graphics.GameplayViewport;
 import com.skyhouse.projectrpg.graphics.TileTexture;
 import com.skyhouse.projectrpg.graphics.TileTexture.TileTexturePosition;
+import com.skyhouse.projectrpg.graphics.UIViewport;
 import com.skyhouse.projectrpg.input.GameplayInputProcess;
 import com.skyhouse.projectrpg.objects.BackgroundGlobal;
 import com.skyhouse.projectrpg.objects.Character;
@@ -32,10 +33,9 @@ public class ProjectRPGGame extends ApplicationAdapter {
 	}
 	
 	GameplayInputProcess gameplayinput;
-	SpriteBatch environmentBatch;
-	SpriteBatch UIbatch;
+	SpriteBatch batch;
 	GameplayViewport gameViewport;
-	OrthographicCamera UICam;
+	UIViewport uiViewport;
 	Character playercharacter;
 	BitmapFont font;
 	
@@ -45,15 +45,14 @@ public class ProjectRPGGame extends ApplicationAdapter {
 	@Override
 	public void create () {
 		
-		PhysicGlobal.init(0f, -10f,  true);
-		SpriterGlobal.init();
-		BackgroundGlobal.init();
+		batch = new SpriteBatch();
 		
-		environmentBatch = new SpriteBatch();
-		UIbatch = new SpriteBatch();
+		PhysicGlobal.init(0f, -10f,  true);
+		SpriterGlobal.init(batch);
+		BackgroundGlobal.init(batch);
 		
 		gameViewport = new GameplayViewport(12f, 12f);
-		UICam = new OrthographicCamera();
+		uiViewport = new UIViewport();
 		
 		BackgroundGlobal.setBackground(new Texture(Gdx.files.internal("background.png")));
 		BackgroundGlobal.setSizeByHeight(17);
@@ -90,17 +89,12 @@ public class ProjectRPGGame extends ApplicationAdapter {
 	@Override
 	public void resize (int width, int height) {
 		gameViewport.update(width, height);
-		UICam.viewportWidth = width;
-		UICam.viewportHeight = height;
-		UICam.position.set(UICam.viewportWidth / 2f, UICam.viewportHeight / 2f, 0.0f);
-		UICam.update();
+		uiViewport.update(width, height);
 		
 		Gdx.app.log(ProjectRPG.TITLE, "screen width: "+width);
 		Gdx.app.log(ProjectRPG.TITLE, "screen height: "+height);
 		Gdx.app.log(ProjectRPG.TITLE, "width viewport: "+gameViewport.getWorldWidth());
 		Gdx.app.log(ProjectRPG.TITLE, "Height viewport: "+gameViewport.getWorldHeight());
-		
-		UIbatch.setProjectionMatrix(UICam.combined);
 	}
 
 	@Override
@@ -116,41 +110,45 @@ public class ProjectRPGGame extends ApplicationAdapter {
 		gameViewport.setCenterToCharacter(playercharacter, 0, 2.4f);
 		playercharacter.update();
 		
-		SpriterGlobal.setProjectionMatrix(gameViewport.getCamera().combined);
-		environmentBatch.setProjectionMatrix(gameViewport.getCamera().combined);
-		
 		BackgroundGlobal.setPosition(-(BackgroundGlobal.getWidth() / 2f) + (playercharacter.getX() * 0.35f), -2f + (playercharacter.getY() * 0.35f));
 		
 		// Render -  Gameplay
 		gameViewport.apply();
+		batch.setProjectionMatrix(gameViewport.getCamera().combined);
 		
 			// Background - Layer 0
-			BackgroundGlobal.draw(environmentBatch);
+			BackgroundGlobal.draw();
 			
 			// Structure (eg. Ladder, background object) - Layer 1
-			environmentBatch.begin();
+			batch.begin();
 				
-			environmentBatch.end();
+			batch.end();
 			
 			// Entities (eg. Character, Monster) - Layer 2
 			SpriterGlobal.updateAndDraw();
 			
 			// Structure (eg. floor, platforms) - Layer 3
-			environmentBatch.begin();
-				ground.render(environmentBatch);
+			batch.begin();
+				ground.render(batch);
 				for(Structure box : box) {
-					box.render(environmentBatch);
+					box.render(batch);
 				}
-			environmentBatch.end();
+			batch.end();
 			
-			//PhysicGlobal.debugRender(mainCam); - Layer 3.1
+			//PhysicGlobal.debugRender(mainCam); - Layer 4
 			PhysicGlobal.debugRender(gameViewport.getCamera());
 	
-		// Render - UI - Layer 4
-		UIbatch.begin();
-			font.draw(UIbatch, "FPS : "+Gdx.graphics.getFramesPerSecond(), 20, UICam.viewportHeight - 20);
-			font.draw(UIbatch, String.format("Frametime : %.0f ms", Gdx.graphics.getDeltaTime()*1000), 20, UICam.viewportHeight - 40);
-		UIbatch.end();
+		// Render - UI
+		uiViewport.apply();
+		batch.setProjectionMatrix(uiViewport.getCamera().combined);
+		
+			// Text - Layer 1
+			batch.begin();
+				font.draw(batch, "FPS : "+Gdx.graphics.getFramesPerSecond(), 20, uiViewport.getWorldHeight() - 20);
+				font.draw(batch, String.format("Frametime : %.0f ms", Gdx.graphics.getDeltaTime()*1000), 20, uiViewport.getWorldHeight() - 40);
+				font.draw(batch, String.format("Draw calls : %d | Bound calls : %d | Shader switch : %d", GLProfiler.drawCalls, GLProfiler.textureBindings, GLProfiler.shaderSwitches), 20, uiViewport.getWorldHeight() - 60);
+				GLProfiler.reset();
+			batch.end();
 		
 		// Log
 		//
