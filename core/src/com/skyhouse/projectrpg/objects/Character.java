@@ -37,7 +37,6 @@ public class Character {
 		actor.addPlayerListener(new SpriterPlayerListener() {
 			@Override
 			public void animationFinished(Animation animation) {
-				// TODO Auto-generated method stub
 				if(animation.name.equals("jump_start")) {
 					actor.getFirstPlayer().setAnimation("jump_loop");
 					actor.changeAnimationTo("jump_loop");
@@ -45,20 +44,32 @@ public class Character {
 				if(animation.name.equals("fall_start")) {
 					actor.getFirstPlayer().setAnimation("fall_loop");
 					actor.changeAnimationTo("fall_loop");
-				}
+				}/*
 				if(animation.name.equals("crouch_start")) {
-					actor.getFirstPlayer().setAnimation("crouch_loop");
-					actor.changeAnimationTo("crouch_loop");
-				}
+					if(isCrouch) {
+						actor.getFirstPlayer().setAnimation("crouch_loop");
+						actor.changeAnimationTo("crouch_loop");						
+					}
+				}*/
 			}
 			
 			@Override
 			public void animationChanged(Animation oldAnim, Animation newAnim) {
-				// TODO Auto-generated method stub
 				if(oldAnim.name.equals("fall_start")) {
 					actor.getPlayer().setWeight(0.0f);
-					if(newAnim.name.equals("walk")) actor.changeAnimationTo("walk");
-					else if(newAnim.name.equals("idle")) actor.changeAnimationTo("idle");
+				}
+				
+				if(oldAnim.name.equals("walk")) {
+					if(actor.getPlayer().getWeight() > 0.5f) actor.getFirstPlayer().setAnimation("walk");
+					actor.getPlayer().setWeight(0.0f);
+				}
+				
+				if(oldAnim.name.equals("idle")) {
+					actor.getPlayer().setWeight(0.0f);
+				}
+				
+				if(oldAnim.name.equals("crouch_loop")) {
+					actor.getPlayer().setWeight(0.0f);
 				}
 			}
 		});
@@ -68,8 +79,9 @@ public class Character {
 		isIdle = true;
 		
 		if(isCrouch && !isWalking && !isJumping && !isFalling) {
+			isIdle = false;
 			if(!isProcessedCrouch) {
-				actor.changeAnimationTo("crouch_start");
+				actor.changeAnimationTo("crouch_loop");
 				isProcessedCrouch = true;
 			}
 		} else {
@@ -169,5 +181,9 @@ public class Character {
 	
 	public float getY() {
 		return actor.getPlayer().getY();
+	}
+	
+	public String getCurrentAnimation() {
+		return actor.c_animation;
 	}
 }

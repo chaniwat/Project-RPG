@@ -41,6 +41,8 @@ public class ProjectRPGGame extends ApplicationAdapter {
 	Structure ground;
 	List<Structure> box;
 	
+	String lastCharAnim;
+	
 	@Override
 	public void create () {
 		
@@ -83,6 +85,8 @@ public class ProjectRPGGame extends ApplicationAdapter {
 		Gdx.app.log(ProjectRPG.TITLE, "created");
 		
 		GLProfiler.enable();
+		
+		lastCharAnim = "";
 	}
 	
 	@Override
@@ -115,43 +119,49 @@ public class ProjectRPGGame extends ApplicationAdapter {
 		gameViewport.apply();
 		batch.setProjectionMatrix(gameViewport.getCamera().combined);
 		
-			// Background - Layer 0
-			BackgroundGlobal.draw();
+		// Background - Layer 0
+		BackgroundGlobal.draw();
+		
+		// Structure (eg. Ladder, background object) - Layer 1
+		batch.begin();
 			
-			// Structure (eg. Ladder, background object) - Layer 1
-			batch.begin();
-				
-			batch.end();
+		batch.end();
 			
-			// Entities (eg. Character, Monster) - Layer 2
-			SpriterGlobal.updateAndDraw();
-			
-			// Structure (eg. floor, platforms) - Layer 3
-			batch.begin();
-				ground.render(batch);
-				for(Structure box : box) {
-					box.render(batch);
-				}
-			batch.end();
-			
-			//PhysicGlobal.debugRender(mainCam); - Layer 4
-			PhysicGlobal.debugRender(gameViewport.getCamera());
+		// Entities (eg. Character, Monster) - Layer 2
+		SpriterGlobal.updateAndDraw();
+		
+		// Structure (eg. floor, platforms) - Layer 3
+		batch.begin();
+			ground.render(batch);
+			for(Structure box : box) {
+				box.render(batch);
+			}
+		batch.end();
+		
+		//PhysicGlobal.debugRender(mainCam); - Layer 4
+		PhysicGlobal.debugRender(gameViewport.getCamera());
 	
 		// Render - UI
 		uiViewport.apply();
 		batch.setProjectionMatrix(uiViewport.getCamera().combined);
 		
-			// Text - Layer 1
-			batch.begin();
-				font.draw(batch, "FPS : "+Gdx.graphics.getFramesPerSecond(), 20, uiViewport.getWorldHeight() - 20);
-				font.draw(batch, String.format("Frametime : %.0f ms", Gdx.graphics.getDeltaTime()*1000), 20, uiViewport.getWorldHeight() - 40);
-				font.draw(batch, String.format("Draw calls : %d | Bound calls : %d | Shader switch : %d", GLProfiler.drawCalls, GLProfiler.textureBindings, GLProfiler.shaderSwitches), 20, uiViewport.getWorldHeight() - 60);
-				GLProfiler.reset();
-			batch.end();
+		// Text - Layer 1
+		batch.begin();
+			font.draw(batch, "FPS : "+Gdx.graphics.getFramesPerSecond(), 20, uiViewport.getWorldHeight() - 20);
+			font.draw(batch, String.format("Frametime : %.0f ms", Gdx.graphics.getDeltaTime()*1000), 20, uiViewport.getWorldHeight() - 40);
+			font.draw(batch, String.format("Draw calls : %d | Bound calls : %d | Shader switch : %d", GLProfiler.drawCalls, GLProfiler.textureBindings, GLProfiler.shaderSwitches), 20, uiViewport.getWorldHeight() - 60);
+		batch.end();
 		
 		// Log
-		//
+		// Animation changed
+		/*
+		if(!lastCharAnim.equals(playercharacter.getCurrentAnimation())) {
+			lastCharAnim = playercharacter.getCurrentAnimation();
+			Gdx.app.log(ProjectRPG.TITLE, String.format("Current Animation : %s", lastCharAnim));			
+		} 
+		*/
 		
+		GLProfiler.reset();
 	}
 	
 	@Override
