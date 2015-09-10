@@ -8,10 +8,12 @@ import com.skyhouse.projectrpg.utils.spriter.SpriterPlayerListener;
 
 public class Character {
 	
-	AnimateActor actor;
+	SpriterActor actor;
 	Body characterBody;
 	boolean isIdle,
 			isProcessedIdle,
+			isCrouch,
+			isProcessedCrouch,
 			isWalking,
 			isProcessedWalk,
 			isJumping,
@@ -21,7 +23,7 @@ public class Character {
 	
 	public Character(String pathtoscml, Vector2 position, float height) {		
 		
-		actor = new AnimateActor(pathtoscml);		
+		actor = new SpriterActor(pathtoscml);		
 		float scale = height / actor.getPlayer().getBoundingRectangle(null).size.height;
 		
 		actor.getPlayer().setWeight(0.0f);
@@ -44,6 +46,10 @@ public class Character {
 					actor.getFirstPlayer().setAnimation("fall_loop");
 					actor.changeAnimationTo("fall_loop");
 				}
+				if(animation.name.equals("crouch_start")) {
+					actor.getFirstPlayer().setAnimation("crouch_loop");
+					actor.changeAnimationTo("crouch_loop");
+				}
 			}
 			
 			@Override
@@ -60,6 +66,15 @@ public class Character {
 	
 	public void update() {
 		isIdle = true;
+		
+		if(isCrouch && !isWalking && !isJumping && !isFalling) {
+			if(!isProcessedCrouch) {
+				actor.changeAnimationTo("crouch_start");
+				isProcessedCrouch = true;
+			}
+		} else {
+			isProcessedCrouch = false;
+		}
 		
 		if(isWalking) {
 			isIdle = false;
@@ -125,6 +140,14 @@ public class Character {
 			characterBody.setLinearVelocity(0, characterBody.getLinearVelocity().y);
 			isFlip = false;
 		}
+	}
+	
+	public void crouch() {
+		isCrouch = true;
+	}
+	
+	public void stand() {
+		isCrouch = false;
 	}
 	
 	public void stopWalk() {

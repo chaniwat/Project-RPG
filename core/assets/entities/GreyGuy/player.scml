@@ -2399,7 +2399,7 @@
                 </key>
             </timeline>
         </animation>
-        <animation id="2" name="crouch_down" length="250" interval="100" looping="false">
+        <animation id="2" name="crouch_start" length="250" interval="100" looping="false">
             <mainline>
                 <key id="0">
                     <bone_ref id="0" timeline="15" key="0"/>
@@ -3171,7 +3171,7 @@
                 </key>
             </timeline>
         </animation>
-        <animation id="4" name="crouch_idle" length="2525" interval="100" looping="false">
+        <animation id="4" name="crouch_loop" length="2525" interval="100" looping="false">
             <mainline>
                 <key id="0">
                     <bone_ref id="0" timeline="15" key="0"/>
@@ -4360,13 +4360,13 @@
             </timeline>
             <timeline id="6" name="p_forearm_idle_0">
                 <key id="0" spin="0">
-                    <object folder="2" file="6" x="64.106427" y="-0" angle="355.763605" scale_x="8.023151"/>
+                    <object folder="2" file="6" x="64.106427" angle="355.763605" scale_x="8.023151"/>
                 </key>
                 <key id="1" time="151" spin="0">
-                    <object folder="2" file="6" x="64.106427" y="-0" angle="355.763605" scale_x="8.023151"/>
+                    <object folder="2" file="6" x="64.106427" angle="355.763605" scale_x="8.023151"/>
                 </key>
                 <key id="2" time="312" spin="0">
-                    <object folder="2" file="6" x="64.106427" y="-0" angle="355.763605" scale_x="8.023151"/>
+                    <object folder="2" file="6" x="64.106427" angle="355.763605" scale_x="8.023151"/>
                 </key>
             </timeline>
             <timeline id="7" name="p_hand_idle_0">
@@ -4514,13 +4514,13 @@
             </timeline>
             <timeline id="20" obj="5" name="front_hand" object_type="bone">
                 <key id="0" spin="0">
-                    <bone x="228.571429" y="-0" angle="358.210089" scale_x="1.524553"/>
+                    <bone x="228.571429" angle="358.210089" scale_x="1.524553"/>
                 </key>
                 <key id="1" time="151" spin="0">
-                    <bone x="228.571429" y="-0" angle="358.210089" scale_x="1.524553"/>
+                    <bone x="228.571429" angle="358.210089" scale_x="1.524553"/>
                 </key>
                 <key id="2" time="312" spin="0">
-                    <bone x="228.571429" y="-0" angle="358.210089" scale_x="1.524553"/>
+                    <bone x="228.571429" angle="358.210089" scale_x="1.524553"/>
                 </key>
             </timeline>
             <timeline id="21" obj="6" name="back_arm" object_type="bone">

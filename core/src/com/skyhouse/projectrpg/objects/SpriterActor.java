@@ -6,12 +6,12 @@ import com.brashmonkey.spriter.PlayerTweener;
 import com.brashmonkey.spriter.Spriter;
 import com.skyhouse.projectrpg.utils.spriter.SpriterPlayerListener;
 
-public class AnimateActor extends Actor {
+public class SpriterActor extends Actor {
 
 	PlayerTweener player;
 	String c_animation;
 	
-	public AnimateActor(String pathtoscml) {
+	public SpriterActor(String pathtoscml) {
 		super(pathtoscml);
 		player = (PlayerTweener)Spriter.newPlayer(pathtoscml, 0, PlayerTweener.class);
 	}

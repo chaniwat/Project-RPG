@@ -36,6 +36,9 @@ public class GameplayInputProcess extends InputAdapter {
 				if(Gdx.input.isKeyPressed(Keys.LEFT)) playercharacter.walkLeft();
 				else playercharacter.stopWalk();
 				break;
+			case Keys.DOWN:
+				playercharacter.stand();
+				break;
 		}
 		return false;
 	}
@@ -52,6 +55,9 @@ public class GameplayInputProcess extends InputAdapter {
 				break;
 			case Keys.UP:
 				playercharacter.jump();
+				break;
+			case Keys.DOWN:
+				playercharacter.crouch();
 				break;
 		}
 		return true;
