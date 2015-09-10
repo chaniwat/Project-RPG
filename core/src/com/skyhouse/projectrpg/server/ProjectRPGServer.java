@@ -19,12 +19,13 @@ public class ProjectRPGServer extends ApplicationAdapter {
 		new Thread(new Runnable() {
 			
 			Scanner input;
+			String command;
 			
 			@Override
 			public void run() {
 				input = new Scanner(System.in);
 				while(true) {
-					String command = input.nextLine();	
+					command = input.nextLine();	
 					Gdx.app.postRunnable(new Runnable() {
 						@Override
 						public void run() {

@@ -41,7 +41,7 @@ public class ProjectRPGGame extends ApplicationAdapter {
 	Structure ground;
 	List<Structure> box;
 	
-	String lastCharAnim;
+	String lastCharAnim = "";
 	
 	@Override
 	public void create () {
@@ -85,8 +85,6 @@ public class ProjectRPGGame extends ApplicationAdapter {
 		Gdx.app.log(ProjectRPG.TITLE, "created");
 		
 		GLProfiler.enable();
-		
-		lastCharAnim = "";
 	}
 	
 	@Override
