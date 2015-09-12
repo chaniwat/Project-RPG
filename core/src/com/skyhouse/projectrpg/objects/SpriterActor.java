@@ -6,13 +6,13 @@ import com.brashmonkey.spriter.PlayerTweener;
 import com.brashmonkey.spriter.Spriter;
 import com.skyhouse.projectrpg.utils.spriter.SpriterPlayerListener;
 
-public class SpriterActor extends Actor {
+public class SpriterActor {
 
 	PlayerTweener player;
 	String c_animation;
 	
 	public SpriterActor(String pathtoscml) {
-		super(pathtoscml);
+		Spriter.load(Gdx.files.internal(pathtoscml).read(), pathtoscml);
 		player = (PlayerTweener)Spriter.newPlayer(pathtoscml, 0, PlayerTweener.class);
 	}
 	
@@ -55,6 +55,9 @@ public class SpriterActor extends Actor {
 	
 	public void addPlayerListener(SpriterPlayerListener listener) {
 		getSecondPlayer().addListener(listener);
+	}
+	
+	public void remove() {
 	}
 	
 }

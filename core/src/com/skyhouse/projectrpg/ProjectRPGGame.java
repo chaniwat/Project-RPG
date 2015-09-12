@@ -167,4 +167,8 @@ public class ProjectRPGGame extends ApplicationAdapter {
 		SpriterGlobal.dispose();
 		PhysicGlobal.dispose();
 	}
+	
+	public static void removeCharacter() {
+		
+	}
 }

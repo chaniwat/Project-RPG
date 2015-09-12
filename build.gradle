@@ -56,11 +56,11 @@ project(":core") {
         compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
         compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
         compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
-        compile "com.underwaterapps.overlap2druntime:overlap2d-runtime-libgdx:0.1.1"
         compile "com.kotcrab.vis:vis-ui:0.8.1"
         compile "net.dermetfan.libgdx-utils:libgdx-utils:0.13.0"
         compile "net.dermetfan.libgdx-utils:libgdx-utils-box2d:0.13.0"
         compile "com.esotericsoftware:kryonet:2.22.0-RC1"
+        compile project(":spriter-master/Spriter")
     }
 }
 

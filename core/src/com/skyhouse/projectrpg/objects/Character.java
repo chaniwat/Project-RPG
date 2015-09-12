@@ -3,6 +3,7 @@ package com.skyhouse.projectrpg.objects;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.brashmonkey.spriter.Animation;
+import com.brashmonkey.spriter.Spriter;
 import com.skyhouse.projectrpg.physics.Box2DSquareShape;
 import com.skyhouse.projectrpg.utils.spriter.SpriterPlayerListener;
 
@@ -12,16 +13,17 @@ public class Character {
 	Body characterBody;
 	boolean isIdle,
 			isProcessedIdle,
-			isCrouch,
-			isProcessedCrouch,
 			isWalking,
 			isProcessedWalk,
 			isJumping,
 			isFalling,
 			isProcessedFall,
 			isFlip;
+	private String pathtoscml;
 	
 	public Character(String pathtoscml, Vector2 position, float height) {		
+		
+		this.pathtoscml = pathtoscml;
 		
 		actor = new SpriterActor(pathtoscml);		
 		float scale = height / actor.getPlayer().getBoundingRectangle(null).size.height;
@@ -44,31 +46,12 @@ public class Character {
 				if(animation.name.equals("fall_start")) {
 					actor.getFirstPlayer().setAnimation("fall_loop");
 					actor.changeAnimationTo("fall_loop");
-				}/*
-				if(animation.name.equals("crouch_start")) {
-					if(isCrouch) {
-						actor.getFirstPlayer().setAnimation("crouch_loop");
-						actor.changeAnimationTo("crouch_loop");						
-					}
-				}*/
+				}
 			}
 			
 			@Override
 			public void animationChanged(Animation oldAnim, Animation newAnim) {
 				if(oldAnim.name.equals("fall_start")) {
-					actor.getPlayer().setWeight(0.0f);
-				}
-				
-				if(oldAnim.name.equals("walk")) {
-					if(actor.getPlayer().getWeight() > 0.5f) actor.getFirstPlayer().setAnimation("walk");
-					actor.getPlayer().setWeight(0.0f);
-				}
-				
-				if(oldAnim.name.equals("idle")) {
-					actor.getPlayer().setWeight(0.0f);
-				}
-				
-				if(oldAnim.name.equals("crouch_loop")) {
 					actor.getPlayer().setWeight(0.0f);
 				}
 			}
@@ -77,16 +60,6 @@ public class Character {
 	
 	public void update() {
 		isIdle = true;
-		
-		if(isCrouch && !isWalking && !isJumping && !isFalling) {
-			isIdle = false;
-			if(!isProcessedCrouch) {
-				actor.changeAnimationTo("crouch_loop");
-				isProcessedCrouch = true;
-			}
-		} else {
-			isProcessedCrouch = false;
-		}
 		
 		if(isWalking) {
 			isIdle = false;
@@ -154,14 +127,6 @@ public class Character {
 		}
 	}
 	
-	public void crouch() {
-		isCrouch = true;
-	}
-	
-	public void stand() {
-		isCrouch = false;
-	}
-	
 	public void stopWalk() {
 		characterBody.setLinearVelocity(0, characterBody.getLinearVelocity().y);
 		isWalking = false;
@@ -185,5 +150,9 @@ public class Character {
 	
 	public String getCurrentAnimation() {
 		return actor.c_animation;
+	}
+	
+	public void remove() {
+		actor.remove();
 	}
 }

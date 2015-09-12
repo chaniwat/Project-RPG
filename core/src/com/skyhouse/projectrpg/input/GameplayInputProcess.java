@@ -13,20 +13,8 @@ public class GameplayInputProcess extends InputAdapter {
 		this.playercharacter = playercharacter;
 	}
 	
-	/*
-	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		// TODO Auto-generated method stub
-		Vector3 worldCoordinates = mainCam.unproject(new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0));
-		Gdx.app.log(com.skyhouse.projectrpg.ProjectRpgGame.TITLE, "touch position: ("+worldCoordinates.x+","+worldCoordinates.y+")");
-		new Box2DBallTest(PhysicGlobal.getWorld(), worldCoordinates.x, worldCoordinates.y);
-		return true;
-	}
-	*/
-	
 	@Override
 	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
 		switch(keycode) {
 			case Keys.LEFT:
 				if(Gdx.input.isKeyPressed(Keys.RIGHT)) playercharacter.walkRight();
@@ -36,16 +24,12 @@ public class GameplayInputProcess extends InputAdapter {
 				if(Gdx.input.isKeyPressed(Keys.LEFT)) playercharacter.walkLeft();
 				else playercharacter.stopWalk();
 				break;
-			case Keys.DOWN:
-				playercharacter.stand();
-				break;
 		}
 		return false;
 	}
 	
 	@Override
 	public boolean keyDown(int keycode) {
-		// TODO Auto-generated method stub
 		switch(keycode) {
 			case Keys.LEFT:
 				playercharacter.walkLeft();
@@ -56,11 +40,12 @@ public class GameplayInputProcess extends InputAdapter {
 			case Keys.UP:
 				playercharacter.jump();
 				break;
-			case Keys.DOWN:
-				playercharacter.crouch();
+			case Keys.HOME:
+				playercharacter.remove();
+				Gdx.input.setInputProcessor(null);
 				break;
 		}
 		return true;
-	}
+	}	
 	
 }

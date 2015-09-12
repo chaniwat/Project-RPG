@@ -13,7 +13,6 @@ public class SpriterGlobal extends Spriter {
 	private SpriterGlobal() {}
 	
 	public static void init(SpriteBatch batch) {
-		//batch = new SpriteBatch();
 		SpriterGlobal.batch = batch;
 		renderer = new ShapeRenderer();
 		
