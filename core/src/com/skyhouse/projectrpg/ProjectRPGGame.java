@@ -1,6 +1,8 @@
 package com.skyhouse.projectrpg;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -13,15 +15,26 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.math.Vector2;
+import com.brashmonkey.spriter.PlayerTweener;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 import com.skyhouse.projectrpg.graphics.GameplayViewport;
+import com.skyhouse.projectrpg.graphics.SpriterActor;
 import com.skyhouse.projectrpg.graphics.TileTexture;
 import com.skyhouse.projectrpg.graphics.TileTexture.TileTexturePosition;
 import com.skyhouse.projectrpg.graphics.UIViewport;
 import com.skyhouse.projectrpg.input.GameplayInputProcess;
 import com.skyhouse.projectrpg.objects.BackgroundGlobal;
 import com.skyhouse.projectrpg.objects.Character;
+import com.skyhouse.projectrpg.objects.CharacterData;
 import com.skyhouse.projectrpg.objects.Structure;
 import com.skyhouse.projectrpg.physics.PhysicGlobal;
+import com.skyhouse.projectrpg.server.InitialRequest;
+import com.skyhouse.projectrpg.server.InitialResponse;
+import com.skyhouse.projectrpg.server.SomeRequest;
+import com.skyhouse.projectrpg.server.SomeResponse;
 import com.skyhouse.projectrpg.utils.spriter.SpriterGlobal;
 
 public class ProjectRPGGame extends ApplicationAdapter {
@@ -35,12 +48,17 @@ public class ProjectRPGGame extends ApplicationAdapter {
 	SpriteBatch batch;
 	GameplayViewport gameViewport;
 	UIViewport uiViewport;
-	ArrayList<Character> characters;
+	
+	HashMap<Integer, Character> characters;
 	Character playercharacter;
+	int myid;
+	
 	BitmapFont font;
 	
 	Structure ground;
 	List<Structure> box;
+	
+	Client client;
 	
 	String lastCharAnim = "";
 	
@@ -59,10 +77,12 @@ public class ProjectRPGGame extends ApplicationAdapter {
 		BackgroundGlobal.setBackground(new Texture(Gdx.files.internal("background.png")));
 		BackgroundGlobal.setSizeByHeight(17);
 		
-		characters = new ArrayList<Character>();
-		playercharacter = new Character("entities/GreyGuy/player.scml", new Vector2(-7, 3) ,2.7f);
-		characters.add(playercharacter);
-		characters.add(new Character("entities/GreyGuy/player.scml", new Vector2(-10, 2) ,2.7f));
+		characters = new HashMap<Integer, Character>();
+		
+		playercharacter =  new Character("entities/GreyGuy/player.scml", new Vector2(-7f, 3f), 2.7f);
+	    
+	    gameplayinput = new GameplayInputProcess(playercharacter);
+	    Gdx.input.setInputProcessor(gameplayinput);
 		
 		TextureAtlas texture = new TextureAtlas(Gdx.files.internal("structures/greenland/tiles_spritesheet.pack"));
 		
@@ -81,14 +101,53 @@ public class ProjectRPGGame extends ApplicationAdapter {
 		font = new BitmapFont();
 		font.setColor(new Color(0, 0, 0, 1));
 		
-		gameplayinput = new GameplayInputProcess(playercharacter);
-		
-		Gdx.input.setInputProcessor(gameplayinput);
-		
 		Gdx.app.log(ProjectRPG.TITLE, "Version = " + ProjectRPG.VERSION);
 		Gdx.app.log(ProjectRPG.TITLE, "created");
 		
 		GLProfiler.enable();
+		
+		client = new Client();
+		Kryo kryo = client.getKryo();
+		kryo.register(ArrayList.class);
+	    kryo.register(InitialRequest.class);
+	    kryo.register(InitialResponse.class);
+	    kryo.register(CharacterData.class);
+	    client.start();
+	    try {
+			client.connect(5000, "127.0.0.1", 54555, 54777);
+		} catch (IOException e) {
+			myid = 0;
+			characters.put(myid, playercharacter);
+			Gdx.app.log(ProjectRPG.TITLE, "No server launched!");
+		}
+
+	    InitialRequest request = new InitialRequest();
+	    request.characterposx = -7f;
+	    request.characterposy = 3f;
+	    request.characterstate = 0;
+	    client.sendTCP(request);
+	    
+	    client.addListener(new Listener() {
+	    	@Override
+	        public void received (Connection connection, Object object) {
+	           if (object instanceof InitialResponse) {
+	        	   final InitialResponse response = (InitialResponse)object;
+	        	   myid = response.clientid;
+	        	   Gdx.app.postRunnable(new Runnable() {
+					@Override
+					public void run() {
+						 for(CharacterData data : response.charactersData) {
+			        		   if(data.id == myid) {
+			        			   characters.put(myid, playercharacter);
+			        			   continue;
+			        		   }
+			        		   characters.put(data.id, new Character("entities/GreyGuy/player.scml", new Vector2(data.x, data.y), 2.7f));
+			        	   }
+					}
+				});
+	            }
+	         }
+	     });
 	}
 	
 	@Override
@@ -113,7 +172,7 @@ public class ProjectRPGGame extends ApplicationAdapter {
 		// Update & Process
 		PhysicGlobal.getWorld().step(1/60f, 8, 3);
 		gameViewport.setViewCenterToCharacter(playercharacter, 0, 2.4f);
-		for(Character character : characters) {
+		for(Character character : characters.values()) {
 			character.update(Gdx.graphics.getDeltaTime());
 		}
 		

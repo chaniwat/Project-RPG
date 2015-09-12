@@ -3,13 +3,19 @@ package com.skyhouse.projectrpg.objects;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.Filter;
 import com.brashmonkey.spriter.Animation;
 import com.skyhouse.projectrpg.graphics.SpriterActor;
 import com.skyhouse.projectrpg.physics.BodyTemplate;
 import com.skyhouse.projectrpg.utils.spriter.SpriterPlayerListener;
 
 public class Character {
+	
+	public enum CharacterState {
+		IDLE,
+		WALKING,
+		JUMPING,
+		FALLING,
+	}
 	
 	SpriterActor actor;
 	Body characterBody;
@@ -23,20 +29,14 @@ public class Character {
 			isFlip;
 	
 	public Character(String pathtoscml, Vector2 position, float height) {	
-		
 		actor = new SpriterActor(pathtoscml);
 		actor.getPlayer().setScale(height / actor.getPlayer().getBoundingRectangle(null).size.height);
 		
-		// Character body
 		characterBody = new BodyTemplate(position, new Vector2(0.93f, 2f), BodyType.DynamicBody, 0.5f).getBody();
 		characterBody.setFixedRotation(true);
 		characterBody.getFixtureList().first().setFriction(0);
 		characterBody.getFixtureList().first().setRestitution(0);
-		
-		Filter filterDef = new Filter();
-		filterDef.groupIndex = -1;
-		
-		characterBody.getFixtureList().first().setFilterData(filterDef);
+		characterBody.getFixtureList().first().getFilterData().groupIndex = -1;
 		
 		actor.getPlayer().getSecondPlayer().addListener(new SpriterPlayerListener() {
 			@Override
@@ -131,10 +131,52 @@ public class Character {
 	}
 	
 	public float getX() {
-		return actor.getPlayer().getX();
+		return characterBody.getTransform().getPosition().x;
 	}
 	
 	public float getY() {
-		return actor.getPlayer().getY();
+		return characterBody.getTransform().getPosition().y - 1;
+	}
+	
+	public void setPosition(float x, float y) {
+		 characterBody.setTransform(x, y + 1, 0);
+	}
+	
+	public CharacterState getCharacterState() {
+		if(isWalking) return CharacterState.WALKING;
+		else if(isJumping) return CharacterState.JUMPING;
+		else if(isFalling) return CharacterState.FALLING;
+		else return CharacterState.IDLE;
+	}
+	
+	public int getCharacterStateIndex() {
+		return getCharacterState().ordinal();
+	}
+	
+	public void setCharacterState(CharacterState state) {
+		resetState();
+		switch(state) {
+			case IDLE:
+				break;
+			case WALKING:
+				isWalking = true;
+				break;
+			case JUMPING:
+				isJumping = true;
+				break;
+			case FALLING:
+				isFalling = true;
+				break;
+		}
+	}
+	
+	public void setCharacterStateIndex(int state) {
+		setCharacterState(CharacterState.values()[state]);
+	}
+	
+	private void resetState() {
+		isWalking = false;
+		isFalling = false;
+		isJumping = false;
 	}
 }
