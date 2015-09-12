@@ -16,7 +16,6 @@ public class BodyTemplate {
 		BodyDef bodydef = new BodyDef();
 		bodydef.type = type;
 		bodydef.position.set(position.x , position.y);
-		// bodydef.position.set(position.x , position.y + (size.y / 2f)); for Character
 		
 		body = PhysicGlobal.getWorld().createBody(bodydef);
 		
@@ -24,7 +23,7 @@ public class BodyTemplate {
 		box.setAsBox(size.x / 2f, size.y / 2f);
 		body.createFixture(box, density);
 		
-		//box.dispose();
+		box.dispose();
 	}
 	
 	public Body getBody() {

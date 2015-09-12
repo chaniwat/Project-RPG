@@ -40,10 +40,6 @@ public class GameplayInputProcess extends InputAdapter {
 			case Keys.UP:
 				playercharacter.jump();
 				break;
-			case Keys.HOME:
-				playercharacter.remove();
-				Gdx.input.setInputProcessor(null);
-				break;
 		}
 		return true;
 	}	

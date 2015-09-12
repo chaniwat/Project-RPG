@@ -109,7 +109,7 @@ public class ProjectRPGGame extends ApplicationAdapter {
 		// Update & Process
 		PhysicGlobal.getWorld().step(1/60f, 8, 3);
 		gameViewport.setViewCenterToCharacter(playercharacter, 0, 2.4f);
-		playercharacter.update();
+		playercharacter.update(Gdx.graphics.getDeltaTime());
 		
 		BackgroundGlobal.setPosition(-(BackgroundGlobal.getWidth() / 2f) + (playercharacter.getX() * 0.35f), -2f + (playercharacter.getY() * 0.35f));
 		

@@ -2,9 +2,10 @@ package com.skyhouse.projectrpg.objects;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.brashmonkey.spriter.Animation;
-import com.brashmonkey.spriter.Spriter;
-import com.skyhouse.projectrpg.physics.Box2DSquareShape;
+import com.skyhouse.projectrpg.graphics.SpriterActor;
+import com.skyhouse.projectrpg.physics.BodyTemplate;
 import com.skyhouse.projectrpg.utils.spriter.SpriterPlayerListener;
 
 public class Character {
@@ -19,52 +20,35 @@ public class Character {
 			isFalling,
 			isProcessedFall,
 			isFlip;
-	private String pathtoscml;
 	
-	public Character(String pathtoscml, Vector2 position, float height) {		
+	public Character(String pathtoscml, Vector2 position, float height) {	
 		
-		this.pathtoscml = pathtoscml;
+		actor = new SpriterActor(pathtoscml);
+		actor.getPlayer().setScale(height / actor.getPlayer().getBoundingRectangle(null).size.height);
 		
-		actor = new SpriterActor(pathtoscml);		
-		float scale = height / actor.getPlayer().getBoundingRectangle(null).size.height;
-		
-		actor.getPlayer().setWeight(0.0f);
-		actor.getPlayer().setScale(scale);
-		
-		// Character
-		characterBody = new Box2DSquareShape((actor.getPlayer().getBoundingRectangle(null).size.width * scale) / 2f, height / 2f, getX() + position.x, getY() + position.y).getBody();
+		// Character body
+		characterBody = new BodyTemplate(position, new Vector2(0.93f, 2f), BodyType.DynamicBody, 0.5f).getBody();
+		characterBody.setFixedRotation(true);
 		characterBody.getFixtureList().first().setFriction(0);
 		characterBody.getFixtureList().first().setRestitution(0);
 		
-		actor.addPlayerListener(new SpriterPlayerListener() {
-			@Override
-			public void animationFinished(Animation animation) {
-				if(animation.name.equals("jump_start")) {
-					actor.getFirstPlayer().setAnimation("jump_loop");
-					actor.changeAnimationTo("jump_loop");
-				}
-				if(animation.name.equals("fall_start")) {
-					actor.getFirstPlayer().setAnimation("fall_loop");
-					actor.changeAnimationTo("fall_loop");
-				}
-			}
-			
+		actor.getPlayer().getSecondPlayer().addListener(new SpriterPlayerListener() {
 			@Override
 			public void animationChanged(Animation oldAnim, Animation newAnim) {
-				if(oldAnim.name.equals("fall_start")) {
+				if(oldAnim.name.equals("fall")) {
 					actor.getPlayer().setWeight(0.0f);
 				}
 			}
 		});
 	}
 	
-	public void update() {
+	public void update(float deltaTime) {
 		isIdle = true;
 		
 		if(isWalking) {
 			isIdle = false;
 			if(!isProcessedWalk && !isJumping && !isFalling) {
-				actor.changeAnimationTo("walk");
+				actor.setNewAnimation("walk");
 				isProcessedWalk = true;
 			}
 			if(isFlip) characterBody.setLinearVelocity(-2.5f, characterBody.getLinearVelocity().y);
@@ -81,7 +65,7 @@ public class Character {
 				
 		if(isFalling && !isJumping) {
 			if(!isProcessedFall) {
-				actor.changeAnimationTo("fall_start");
+				actor.setNewAnimation("fall");
 				isProcessedFall = true;
 			}
 			if(characterBody.getLinearVelocity().y < 1f && characterBody.getLinearVelocity().y > -1f) {
@@ -98,7 +82,7 @@ public class Character {
 		
 		if(isIdle) {
 			if(!isProcessedIdle) {
-				actor.changeAnimationTo("idle");
+				actor.setNewAnimation("idle");
 				isProcessedIdle = true;
 			}
 		} else {
@@ -106,7 +90,7 @@ public class Character {
 		}
 		
 		actor.getPlayer().setPosition(characterBody.getPosition().x, characterBody.getPosition().y - 1f);
-		actor.updateTweener();
+		actor.updateTweener(deltaTime);
 	}
 	
 	public void walkLeft() {
@@ -135,7 +119,7 @@ public class Character {
 	public void jump() {
 		if(!isJumping && !isFalling) {
 			characterBody.applyLinearImpulse(0, 5.0f, characterBody.getPosition().x, characterBody.getPosition().y, true);
-			actor.changeAnimationTo("jump_start");
+			actor.setNewAnimation("jump");
 			isJumping = true;
 		}
 	}
@@ -146,13 +130,5 @@ public class Character {
 	
 	public float getY() {
 		return actor.getPlayer().getY();
-	}
-	
-	public String getCurrentAnimation() {
-		return actor.c_animation;
-	}
-	
-	public void remove() {
-		actor.remove();
 	}
 }
