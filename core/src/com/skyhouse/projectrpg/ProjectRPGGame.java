@@ -35,6 +35,7 @@ public class ProjectRPGGame extends ApplicationAdapter {
 	SpriteBatch batch;
 	GameplayViewport gameViewport;
 	UIViewport uiViewport;
+	ArrayList<Character> characters;
 	Character playercharacter;
 	BitmapFont font;
 	
@@ -58,7 +59,10 @@ public class ProjectRPGGame extends ApplicationAdapter {
 		BackgroundGlobal.setBackground(new Texture(Gdx.files.internal("background.png")));
 		BackgroundGlobal.setSizeByHeight(17);
 		
+		characters = new ArrayList<Character>();
 		playercharacter = new Character("entities/GreyGuy/player.scml", new Vector2(-7, 3) ,2.7f);
+		characters.add(playercharacter);
+		characters.add(new Character("entities/GreyGuy/player.scml", new Vector2(-10, 2) ,2.7f));
 		
 		TextureAtlas texture = new TextureAtlas(Gdx.files.internal("structures/greenland/tiles_spritesheet.pack"));
 		
@@ -109,7 +113,9 @@ public class ProjectRPGGame extends ApplicationAdapter {
 		// Update & Process
 		PhysicGlobal.getWorld().step(1/60f, 8, 3);
 		gameViewport.setViewCenterToCharacter(playercharacter, 0, 2.4f);
-		playercharacter.update(Gdx.graphics.getDeltaTime());
+		for(Character character : characters) {
+			character.update(Gdx.graphics.getDeltaTime());
+		}
 		
 		BackgroundGlobal.setPosition(-(BackgroundGlobal.getWidth() / 2f) + (playercharacter.getX() * 0.35f), -2f + (playercharacter.getY() * 0.35f));
 		
@@ -148,6 +154,7 @@ public class ProjectRPGGame extends ApplicationAdapter {
 			font.draw(batch, "FPS : "+Gdx.graphics.getFramesPerSecond(), 20, uiViewport.getWorldHeight() - 20);
 			font.draw(batch, String.format("Frametime : %.0f ms", Gdx.graphics.getDeltaTime()*1000), 20, uiViewport.getWorldHeight() - 40);
 			font.draw(batch, String.format("Draw calls : %d | Bound calls : %d | Shader switch : %d", GLProfiler.drawCalls, GLProfiler.textureBindings, GLProfiler.shaderSwitches), 20, uiViewport.getWorldHeight() - 60);
+			font.draw(batch, String.format("Player position: (%.2f, %.2f)", playercharacter.getX(), playercharacter.getY()), 20, uiViewport.getWorldHeight() - 80);
 		batch.end();
 		
 		// Log

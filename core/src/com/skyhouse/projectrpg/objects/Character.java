@@ -3,6 +3,7 @@ package com.skyhouse.projectrpg.objects;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Filter;
 import com.brashmonkey.spriter.Animation;
 import com.skyhouse.projectrpg.graphics.SpriterActor;
 import com.skyhouse.projectrpg.physics.BodyTemplate;
@@ -31,6 +32,11 @@ public class Character {
 		characterBody.setFixedRotation(true);
 		characterBody.getFixtureList().first().setFriction(0);
 		characterBody.getFixtureList().first().setRestitution(0);
+		
+		Filter filterDef = new Filter();
+		filterDef.groupIndex = -1;
+		
+		characterBody.getFixtureList().first().setFilterData(filterDef);
 		
 		actor.getPlayer().getSecondPlayer().addListener(new SpriterPlayerListener() {
 			@Override
