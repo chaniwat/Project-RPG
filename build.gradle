@@ -44,6 +44,13 @@ project(":desktop") {
     }
 }
 
+project(":spriter-master/Spriter") {
+    apply plugin: "java"
+
+    dependencies {
+    }
+}
+
 project(":core") {
     apply plugin: "java"
 
