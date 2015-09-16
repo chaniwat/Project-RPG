@@ -24,12 +24,12 @@ import com.skyhouse.projectrpg.graphics.viewports.GameplayViewport;
 import com.skyhouse.projectrpg.graphics.viewports.UIViewport;
 import com.skyhouse.projectrpg.input.GameplayInputProcess;
 import com.skyhouse.projectrpg.objects.BackgroundGlobal;
-import com.skyhouse.projectrpg.server.DisconnectRequest;
-import com.skyhouse.projectrpg.server.InitialRequest;
 import com.skyhouse.projectrpg.server.ProjectRPGServer;
-import com.skyhouse.projectrpg.server.utils.DisconnectListener;
-import com.skyhouse.projectrpg.server.utils.LoginListener;
-import com.skyhouse.projectrpg.server.utils.UpdateListener;
+import com.skyhouse.projectrpg.server.listeners.DisconnectListener;
+import com.skyhouse.projectrpg.server.listeners.LoginListener;
+import com.skyhouse.projectrpg.server.listeners.UpdateListener;
+import com.skyhouse.projectrpg.server.packets.DisconnectRequest;
+import com.skyhouse.projectrpg.server.packets.InitialRequest;
 import com.skyhouse.projectrpg.utils.spriter.SpriterGlobal;
 
 public class ProjectRPGGame extends ApplicationAdapter {

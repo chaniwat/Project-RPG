@@ -1,4 +1,4 @@
-package com.skyhouse.projectrpg.server.utils;
+package com.skyhouse.projectrpg.server.listeners;
 
 import java.util.Map.Entry;
 
@@ -9,6 +9,7 @@ import com.skyhouse.projectrpg.ProjectRPGGame;
 import com.skyhouse.projectrpg.entities.Character;
 import com.skyhouse.projectrpg.entities.data.CharacterData;
 import com.skyhouse.projectrpg.server.ProjectRPGServer;
+import com.skyhouse.projectrpg.server.packets.CharacterDataPacket;
 
 public class UpdateListener {
 	
@@ -16,8 +17,8 @@ public class UpdateListener {
 		
 		@Override
 		public void received(Connection connection, Object object) {
-			if(object instanceof CharactersUpdate) {
-				final CharactersUpdate update = (CharactersUpdate)object;
+			if(object instanceof CharacterDataPacket) {
+				final CharacterDataPacket update = (CharacterDataPacket)object;
 				Gdx.app.postRunnable(new Runnable() {
 					@Override
 					public void run() {

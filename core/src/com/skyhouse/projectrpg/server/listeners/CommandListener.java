@@ -1,4 +1,4 @@
-package com.skyhouse.projectrpg.server.utils;
+package com.skyhouse.projectrpg.server.listeners;
 
 import java.util.Scanner;
 

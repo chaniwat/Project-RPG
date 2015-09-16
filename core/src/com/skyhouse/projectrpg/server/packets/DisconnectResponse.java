@@ -1,4 +1,4 @@
-package com.skyhouse.projectrpg.server;
+package com.skyhouse.projectrpg.server.packets;
 
 public class DisconnectResponse {
 

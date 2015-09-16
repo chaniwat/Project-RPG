@@ -1,4 +1,4 @@
-package com.skyhouse.projectrpg.server.utils;
+package com.skyhouse.projectrpg.server.listeners;
 
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
@@ -9,9 +9,9 @@ import com.skyhouse.projectrpg.entities.data.CharacterData;
 import com.skyhouse.projectrpg.entities.data.CharacterData.CharacterState;
 import com.skyhouse.projectrpg.input.GameplayInputProcess;
 import com.skyhouse.projectrpg.physics.CharacterBody;
-import com.skyhouse.projectrpg.server.InitialRequest;
-import com.skyhouse.projectrpg.server.InitialResponse;
 import com.skyhouse.projectrpg.server.ProjectRPGServer;
+import com.skyhouse.projectrpg.server.packets.InitialRequest;
+import com.skyhouse.projectrpg.server.packets.InitialResponse;
 
 public class LoginListener {
 	

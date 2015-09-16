@@ -15,11 +15,15 @@ import com.skyhouse.projectrpg.entities.data.StructureData;
 import com.skyhouse.projectrpg.physics.CharacterBody;
 import com.skyhouse.projectrpg.physics.PhysicGlobal;
 import com.skyhouse.projectrpg.physics.StructureBody;
-import com.skyhouse.projectrpg.server.utils.CharactersUpdate;
-import com.skyhouse.projectrpg.server.utils.CommandListener;
-import com.skyhouse.projectrpg.server.utils.DisconnectListener;
-import com.skyhouse.projectrpg.server.utils.LoginListener;
-import com.skyhouse.projectrpg.server.utils.UpdateListener;
+import com.skyhouse.projectrpg.server.listeners.CommandListener;
+import com.skyhouse.projectrpg.server.listeners.DisconnectListener;
+import com.skyhouse.projectrpg.server.listeners.LoginListener;
+import com.skyhouse.projectrpg.server.listeners.UpdateListener;
+import com.skyhouse.projectrpg.server.packets.CharacterDataPacket;
+import com.skyhouse.projectrpg.server.packets.DisconnectRequest;
+import com.skyhouse.projectrpg.server.packets.DisconnectResponse;
+import com.skyhouse.projectrpg.server.packets.InitialRequest;
+import com.skyhouse.projectrpg.server.packets.InitialResponse;
 
 public class ProjectRPGServer extends ApplicationAdapter {
 	
@@ -68,7 +72,7 @@ public class ProjectRPGServer extends ApplicationAdapter {
 			character.update();
 		}
 		
-		CharactersUpdate update = new CharactersUpdate();
+		CharacterDataPacket update = new CharacterDataPacket();
 		update.characters = new HashMap<Integer, CharacterData>();
 		for(Entry<Integer, CharacterBody> character : ProjectRPGServer.characters.entrySet()) {
 			update.characters.put(character.getKey(), character.getValue().getData());
@@ -76,13 +80,6 @@ public class ProjectRPGServer extends ApplicationAdapter {
 		server.sendToAllUDP(update);
 		
 		// log
-		/*
-		if(ctime > 1f) {
-			Gdx.app.log(ProjectRPG.TITLE, ""+update.characters.size());
-			ctime = 0f;
-		}
-		ctime += Gdx.graphics.getDeltaTime();
-		*/
 	}
 
 	@Override
@@ -102,7 +99,7 @@ public class ProjectRPGServer extends ApplicationAdapter {
 		kryo.register(InitialResponse.class);
 		kryo.register(DisconnectRequest.class);
 		kryo.register(DisconnectResponse.class);
-		kryo.register(CharactersUpdate.class);
+		kryo.register(CharacterDataPacket.class);
 	}
 
 }

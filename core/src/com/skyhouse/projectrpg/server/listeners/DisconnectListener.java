@@ -1,12 +1,12 @@
-package com.skyhouse.projectrpg.server.utils;
+package com.skyhouse.projectrpg.server.listeners;
 
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.skyhouse.projectrpg.ProjectRPGGame;
-import com.skyhouse.projectrpg.server.DisconnectRequest;
-import com.skyhouse.projectrpg.server.DisconnectResponse;
 import com.skyhouse.projectrpg.server.ProjectRPGServer;
+import com.skyhouse.projectrpg.server.packets.DisconnectRequest;
+import com.skyhouse.projectrpg.server.packets.DisconnectResponse;
 
 public class DisconnectListener {
 	

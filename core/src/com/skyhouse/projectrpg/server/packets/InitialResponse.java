@@ -1,4 +1,4 @@
-package com.skyhouse.projectrpg.server;
+package com.skyhouse.projectrpg.server.packets;
 
 import com.skyhouse.projectrpg.entities.data.CharacterData;
 

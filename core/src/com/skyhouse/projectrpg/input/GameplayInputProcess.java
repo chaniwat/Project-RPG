@@ -3,7 +3,6 @@ package com.skyhouse.projectrpg.input;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.math.Vector2;
 import com.skyhouse.projectrpg.entities.Character;
 import com.skyhouse.projectrpg.entities.data.CharacterData.CharacterState;
 
