@@ -32,7 +32,7 @@ public class GameplayViewport extends Viewport {
 	
 	public void setViewCenterToCharacter(Character character, float offsetX, float offsetY) {
 		if(!character.equals(null)) {
-				getCamera().position.set(character.getX() + offsetX, character.getY() + offsetY, 0.0f);
+				getCamera().position.set(character.getPositionX() + offsetX, character.getPositionY() + offsetY, 0.0f);
 				getCamera().update();
 		}
 	}

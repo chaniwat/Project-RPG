@@ -5,6 +5,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 import com.skyhouse.projectrpg.objects.Character;
+import com.skyhouse.projectrpg.objects.CharacterData.CharacterState;
 
 public class GameplayInputProcess extends InputAdapter {
 	
@@ -18,12 +19,16 @@ public class GameplayInputProcess extends InputAdapter {
 	public boolean keyUp(int keycode) {
 		switch(keycode) {
 			case Keys.LEFT:
-				if(Gdx.input.isKeyPressed(Keys.RIGHT)) playercharacter.walkRight();
-				else playercharacter.stopWalk();
+				if(Gdx.input.isKeyPressed(Keys.RIGHT)) {
+					playercharacter.setFilpX(false);
+				}
+				else playercharacter.setState(CharacterState.IDLE);
 				break;
 			case Keys.RIGHT:
-				if(Gdx.input.isKeyPressed(Keys.LEFT)) playercharacter.walkLeft();
-				else playercharacter.stopWalk();
+				if(Gdx.input.isKeyPressed(Keys.LEFT)) {
+					playercharacter.setFilpX(true);
+				}
+				else playercharacter.setState(CharacterState.IDLE);
 				break;
 		}
 		return false;
@@ -33,13 +38,15 @@ public class GameplayInputProcess extends InputAdapter {
 	public boolean keyDown(int keycode) {
 		switch(keycode) {
 			case Keys.LEFT:
-				playercharacter.walkLeft();
+				playercharacter.setState(CharacterState.WALK);
+				playercharacter.setFilpX(true);
 				break;
 			case Keys.RIGHT:
-				playercharacter.walkRight();
+				playercharacter.setState(CharacterState.WALK);
+				playercharacter.setFilpX(false);
 				break;
 			case Keys.UP:
-				playercharacter.jump();
+				playercharacter.setState(CharacterState.JUMP);;
 				break;
 		}
 		return true;

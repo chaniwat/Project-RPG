@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
-public class BodyTemplate {
+public abstract class BodyTemplate {
 	
 	Body body;
 	Fixture fixture;
@@ -21,7 +21,7 @@ public class BodyTemplate {
 		
 		PolygonShape box = new PolygonShape();
 		box.setAsBox(size.x / 2f, size.y / 2f);
-		body.createFixture(box, density);
+		fixture = body.createFixture(box, density);
 		
 		box.dispose();
 	}
@@ -29,5 +29,7 @@ public class BodyTemplate {
 	public Body getBody() {
 		return body;
 	}
+	
+	public abstract void update();
 	
 }

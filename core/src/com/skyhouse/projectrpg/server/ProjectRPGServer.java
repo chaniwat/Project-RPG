@@ -15,7 +15,6 @@ import com.skyhouse.projectrpg.objects.CharacterData;
 
 public class ProjectRPGServer extends ApplicationAdapter {
 	
-	int id = 0;
 	Server server;
 	ArrayList<CharacterData> charactersData;
 	
@@ -42,7 +41,7 @@ public class ProjectRPGServer extends ApplicationAdapter {
 			public void received(Connection connection, Object object) {
 				if(object instanceof InitialRequest) {
 					InitialRequest request = (InitialRequest)object;
-					int newid = id++;
+					int newid = connection.getID();
 					charactersData.add(new CharacterData(newid, request.characterposx, request.characterposy, request.characterstate));
 					
 					InitialResponse response = new InitialResponse();
@@ -53,6 +52,11 @@ public class ProjectRPGServer extends ApplicationAdapter {
 					
 					connection.sendTCP(response);
 				}
+			}
+			
+			@Override
+			public void disconnected(Connection connection) {
+				charactersData.remove(connection.getID() - 1);
 			}
 		});
 		

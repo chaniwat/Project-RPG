@@ -49,9 +49,7 @@ public class ProjectRPGGame extends ApplicationAdapter {
 	GameplayViewport gameViewport;
 	UIViewport uiViewport;
 	
-	HashMap<Integer, Character> characters;
 	Character playercharacter;
-	int myid;
 	
 	BitmapFont font;
 	
@@ -77,16 +75,13 @@ public class ProjectRPGGame extends ApplicationAdapter {
 		BackgroundGlobal.setBackground(new Texture(Gdx.files.internal("background.png")));
 		BackgroundGlobal.setSizeByHeight(17);
 		
-		characters = new HashMap<Integer, Character>();
-		
-		playercharacter =  new Character("entities/GreyGuy/player.scml", new Vector2(-7f, 3f), 2.7f);
-	    
+		playercharacter =  new Character(0, new Vector2(-7f, 3f), 2.7f);
 	    gameplayinput = new GameplayInputProcess(playercharacter);
 	    Gdx.input.setInputProcessor(gameplayinput);
 		
-		TextureAtlas texture = new TextureAtlas(Gdx.files.internal("structures/greenland/tiles_spritesheet.pack"));
 		
 		// For Box2D test
+	    TextureAtlas texture = new TextureAtlas(Gdx.files.internal("structures/greenland/tiles_spritesheet.pack"));
 		
 		ground = new Structure(new Vector2(-20f, 0), new Vector2(60f, 5f), new TileTexture(texture.findRegion("grassMid")));
 		ground.getTileTexture().setRegionPosition(texture.findRegion("grassCenter"), TileTexturePosition.MiddleHorizontal, TileTexturePosition.Bottom);
@@ -105,49 +100,6 @@ public class ProjectRPGGame extends ApplicationAdapter {
 		Gdx.app.log(ProjectRPG.TITLE, "created");
 		
 		GLProfiler.enable();
-		
-		client = new Client();
-		Kryo kryo = client.getKryo();
-		kryo.register(ArrayList.class);
-	    kryo.register(InitialRequest.class);
-	    kryo.register(InitialResponse.class);
-	    kryo.register(CharacterData.class);
-	    client.start();
-	    try {
-			client.connect(5000, "127.0.0.1", 54555, 54777);
-		} catch (IOException e) {
-			myid = 0;
-			characters.put(myid, playercharacter);
-			Gdx.app.log(ProjectRPG.TITLE, "No server launched!");
-		}
-
-	    InitialRequest request = new InitialRequest();
-	    request.characterposx = -7f;
-	    request.characterposy = 3f;
-	    request.characterstate = 0;
-	    client.sendTCP(request);
-	    
-	    client.addListener(new Listener() {
-	    	@Override
-	        public void received (Connection connection, Object object) {
-	           if (object instanceof InitialResponse) {
-	        	   final InitialResponse response = (InitialResponse)object;
-	        	   myid = response.clientid;
-	        	   Gdx.app.postRunnable(new Runnable() {
-					@Override
-					public void run() {
-						 for(CharacterData data : response.charactersData) {
-			        		   if(data.id == myid) {
-			        			   characters.put(myid, playercharacter);
-			        			   continue;
-			        		   }
-			        		   characters.put(data.id, new Character("entities/GreyGuy/player.scml", new Vector2(data.x, data.y), 2.7f));
-			        	   }
-					}
-				});
-	            }
-	         }
-	     });
 	}
 	
 	@Override
@@ -172,11 +124,10 @@ public class ProjectRPGGame extends ApplicationAdapter {
 		// Update & Process
 		PhysicGlobal.getWorld().step(1/60f, 8, 3);
 		gameViewport.setViewCenterToCharacter(playercharacter, 0, 2.4f);
-		for(Character character : characters.values()) {
-			character.update(Gdx.graphics.getDeltaTime());
-		}
+		playercharacter.update(Gdx.graphics.getDeltaTime());
 		
-		BackgroundGlobal.setPosition(-(BackgroundGlobal.getWidth() / 2f) + (playercharacter.getX() * 0.35f), -2f + (playercharacter.getY() * 0.35f));
+		//BackgroundGlobal.setPosition(-(BackgroundGlobal.getWidth() / 2f) + (playercharacter.getX() * 0.35f), -2f + (playercharacter.getY() * 0.35f));
+		BackgroundGlobal.setPosition(-(BackgroundGlobal.getWidth() / 2f), 0f);
 		
 		// Render -  Gameplay
 		gameViewport.apply();
@@ -213,7 +164,8 @@ public class ProjectRPGGame extends ApplicationAdapter {
 			font.draw(batch, "FPS : "+Gdx.graphics.getFramesPerSecond(), 20, uiViewport.getWorldHeight() - 20);
 			font.draw(batch, String.format("Frametime : %.0f ms", Gdx.graphics.getDeltaTime()*1000), 20, uiViewport.getWorldHeight() - 40);
 			font.draw(batch, String.format("Draw calls : %d | Bound calls : %d | Shader switch : %d", GLProfiler.drawCalls, GLProfiler.textureBindings, GLProfiler.shaderSwitches), 20, uiViewport.getWorldHeight() - 60);
-			font.draw(batch, String.format("Player position: (%.2f, %.2f)", playercharacter.getX(), playercharacter.getY()), 20, uiViewport.getWorldHeight() - 80);
+			font.draw(batch, String.format("Player position: (%.2f, %.2f)", playercharacter.getPositionX(), playercharacter.getPositionY()), 20, uiViewport.getWorldHeight() - 80);
+			font.draw(batch, String.format("Player state: %s", playercharacter.getState().name()), 20, uiViewport.getWorldHeight() - 100);
 		batch.end();
 		
 		// Log
