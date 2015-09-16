@@ -1,20 +1,11 @@
-package com.skyhouse.projectrpg.objects;
+package com.skyhouse.projectrpg.entities;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.brashmonkey.spriter.Animation;
-import com.skyhouse.projectrpg.ProjectRPGGame.ProjectRPG;
+import com.skyhouse.projectrpg.entities.data.CharacterData;
 import com.skyhouse.projectrpg.graphics.SpriterActor;
-import com.skyhouse.projectrpg.physics.BodyTemplate;
-import com.skyhouse.projectrpg.physics.CharacterBody;
-import com.skyhouse.projectrpg.utils.spriter.SpriterPlayerListener;
 
 public class Character extends CharacterData {
 	
 	private SpriterActor actor;
-	private CharacterBody body;
 	
 	private boolean idleflag,
 								   walkflag,
@@ -22,18 +13,14 @@ public class Character extends CharacterData {
 								   fallflag,
 								   flipflag = false;
 	
-	public Character(int id, Vector2 position, float height) {	
-		super(id, position.x, position.y, CharacterState.IDLE);
+	public Character(CharacterData data) {
+		super(data);
 		
 		actor = new SpriterActor("entities/GreyGuy/player.scml");
-		actor.getPlayer().setScale(height / actor.getPlayer().getBoundingRectangle(null).size.height);
-		
-		body = new CharacterBody(this);
+		actor.getPlayer().setScale(2.7f / actor.getPlayer().getBoundingRectangle(null).size.height);
 	}
 	
-	public void update(float deltaTime) {
-		body.update();
-		
+	public void update(float deltaTime) {		
 		switch(getState()) {
 			case IDLE:
 				if(!idleflag) {
@@ -75,12 +62,16 @@ public class Character extends CharacterData {
 				break;
 		}
 		
-		if(isFlipX() != flipflag) {
+		if(flipflag != isFlipX()) {
 			flipflag = isFlipX();
 			actor.getPlayer().flipX();
 		}
 		
 		actor.updateTweener(deltaTime);
 		actor.getPlayer().setPosition(getPositionX(), getPositionY());
+	}
+	
+	public void dispose() {
+		actor.dispose();
 	}
 }

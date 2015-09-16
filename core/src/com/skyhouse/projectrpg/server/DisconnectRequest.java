@@ -1,5 +1,5 @@
 package com.skyhouse.projectrpg.server;
 
-public class InitialRequest {
-	
+public class DisconnectRequest {
+
 }

@@ -1,11 +1,9 @@
 package com.skyhouse.projectrpg.physics;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.skyhouse.projectrpg.ProjectRPGGame.ProjectRPG;
-import com.skyhouse.projectrpg.objects.CharacterData;
-import com.skyhouse.projectrpg.objects.CharacterData.CharacterState;
+import com.skyhouse.projectrpg.entities.data.CharacterData;
+import com.skyhouse.projectrpg.entities.data.CharacterData.CharacterState;
 
 public class CharacterBody extends BodyTemplate {
 
@@ -22,6 +20,10 @@ public class CharacterBody extends BodyTemplate {
 		fixture.getFilterData().groupIndex = -1;
 		
 		this.character = character;
+	}
+	
+	public CharacterData getData() {
+		return character;
 	}
 	
 	@Override
@@ -81,5 +83,5 @@ public class CharacterBody extends BodyTemplate {
 	private void stop() {
 		move(0f, true);
 	}
-
+	
 }

@@ -1,16 +1,13 @@
 package com.skyhouse.projectrpg.server;
 
-import java.util.ArrayList;
-
-import com.skyhouse.projectrpg.objects.CharacterData;
+import com.skyhouse.projectrpg.entities.data.CharacterData;
 
 public class InitialResponse {
 	
-	public ArrayList<CharacterData> charactersData;
-	public int clientid;
-	
-	public InitialResponse() {
-		charactersData = new ArrayList<CharacterData>();
-	}
+	public CharacterData data;
 
+	public InitialResponse() {
+		data = new CharacterData();
+	}
+	
 }

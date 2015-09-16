@@ -67,4 +67,11 @@ public class SpriterActor {
 	public PlayerTweener getPlayer() {
 		return player;
 	}
+	
+	/**
+	 * Clear this SpriterActor
+	 */
+	public void dispose() {
+		Spriter.removePlayer(player);
+	}
 }

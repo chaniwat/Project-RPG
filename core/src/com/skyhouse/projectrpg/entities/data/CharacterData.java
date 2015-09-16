@@ -1,4 +1,4 @@
-package com.skyhouse.projectrpg.objects;
+package com.skyhouse.projectrpg.entities.data;
 
 public class CharacterData {
 	
@@ -14,14 +14,21 @@ public class CharacterData {
 	private int id;
 	private CharacterState state;
 	private float position_x, position_y;
-	private boolean flipXflag;
+	private boolean flipXflag = false;
 	
 	public CharacterData() {}
-	public CharacterData(int id, float position_x, float position_y, CharacterState CharacterState) {
+	public CharacterData(CharacterData data) {
+		this.id = data.id;
+		this.position_x = data.position_x;
+		this.position_y = data.position_y;
+		this.state = data.state;
+		this.flipXflag = data.flipXflag;
+	}
+	public CharacterData(int id, float position_x, float position_y, CharacterState state) {
 		this.id = id;
 		this.position_x = position_x;
 		this.position_y = position_y;
-		this.state = CharacterState;
+		this.state = state;
 	}
 	
 	public int getID() {
@@ -33,7 +40,7 @@ public class CharacterData {
 	}
 	
 	public float getPositionY() {
-		return this.position_y - 1;
+		return this.position_y - 0.5f;
 	}
 	
 	public CharacterState getState() {
@@ -58,7 +65,7 @@ public class CharacterData {
 	}
 	
 	public void setPositonY(float position_y) {
-		setPosition(this.position_x, position_y + 1);
+		setPosition(this.position_x, position_y);
 	}
 	
 	public void setState(CharacterState state) {

@@ -13,13 +13,13 @@ public final class PhysicGlobal {
 	
 	private PhysicGlobal() {}
 	
-	public static void init(Vector2 v, boolean doSleep) {
+	public static void init(Vector2 v, boolean doSleep, boolean debug) {
 		world = new World(v, doSleep);
-		box2dDebugRenderer = new Box2DDebugRenderer();
+		if(debug) box2dDebugRenderer = new Box2DDebugRenderer();
 	}
 	
-	public static void init(float vX, float vY, boolean doSleep) {
-		init(new Vector2(vX, vY), doSleep);
+	public static void init(float vX, float vY, boolean doSleep, boolean debug) {
+		init(new Vector2(vX, vY), doSleep, debug);
 	}
 	
 	public static void debugRender(Camera camera) {

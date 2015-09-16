@@ -1,4 +1,4 @@
-package com.skyhouse.projectrpg.graphics;
+package com.skyhouse.projectrpg.graphics.viewports;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.Viewport;

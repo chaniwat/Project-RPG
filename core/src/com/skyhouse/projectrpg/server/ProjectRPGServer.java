@@ -1,100 +1,108 @@
 package com.skyhouse.projectrpg.server;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryonet.Connection;
-import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 import com.skyhouse.projectrpg.ProjectRPGGame.ProjectRPG;
-import com.skyhouse.projectrpg.objects.CharacterData;
+import com.skyhouse.projectrpg.entities.data.CharacterData;
+import com.skyhouse.projectrpg.entities.data.StructureData;
+import com.skyhouse.projectrpg.physics.CharacterBody;
+import com.skyhouse.projectrpg.physics.PhysicGlobal;
+import com.skyhouse.projectrpg.physics.StructureBody;
+import com.skyhouse.projectrpg.server.utils.CharactersUpdate;
+import com.skyhouse.projectrpg.server.utils.CommandListener;
+import com.skyhouse.projectrpg.server.utils.DisconnectListener;
+import com.skyhouse.projectrpg.server.utils.LoginListener;
+import com.skyhouse.projectrpg.server.utils.UpdateListener;
 
 public class ProjectRPGServer extends ApplicationAdapter {
 	
-	Server server;
-	ArrayList<CharacterData> charactersData;
+	public static Server server;
+	public static HashMap<Integer, CharacterBody> characters;
+	public static HashMap<String, StructureBody> structures;
+	
+	float ctime = 0f;
 	
 	@Override
-	public void create() {
-		
-		charactersData = new ArrayList<CharacterData>();
+	public void create() {		
 		server = new Server();
-		
 		Kryo kryo = server.getKryo();
-		kryo.register(ArrayList.class);
-		kryo.register(InitialRequest.class);
-	    kryo.register(InitialResponse.class);
-	    kryo.register(CharacterData.class);
+		ProjectRPGServer.registerClass(kryo);
 		server.start();
 		try {
-			server.bind(54555, 54777);
+			server.bind(54555, 54556);
 		} catch (IOException e) {
-			e.printStackTrace();
+			Gdx.app.error(ProjectRPG.TITLE, "Cannot bind this port, maybe used by another application");
+			Gdx.app.exit();
 		}
 		
-		server.addListener(new Listener() {
-			@Override
-			public void received(Connection connection, Object object) {
-				if(object instanceof InitialRequest) {
-					InitialRequest request = (InitialRequest)object;
-					int newid = connection.getID();
-					charactersData.add(new CharacterData(newid, request.characterposx, request.characterposy, request.characterstate));
-					
-					InitialResponse response = new InitialResponse();
-					response.clientid = newid;
-					for(CharacterData data : charactersData) {
-						response.charactersData.add(data);						
-					}
-					
-					connection.sendTCP(response);
-				}
-			}
-			
-			@Override
-			public void disconnected(Connection connection) {
-				charactersData.remove(connection.getID() - 1);
-			}
-		});
+		characters = new HashMap<Integer, CharacterBody>();
+		structures = new HashMap<String, StructureBody>();
 		
-		new Thread(new Runnable() {
-			
-			Scanner input;
-			String command;
-			
-			@Override
-			public void run() {
-				input = new Scanner(System.in);
-				while(true) {
-					command = input.nextLine();	
-					Gdx.app.postRunnable(new Runnable() {
-						@Override
-						public void run() {
-							receiveConsole(command);
-						}
-					});
-				}
-			}
-		}).start();
+		PhysicGlobal.init(0f, -10f,  true, false);
+		structures.put("ground", new StructureBody(new StructureData(-20f, 0, 60f, 5f), BodyType.StaticBody));
+		structures.put("box1", new StructureBody(new StructureData(1, 1, 1, 1),  BodyType.StaticBody));
+		structures.put("box2", new StructureBody(new StructureData(2, 2, 1, 2),  BodyType.StaticBody));
+		structures.put("box3", new StructureBody(new StructureData(3, 3, 3, 3),  BodyType.StaticBody));
+		structures.put("box4", new StructureBody(new StructureData(6, 2, 1, 1),  BodyType.StaticBody));
+		structures.put("box5", new StructureBody(new StructureData(7, 1, 1, 1),  BodyType.StaticBody));
+		
+		server.addListener(new LoginListener.ServerSide());
+		server.addListener(new DisconnectListener.ServerSide());
+		server.addListener(new UpdateListener.ServerSide());
+		new Thread(new CommandListener()).start();
 	}
 
 	@Override
-	public void render() {
+	public void render() {		
+		// Simulate Physics
+		PhysicGlobal.getWorld().step(1/60f, 8, 3);
 		
-	}
-	
-	private void receiveConsole(String command) {
-		if(command.equals("test")) {
-			Gdx.app.log(ProjectRPG.TITLE, "Checked!");
+		for(CharacterBody character : characters.values()) {
+			character.update();
 		}
+		
+		CharactersUpdate update = new CharactersUpdate();
+		update.characters = new HashMap<Integer, CharacterData>();
+		for(Entry<Integer, CharacterBody> character : ProjectRPGServer.characters.entrySet()) {
+			update.characters.put(character.getKey(), character.getValue().getData());
+		}
+		server.sendToAllUDP(update);
+		
+		// log
+		/*
+		if(ctime > 1f) {
+			Gdx.app.log(ProjectRPG.TITLE, ""+update.characters.size());
+			ctime = 0f;
+		}
+		ctime += Gdx.graphics.getDeltaTime();
+		*/
 	}
 
 	@Override
 	public void dispose() {
 		
+	}
+	
+	/**
+	 * Registering the class before start the client or server
+	 * @param kryo {@link Kryo} object
+	 */
+	public static void registerClass(Kryo kryo) {
+		kryo.register(HashMap.class);
+		kryo.register(CharacterData.class);
+		kryo.register(CharacterData.CharacterState.class);
+		kryo.register(InitialRequest.class);
+		kryo.register(InitialResponse.class);
+		kryo.register(DisconnectRequest.class);
+		kryo.register(DisconnectResponse.class);
+		kryo.register(CharactersUpdate.class);
 	}
 
 }

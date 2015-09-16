@@ -32,4 +32,8 @@ public abstract class BodyTemplate {
 	
 	public abstract void update();
 	
+	public void dispose() {
+		PhysicGlobal.getWorld().destroyBody(body);
+	}
+	
 }

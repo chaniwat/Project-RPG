@@ -260,5 +260,13 @@ public class Spriter {
 		
 		initialized = false;
 	}
+	
+	/**
+	 * Clear the specific player
+	 * @param player
+	 */
+	public static void removePlayer(Player player) {
+		players.remove(player);
+	}
 
 }
