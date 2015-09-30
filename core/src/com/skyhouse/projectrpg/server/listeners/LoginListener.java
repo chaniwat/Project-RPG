@@ -6,7 +6,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.skyhouse.projectrpg.ProjectRPGGame;
 import com.skyhouse.projectrpg.entities.Character;
 import com.skyhouse.projectrpg.entities.data.CharacterData;
-import com.skyhouse.projectrpg.entities.data.CharacterData.CharacterState;
+import com.skyhouse.projectrpg.entities.data.CharacterData.CharacterActionState;
 import com.skyhouse.projectrpg.input.GameplayInputProcess;
 import com.skyhouse.projectrpg.physics.CharacterBody;
 import com.skyhouse.projectrpg.server.ProjectRPGServer;
@@ -38,7 +38,7 @@ public class LoginListener {
 		@Override
 		public void received(Connection connection, Object object) {
 			if(object instanceof InitialRequest) {
-				CharacterData character = new CharacterData(connection.getID(), -7f, 4f, CharacterState.IDLE);
+				CharacterData character = new CharacterData(connection.getID(), -7f, 4f, CharacterActionState.IDLE);
 				ProjectRPGServer.characters.putIfAbsent(connection.getID(), new CharacterBody(character));
 				
 				InitialResponse response = new InitialResponse();

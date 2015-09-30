@@ -1,9 +1,11 @@
-package com.skyhouse.projectrpg.utils.spriter;
+package com.skyhouse.projectrpg.graphics;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.brashmonkey.spriter.Spriter;
+import com.skyhouse.projectrpg.utils.spriter.SpriterDrawer;
+import com.skyhouse.projectrpg.utils.spriter.SpriterLoader;
 
 public class SpriterGlobal extends Spriter {
 	

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map>
+	<head>
+		<name>L01</name>
+		<mapname>TestLevel</mapname>
+		<texture>greenland</texture>
+		<background>plainland</background>
+	</head>
+	<structures>
+		<structure>
+			<name>ground</name>
+			<position_x>-20</position_x>
+			<position_y>0</position_y>
+			<width>60</width>
+			<height>5</height>
+			<textureregions>
+				<region position="Top">grassMid</region>
+				<region position="MiddleHorizontal">grassCenter</region>
+				<region position="Bottom">grassCenter</region>
+			</textureregions>
+			<behaviors></behaviors>
+		</structure>
+		<structure>
+			<name>box1</name>
+			<position_x>1</position_x>
+			<position_y>1</position_y>
+			<width>1</width>
+			<height>1</height>
+			<textureregions>
+				<region position="ALL">boxAlt</region>
+			</textureregions>
+			<behaviors></behaviors>
+		</structure>
+		<structure>
+			<name>box2</name>
+			<position_x>2</position_x>
+			<position_y>2</position_y>
+			<width>1</width>
+			<height>2</height>
+			<textureregions>
+				<region position="ALL">boxAlt</region>
+			</textureregions>
+			<behaviors></behaviors>
+		</structure>
+		<structure>
+			<name>box3</name>
+			<position_x>3</position_x>
+			<position_y>3</position_y>
+			<width>3</width>
+			<height>3</height>
+			<textureregions>
+				<region position="ALL">boxAlt</region>
+			</textureregions>
+			<behaviors></behaviors>
+		</structure>
+		<structure>
+			<name>box4</name>
+			<position_x>6</position_x>
+			<position_y>2</position_y>
+			<width>1</width>
+			<height>2</height>
+			<textureregions>
+				<region position="ALL">boxAlt</region>
+			</textureregions>
+			<behaviors></behaviors>
+		</structure>
+		<structure>
+			<name>box5</name>
+			<position_x>7</position_x>
+			<position_y>1</position_y>
+			<width>1</width>
+			<height>1</height>
+			<textureregions>
+				<region position="ALL">boxAlt</region>
+			</textureregions>
+			<behaviors></behaviors>
+		</structure>
+	</structures>
+	<npcs></npcs>
+	<triggerareas>
+		
+	</triggerareas>
+	<connections>
+		<point>
+			<tomap>L02</tomap>
+			<position_x></position_x>
+			<position_y></position_y>
+		</point>
+	</connections>
+</map>

@@ -63,6 +63,10 @@ public class TileTexture {
 	 * 3x3 - ALL
 	 */
 	
+	public TileTexture() {
+		this.region = new TextureRegion[9];
+	}
+	
 	public TileTexture(TextureRegion region) {
 		this.region = new TextureRegion[9];
 		setRegionPosition(region, TileTexturePosition.ALL);
@@ -132,8 +136,7 @@ public class TileTexture {
 			} else {
 				batch.draw(region[TileTexturePosition.BottomRight.getIndex()], position.x + (size.x - 1), position.y - 1 - (size.y - 1), 1, 1);
 			}
-		}
-		
+		}	
 	}
 
 }

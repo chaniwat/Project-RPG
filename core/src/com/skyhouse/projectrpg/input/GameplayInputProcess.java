@@ -1,10 +1,7 @@
 package com.skyhouse.projectrpg.input;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.Input.Keys;
 import com.skyhouse.projectrpg.entities.Character;
-import com.skyhouse.projectrpg.entities.data.CharacterData.CharacterState;
 
 public class GameplayInputProcess extends InputAdapter {
 	
@@ -16,6 +13,7 @@ public class GameplayInputProcess extends InputAdapter {
 	
 	@Override
 	public boolean keyUp(int keycode) {
+		/*
 		switch(keycode) {
 			case Keys.LEFT:
 				if(Gdx.input.isKeyPressed(Keys.RIGHT)) {
@@ -30,11 +28,14 @@ public class GameplayInputProcess extends InputAdapter {
 				else maincharacter.setState(CharacterState.IDLE);
 				break;
 		}
-		return false;
+		*/
+		maincharacter.inputstate.put(keycode, false);
+		return true;
 	}
 	
 	@Override
 	public boolean keyDown(int keycode) {
+		/*
 		switch(keycode) {
 			case Keys.LEFT:
 				maincharacter.setState(CharacterState.WALK);
@@ -48,6 +49,8 @@ public class GameplayInputProcess extends InputAdapter {
 				maincharacter.setState(CharacterState.JUMP);;
 				break;
 		}
+		*/
+		maincharacter.inputstate.put(keycode, true);
 		return true;
 	}	
 	

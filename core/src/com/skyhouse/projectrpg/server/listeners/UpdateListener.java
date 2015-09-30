@@ -31,7 +31,7 @@ public class UpdateListener {
 							}
 							ProjectRPGGame.characters.get(connectionid).setPosition(data.getPositionX(), data.getPositionY());
 							ProjectRPGGame.characters.get(connectionid).setFilpX(data.isFlipX());
-							ProjectRPGGame.characters.get(connectionid).setState(data.getState());
+							ProjectRPGGame.characters.get(connectionid).actionstate = data.actionstate;
 						}
 					}
 				});
@@ -49,8 +49,7 @@ public class UpdateListener {
 				Gdx.app.postRunnable(new Runnable() {
 					@Override
 					public void run() {
-						ProjectRPGServer.characters.get(data.getID()).getData().setFilpX(data.isFlipX());
-						ProjectRPGServer.characters.get(data.getID()).getData().setState(data.getState());
+						ProjectRPGServer.characters.get(data.getID()).getData().inputstate = data.inputstate;
 					}
 				});
 			}

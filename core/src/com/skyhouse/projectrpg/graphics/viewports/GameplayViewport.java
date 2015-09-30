@@ -3,7 +3,7 @@ package com.skyhouse.projectrpg.graphics.viewports;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.skyhouse.projectrpg.ProjectRPGGame.ProjectRPG;
+import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.entities.Character;
 
 public class GameplayViewport extends Viewport {

@@ -21,7 +21,7 @@ public class Character extends CharacterData {
 	}
 	
 	public void update(float deltaTime) {		
-		switch(getState()) {
+		switch(actionstate) {
 			case IDLE:
 				if(!idleflag) {
 					actor.setNewAnimation("idle");

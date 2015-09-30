@@ -1,9 +1,10 @@
 package com.skyhouse.projectrpg.physics;
 
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.skyhouse.projectrpg.entities.data.CharacterData;
-import com.skyhouse.projectrpg.entities.data.CharacterData.CharacterState;
+import com.skyhouse.projectrpg.entities.data.CharacterData.CharacterActionState;
 
 public class CharacterBody extends BodyTemplate {
 
@@ -30,47 +31,44 @@ public class CharacterBody extends BodyTemplate {
 	public void update() {
 		float speed = 2.5f;
 		
-		switch(character.getState()) {
-			case IDLE:
-				stop();
-				break;
-			case WALK:
-				move(speed);
-				break;
-			case JUMP:
-				if(!jumpflag && !fallflag) {
-					body.applyLinearImpulse(0f, 5f, body.getPosition().x, body.getPosition().y, true);
-					jumpflag = true;
-				}
-				if(walkflag) move(speed);
-				break;
-			case FALL:
-				if(walkflag) move(speed);
-				fallflag = true;
-				break;
-			default: break;
+		character.actionstate = CharacterActionState.IDLE;
+		
+		if(character.inputstate.get(Keys.LEFT) || character.inputstate.get(Keys.RIGHT)) {
+			if(character.inputstate.get(Keys.LEFT)) character.setFilpX(true);
+			else if(character.inputstate.get(Keys.RIGHT)) character.setFilpX(false);
+			move(speed);
+			character.actionstate = CharacterActionState.WALK;
+		} else {
+			stop();
+		}
+		
+		if(character.inputstate.get(Keys.UP)) {
+			if(!jumpflag && !fallflag) {
+				jump();
+				character.actionstate = CharacterActionState.JUMP;
+			}
+		}
+		
+		if(jumpflag) {
+			character.actionstate = CharacterActionState.JUMP;
 		}
 		
 		if(body.getLinearVelocity().y < -1f) {
 			jumpflag = false;
-			character.setState(CharacterState.FALL);
+			fallflag = true;
+			character.actionstate = CharacterActionState.FALL;
 		}
 		
 		if(body.getLinearVelocity().y > -1f && body.getLinearVelocity().y < 1f  && !jumpflag) {
 			fallflag = false;
-			if(walkflag) character.setState(CharacterState.WALK);
-			else character.setState(CharacterState.IDLE);
+			if(walkflag) character.actionstate = CharacterActionState.WALK;
+			else character.actionstate = CharacterActionState.IDLE;
 		}
 		
 		character.setPosition(body.getPosition().x, body.getPosition().y);
 	}
 	
 	private void move(float speed, boolean stop) {
-		if(jumpflag) {
-			character.setState(CharacterState.JUMP);
-		} else if(fallflag) {
-			character.setState(CharacterState.FALL);
-		}
 		if(character.isFlipX()) body.setLinearVelocity(-speed, body.getLinearVelocity().y);
 		else body.setLinearVelocity(speed, body.getLinearVelocity().y);
 		walkflag = !stop;
@@ -82,6 +80,11 @@ public class CharacterBody extends BodyTemplate {
 	
 	private void stop() {
 		move(0f, true);
+	}
+	
+	private void jump() {
+		body.applyLinearImpulse(0f, 5f, body.getPosition().x, body.getPosition().y, true);
+		jumpflag = true;
 	}
 	
 }

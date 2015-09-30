@@ -1,8 +1,10 @@
 package com.skyhouse.projectrpg.entities.data;
 
+import java.util.HashMap;
+
 public class CharacterData {
 	
-	public enum CharacterState {
+	public enum CharacterActionState {
 		IDLE,
 		WALK,
 		JUMP,
@@ -11,8 +13,21 @@ public class CharacterData {
 		DEATH
 	}
 	
+	@SuppressWarnings("serial")
+	public static class CharacterInputState extends  HashMap<Integer, Boolean> {
+		public CharacterInputState() {
+			super();
+		}
+		
+		@Override
+		public Boolean get(Object key) {
+			return super.getOrDefault(key, false);
+		}
+	}
+	
 	private int id;
-	private CharacterState state;
+	public CharacterActionState actionstate;
+	public CharacterInputState inputstate;
 	private float position_x, position_y;
 	private boolean flipXflag = false;
 	
@@ -21,14 +36,16 @@ public class CharacterData {
 		this.id = data.id;
 		this.position_x = data.position_x;
 		this.position_y = data.position_y;
-		this.state = data.state;
+		this.actionstate = data.actionstate;
+		this.inputstate = data.inputstate;
 		this.flipXflag = data.flipXflag;
 	}
-	public CharacterData(int id, float position_x, float position_y, CharacterState state) {
+	public CharacterData(int id, float position_x, float position_y, CharacterActionState state) {
 		this.id = id;
 		this.position_x = position_x;
 		this.position_y = position_y;
-		this.state = state;
+		this.actionstate = state;
+		this.inputstate = new CharacterInputState();
 	}
 	
 	public int getID() {
@@ -41,10 +58,6 @@ public class CharacterData {
 	
 	public float getPositionY() {
 		return this.position_y - 0.5f;
-	}
-	
-	public CharacterState getState() {
-		return this.state;
 	}
 	
 	public boolean isFlipX() {
@@ -66,9 +79,5 @@ public class CharacterData {
 	
 	public void setPositonY(float position_y) {
 		setPosition(this.position_x, position_y);
-	}
-	
-	public void setState(CharacterState state) {
-		this.state = state;
 	}
 }
