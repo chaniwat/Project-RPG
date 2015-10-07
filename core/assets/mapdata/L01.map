@@ -4,7 +4,11 @@
 		<name>L01</name>
 		<mapname>TestLevel</mapname>
 		<texture>greenland</texture>
-		<background>plainland</background>
+		<background>
+			<url>background</url>
+			<width>auto</width>
+			<height>17</height>
+		</background>
 	</head>
 	<structures>
 		<structure>

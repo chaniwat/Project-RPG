@@ -3,6 +3,7 @@ package com.skyhouse.projectrpg.physics;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.Filter;
 import com.skyhouse.projectrpg.entities.data.CharacterData;
 import com.skyhouse.projectrpg.entities.data.CharacterData.CharacterActionState;
 
@@ -18,7 +19,10 @@ public class CharacterBody extends BodyTemplate {
 		body.setFixedRotation(true);
 		fixture.setFriction(0);
 		fixture.setRestitution(0);
-		fixture.getFilterData().groupIndex = -1;
+		
+		Filter filterdef = new Filter();
+		filterdef.groupIndex = -1;
+		fixture.setFilterData(filterdef);
 		
 		this.character = character;
 	}

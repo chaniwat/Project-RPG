@@ -2,18 +2,17 @@ package com.skyhouse.projectrpg.server;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Scanner;
 import java.util.Map.Entry;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Server;
 import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.entities.data.CharacterData;
-import com.skyhouse.projectrpg.entities.data.StructureData;
-import com.skyhouse.projectrpg.map.MapBody;
-import com.skyhouse.projectrpg.map.MapReader;
+import com.skyhouse.projectrpg.map.Map;
+import com.skyhouse.projectrpg.net.Network;
 import com.skyhouse.projectrpg.physics.CharacterBody;
 import com.skyhouse.projectrpg.physics.PhysicGlobal;
 import com.skyhouse.projectrpg.physics.StructureBody;
@@ -33,15 +32,18 @@ public class ProjectRPGServer extends ApplicationAdapter {
 	public static HashMap<Integer, CharacterBody> characters;
 	public static HashMap<String, StructureBody> structures;
 	
-	public static MapBody map;
+	public static Map map;
 	
 	float ctime = 0f;
 	
+	Scanner input;
+	String command;
+	
 	@Override
-	public void create() {		
+	public void create() {	
 		server = new Server();
 		Kryo kryo = server.getKryo();
-		ProjectRPGServer.registerClass(kryo);
+		Network.registerKryoClass(kryo);
 		server.start();
 		try {
 			server.bind(54555, 54556);
@@ -56,7 +58,7 @@ public class ProjectRPGServer extends ApplicationAdapter {
 		
 		PhysicGlobal.init(0f, -10f,  true, false);
 		try {
-			map = new MapReader(Gdx.files.internal("mapdata/L01.map"), null).getMapBody();
+			map = new Map(Gdx.files.internal("mapdata/L01.map"), null);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -64,8 +66,8 @@ public class ProjectRPGServer extends ApplicationAdapter {
 		server.addListener(new LoginListener.ServerSide());
 		server.addListener(new DisconnectListener.ServerSide());
 		server.addListener(new UpdateListener.ServerSide());
-		new Thread(new CommandListener()).start();
-	}
+		new Thread(new CommandListener()).start(); // New Thread
+}
 
 	@Override
 	public void render() {		
@@ -90,21 +92,4 @@ public class ProjectRPGServer extends ApplicationAdapter {
 	public void dispose() {
 		
 	}
-	
-	/**
-	 * Registering the class before start the client or server
-	 * @param kryo {@link Kryo} object
-	 */
-	public static void registerClass(Kryo kryo) {
-		kryo.register(HashMap.class);
-		kryo.register(CharacterData.class);
-		kryo.register(CharacterData.CharacterActionState.class);
-		kryo.register(CharacterData.CharacterInputState.class);
-		kryo.register(InitialRequest.class);
-		kryo.register(InitialResponse.class);
-		kryo.register(DisconnectRequest.class);
-		kryo.register(DisconnectResponse.class);
-		kryo.register(CharacterDataPacket.class);
-	}
-
 }

@@ -1,5 +1,6 @@
 package com.skyhouse.projectrpg.entities;
 
+import com.brashmonkey.spriter.PlayerTweener;
 import com.skyhouse.projectrpg.entities.data.CharacterData;
 import com.skyhouse.projectrpg.graphics.SpriterActor;
 
@@ -69,6 +70,10 @@ public class Character extends CharacterData {
 		
 		actor.updateTweener(deltaTime);
 		actor.getPlayer().setPosition(getPositionX(), getPositionY());
+	}
+	
+	public PlayerTweener getSpriterPlayer() {
+		return actor.getPlayer();
 	}
 	
 	public void dispose() {

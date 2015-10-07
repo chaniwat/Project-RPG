@@ -6,6 +6,7 @@ import java.util.HashMap;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerAdapter;
 import com.badlogic.gdx.controllers.Controllers;
@@ -15,26 +16,26 @@ import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
+import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
+import com.badlogic.gdx.utils.Logger;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.skyhouse.projectrpg.entities.Character;
 import com.skyhouse.projectrpg.entities.Structure;
 import com.skyhouse.projectrpg.entities.data.CharacterData;
-import com.skyhouse.projectrpg.entities.data.StructureData;
 import com.skyhouse.projectrpg.graphics.SpriterGlobal;
-import com.skyhouse.projectrpg.graphics.TileTexture;
-import com.skyhouse.projectrpg.graphics.TileTexture.TileTexturePosition;
 import com.skyhouse.projectrpg.graphics.viewports.GameplayViewport;
 import com.skyhouse.projectrpg.graphics.viewports.UIViewport;
 import com.skyhouse.projectrpg.input.GameplayInputProcess;
 import com.skyhouse.projectrpg.map.Map;
-import com.skyhouse.projectrpg.map.MapReader;
+import com.skyhouse.projectrpg.map.MapLoader;
+import com.skyhouse.projectrpg.net.Network;
 import com.skyhouse.projectrpg.objects.BackgroundGlobal;
-import com.skyhouse.projectrpg.server.ProjectRPGServer;
 import com.skyhouse.projectrpg.server.listeners.DisconnectListener;
 import com.skyhouse.projectrpg.server.listeners.LoginListener;
 import com.skyhouse.projectrpg.server.listeners.UpdateListener;
@@ -44,92 +45,34 @@ import com.skyhouse.projectrpg.utils.spriter.ThaiCharacter;
 
 public class ProjectRPGGame extends ApplicationAdapter {
 	
-	public static  Client client;
+	Client client;
 	
 	SpriteBatch batch;
-	GameplayViewport gameViewport;
-	UIViewport uiViewport;
-	GameplayInputProcess gameplayinput;
-	
 	AssetManager assetmanager;
 	BitmapFont font;
 	
-	Map map;
-	
+	public static GameplayViewport gameViewport;
+	public static UIViewport uiViewport;
+	public static Map map;
 	public static HashMap<Integer, Character> characters;
  	public static Character maincharacter;
- 	public static CharacterData maincharacterdata;
- 	public static HashMap<String, Structure> structures;
 	
 	@Override
-	public void create () {		
-		client = new Client();
-		Kryo kryo = client.getKryo();
-		ProjectRPGServer.registerClass(kryo);
-		client.start();
-		try {
-			client.connect(5000, "server.projectrpg.dev", 54555, 54556);
-		} catch (IOException e) {
-			Gdx.app.error(ProjectRPG.TITLE, "Can't connect to server");
-			Gdx.app.exit();
-		}
-		
-		batch = new SpriteBatch();
-		
-		SpriterGlobal.init(batch);
-		BackgroundGlobal.init(batch);
-		
-		gameViewport = new GameplayViewport(12f);
-		uiViewport = new UIViewport();
-		
-		BackgroundGlobal.setBackground(new Texture(Gdx.files.internal("background.png")));
-		BackgroundGlobal.setSizeByHeight(17);
+	public void create () {
+		Gdx.app.setLogLevel(Logger.DEBUG);
 		
 		characters = new HashMap<Integer, Character>();
-		structures = new HashMap<String, Structure>();
 		
-		assetmanager = new AssetManager();
+		initialNetwork();
+		initialGraphics();
+		initialAssets();
 		
-		// For Box2D test
-		/*
-		assetmanager.load("textures/tilemap/greenland.pack", TextureAtlas.class);
-		assetmanager.finishLoadingAsset("textures/tilemap/greenland.pack");
-	    TextureAtlas texture = assetmanager.get("textures/tilemap/greenland.pack", TextureAtlas.class);
-	    */
-	    
-	    try {
-			map = new MapReader(Gdx.files.internal("mapdata/L01.map"), assetmanager).getMap();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	    /*
-		structures.put("ground", new Structure(new StructureData(-20f, 0, 60f, 5f), new TileTexture(texture.findRegion("grassMid"))));
-		structures.get("ground").getTileTexture().setRegionPosition(texture.findRegion("grassCenter"), TileTexturePosition.MiddleHorizontal, TileTexturePosition.Bottom);
-		structures.put("box1", new Structure(new StructureData(1, 1, 1, 1),  new TileTexture(texture.findRegion("boxAlt"))));
-		structures.put("box2", new Structure(new StructureData(2, 2, 1, 2),  new TileTexture(texture.findRegion("boxAlt"))));
-		structures.put("box3", new Structure(new StructureData(3, 3, 3, 3),  new TileTexture(texture.findRegion("boxAlt"))));
-		structures.put("box4", new Structure(new StructureData(6, 2, 1, 2),  new TileTexture(texture.findRegion("boxAlt"))));
-		structures.put("box5", new Structure(new StructureData(7, 1, 1, 1),  new TileTexture(texture.findRegion("boxAlt"))));
-		*/
-		
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Regular.ttf"));
-		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.characters = FreeTypeFontGenerator.DEFAULT_CHARS + ThaiCharacter.THAI_CHARS;
-		font = generator.generateFont(parameter);
-		generator.dispose();
-		font.setColor(new Color(0, 0, 0, 1));
-		
-		client.addListener(new LoginListener.ClientSide());
-		client.addListener(new DisconnectListener.ClientSide());
-		client.addListener(new UpdateListener.ClientSide());
-		client.sendTCP(new InitialRequest());
-		
-		Gdx.app.log(ProjectRPG.TITLE, "Version = " + ProjectRPG.VERSION);
-		Gdx.app.log(ProjectRPG.TITLE, "created");
+		Gdx.app.debug(ProjectRPG.TITLE, "Version = " + ProjectRPG.VERSION);
+		Gdx.app.debug(ProjectRPG.TITLE, "created");
 		
 		GLProfiler.enable();
 		
+		/*
 		for(Controller controller : Controllers.getControllers()) {
 			Gdx.app.log(ProjectRPG.TITLE, controller.getName());
 		}
@@ -156,6 +99,56 @@ public class ProjectRPGGame extends ApplicationAdapter {
 				}
 			});
 		}
+		*/
+	}
+	
+	private void initialNetwork() {
+		client = new Client();
+		Kryo kryo = client.getKryo();
+		Network.registerKryoClass(kryo);
+		client.start();
+		try {
+			client.connect(5000, "server.projectrpg.dev", 54555, 54556);
+		} catch (IOException e) {
+			Gdx.app.error(ProjectRPG.TITLE, "Can't connect to server");
+			Gdx.app.exit();
+		}
+		
+		client.addListener(new LoginListener.ClientSide());
+		client.addListener(new DisconnectListener.ClientSide());
+		client.addListener(new UpdateListener.ClientSide());
+		client.sendTCP(new InitialRequest());
+	}
+	
+	private void initialGraphics() {
+		batch = new SpriteBatch();
+		
+		SpriterGlobal.init(batch);
+		BackgroundGlobal.init(batch);
+		
+		gameViewport = new GameplayViewport(12f);
+		uiViewport = new UIViewport();
+	}
+	
+	private void initialAssets() {
+		InternalFileHandleResolver resolver = new InternalFileHandleResolver();
+		assetmanager = new AssetManager();
+		assetmanager.setLoader(Map.class, new MapLoader(resolver));
+		assetmanager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
+		assetmanager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
+		
+		FreeTypeFontLoaderParameter fontparams = new FreeTypeFontLoaderParameter();
+		fontparams.fontFileName = "fonts/Roboto-Regular.ttf";
+		fontparams.fontParameters.characters = FreeTypeFontGenerator.DEFAULT_CHARS + ThaiCharacter.THAI_CHARS;
+		assetmanager.load("fonts/Roboto-Regular.ttf", BitmapFont.class, fontparams);
+		
+		assetmanager.load("mapdata/L01.map", Map.class, new MapLoader.MapParameter(assetmanager));
+		assetmanager.finishLoading();		
+		
+		map = assetmanager.get("mapdata/L01.map", Map.class);
+		
+		font = assetmanager.get("fonts/Roboto-Regular.ttf", BitmapFont.class);
+		font.setColor(new Color(0, 0, 0, 1));
 	}
 	
 	@Override
@@ -163,10 +156,10 @@ public class ProjectRPGGame extends ApplicationAdapter {
 		gameViewport.update(width, height);
 		uiViewport.update(width, height);
 		
-		Gdx.app.log(ProjectRPG.TITLE, "screen width: "+width);
-		Gdx.app.log(ProjectRPG.TITLE, "screen height: "+height);
-		Gdx.app.log(ProjectRPG.TITLE, "width viewport: "+gameViewport.getWorldWidth());
-		Gdx.app.log(ProjectRPG.TITLE, "Height viewport: "+gameViewport.getWorldHeight());
+		Gdx.app.debug(ProjectRPG.TITLE, "screen width: "+width);
+		Gdx.app.debug(ProjectRPG.TITLE, "screen height: "+height);
+		Gdx.app.debug(ProjectRPG.TITLE, "width viewport: "+gameViewport.getWorldWidth());
+		Gdx.app.debug(ProjectRPG.TITLE, "Height viewport: "+gameViewport.getWorldHeight());
 	}
 
 	@Override
@@ -202,7 +195,9 @@ public class ProjectRPGGame extends ApplicationAdapter {
 		for(Character character : characters.values()) {
 			character.update(Gdx.graphics.getDeltaTime());
 		}
-		SpriterGlobal.updateAndDraw();
+		SpriterGlobal.updateAndDrawExcept(maincharacter.getSpriterPlayer());
+		maincharacter.getSpriterPlayer().update();
+		SpriterGlobal.draw(maincharacter.getSpriterPlayer());
 		
 		// Structure (eg. floor, platforms) - Layer 3
 		batch.begin();
@@ -220,9 +215,8 @@ public class ProjectRPGGame extends ApplicationAdapter {
 			font.draw(batch, String.format("Draw calls : %d | Bound calls : %d | Shader switch : %d", GLProfiler.drawCalls, GLProfiler.textureBindings, GLProfiler.shaderSwitches), 20, uiViewport.getWorldHeight() - 60);
 			font.draw(batch, String.format("Player position: (%.2f, %.2f)", maincharacter.getPositionX(), maincharacter.getPositionY()), 20, uiViewport.getWorldHeight() - 80);
 			font.draw(batch, String.format("Player state: %s", maincharacter.actionstate.name()), 20, uiViewport.getWorldHeight() - 100);
-			font.draw(batch, String.format("ไหนลองพิมพ์ไทยสิ๊ นี่คือ (ผสมไทย) ก็นะ อ่อ อิ :D", maincharacter.actionstate.name()), 20, uiViewport.getWorldHeight() - 125);
+			font.draw(batch, String.format("Memory used : %.2f MB | Native used : %.2f MB", ( Gdx.app.getJavaHeap() / 1024f / 1024f), (Gdx.app.getNativeHeap()  / 1024f / 1024f)), 20, uiViewport.getWorldHeight() - 120);
 		batch.end();
-		
 		// Log
 		
 		GLProfiler.reset();
