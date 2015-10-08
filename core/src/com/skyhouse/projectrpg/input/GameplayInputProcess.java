@@ -1,56 +1,56 @@
 package com.skyhouse.projectrpg.input;
 
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
 import com.skyhouse.projectrpg.entities.Character;
 
 public class GameplayInputProcess extends InputAdapter {
 	
-	Character maincharacter;
+	Character character;
 	
 	public  GameplayInputProcess(Character maincharacter) {
-		this.maincharacter = maincharacter;
+		this.character = maincharacter;
 	}
 	
 	@Override
 	public boolean keyUp(int keycode) {
-		/*
 		switch(keycode) {
 			case Keys.LEFT:
-				if(Gdx.input.isKeyPressed(Keys.RIGHT)) {
-					maincharacter.setFilpX(false);
-				}
-				else maincharacter.setState(CharacterState.IDLE);
+				character.inputstate.left_flag = false;
+				if(character.inputstate.right_flag == false) character.inputstate.x_value = 0;
 				break;
 			case Keys.RIGHT:
-				if(Gdx.input.isKeyPressed(Keys.LEFT)) {
-					maincharacter.setFilpX(true);
-				}
-				else maincharacter.setState(CharacterState.IDLE);
+				character.inputstate.right_flag = false;
+				if(character.inputstate.left_flag == false) character.inputstate.x_value = 0;
+				break;
+			case Keys.UP:
+				character.inputstate.up_flag = false;
+				break;
+			case Keys.CONTROL_LEFT:
+				character.inputstate.jump_flag = false;
 				break;
 		}
-		*/
-		maincharacter.inputstate.put(keycode, false);
 		return true;
 	}
 	
 	@Override
 	public boolean keyDown(int keycode) {
-		/*
 		switch(keycode) {
 			case Keys.LEFT:
-				maincharacter.setState(CharacterState.WALK);
-				maincharacter.setFilpX(true);
+				character.inputstate.left_flag = true;
+				character.inputstate.x_value = 1;
 				break;
 			case Keys.RIGHT:
-				maincharacter.setState(CharacterState.WALK);
-				maincharacter.setFilpX(false);
+				character.inputstate.right_flag = true;
+				character.inputstate.x_value = 1;
 				break;
 			case Keys.UP:
-				maincharacter.setState(CharacterState.JUMP);;
+				character.inputstate.up_flag = true;
+				break;
+			case Keys.CONTROL_LEFT:
+				character.inputstate.jump_flag = true;
 				break;
 		}
-		*/
-		maincharacter.inputstate.put(keycode, true);
 		return true;
 	}	
 	

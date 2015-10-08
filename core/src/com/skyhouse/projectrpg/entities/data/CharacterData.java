@@ -1,7 +1,5 @@
 package com.skyhouse.projectrpg.entities.data;
 
-import java.util.HashMap;
-
 public class CharacterData {
 	
 	public enum CharacterActionState {
@@ -13,21 +11,24 @@ public class CharacterData {
 		DEATH
 	}
 	
-	@SuppressWarnings("serial")
-	public static class CharacterInputState extends  HashMap<Integer, Boolean> {
+	public static class CharacterInputState {
+		
+		public boolean up_flag, left_flag, right_flag, jump_flag;
+		public float x_value;
+		
 		public CharacterInputState() {
-			super();
+			up_flag = false;
+			left_flag = false;
+			right_flag = false;
+			jump_flag = false;
+			x_value = 0;
 		}
 		
-		@Override
-		public Boolean get(Object key) {
-			return super.getOrDefault(key, false);
-		}
 	}
 	
 	private int id;
-	public CharacterActionState actionstate;
 	public CharacterInputState inputstate;
+	public CharacterActionState actionstate;
 	private float position_x, position_y;
 	private boolean flipXflag = false;
 	

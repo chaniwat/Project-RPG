@@ -1,6 +1,5 @@
 package com.skyhouse.projectrpg.physics;
 
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Filter;
@@ -37,16 +36,18 @@ public class CharacterBody extends BodyTemplate {
 		
 		character.actionstate = CharacterActionState.IDLE;
 		
-		if(character.inputstate.get(Keys.LEFT) || character.inputstate.get(Keys.RIGHT)) {
-			if(character.inputstate.get(Keys.LEFT)) character.setFilpX(true);
-			else if(character.inputstate.get(Keys.RIGHT)) character.setFilpX(false);
-			move(speed);
+		if(character.inputstate.left_flag || character.inputstate.right_flag) {
+			if(character.inputstate.left_flag) character.setFilpX(true);
+			else if(character.inputstate.right_flag) character.setFilpX(false);
+			float x_value = character.inputstate.x_value;
+			if(x_value > 1) x_value = 1f;
+			move(speed * x_value);
 			character.actionstate = CharacterActionState.WALK;
 		} else {
 			stop();
 		}
 		
-		if(character.inputstate.get(Keys.UP)) {
+		if(character.inputstate.jump_flag) {
 			if(!jumpflag && !fallflag) {
 				jump();
 				character.actionstate = CharacterActionState.JUMP;

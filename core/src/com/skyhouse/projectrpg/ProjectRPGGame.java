@@ -31,6 +31,7 @@ import com.skyhouse.projectrpg.entities.data.CharacterData;
 import com.skyhouse.projectrpg.graphics.SpriterGlobal;
 import com.skyhouse.projectrpg.graphics.viewports.GameplayViewport;
 import com.skyhouse.projectrpg.graphics.viewports.UIViewport;
+import com.skyhouse.projectrpg.input.GameplayControllerProcess;
 import com.skyhouse.projectrpg.input.GameplayInputProcess;
 import com.skyhouse.projectrpg.map.Map;
 import com.skyhouse.projectrpg.map.MapLoader;
@@ -72,34 +73,9 @@ public class ProjectRPGGame extends ApplicationAdapter {
 		
 		GLProfiler.enable();
 		
-		/*
 		for(Controller controller : Controllers.getControllers()) {
 			Gdx.app.log(ProjectRPG.TITLE, controller.getName());
 		}
-		
-		if(Controllers.getControllers().size > 0) {
-			Controller controller = Controllers.getControllers().get(0);
-			controller.addListener(new ControllerAdapter() {
-				@Override
-				public boolean buttonDown(Controller controller, int buttonIndex) {
-					Gdx.app.log(ProjectRPG.TITLE, "Controller:" + controller.getName() + " | Button: " + buttonIndex);
-					return true;
-				}
-				
-				@Override
-				public boolean axisMoved(Controller controller, int axisIndex, float value) {
-					Gdx.app.log(ProjectRPG.TITLE, "Controller:" + controller.getName() + " | Axis: " + axisIndex + " | value: " + value);
-					return super.axisMoved(controller, axisIndex, value);
-				}
-				
-				@Override
-				public boolean povMoved(Controller controller, int povIndex, PovDirection value) {
-					Gdx.app.log(ProjectRPG.TITLE, "Controller:" + controller.getName() + " | POV: " + povIndex + " | value: " + value);
-					return true;
-				}
-			});
-		}
-		*/
 	}
 	
 	private void initialNetwork() {
@@ -215,7 +191,6 @@ public class ProjectRPGGame extends ApplicationAdapter {
 			font.draw(batch, String.format("Draw calls : %d | Bound calls : %d | Shader switch : %d", GLProfiler.drawCalls, GLProfiler.textureBindings, GLProfiler.shaderSwitches), 20, uiViewport.getWorldHeight() - 60);
 			font.draw(batch, String.format("Player position: (%.2f, %.2f)", maincharacter.getPositionX(), maincharacter.getPositionY()), 20, uiViewport.getWorldHeight() - 80);
 			font.draw(batch, String.format("Player state: %s", maincharacter.actionstate.name()), 20, uiViewport.getWorldHeight() - 100);
-			font.draw(batch, String.format("Memory used : %.2f MB | Native used : %.2f MB", ( Gdx.app.getJavaHeap() / 1024f / 1024f), (Gdx.app.getNativeHeap()  / 1024f / 1024f)), 20, uiViewport.getWorldHeight() - 120);
 		batch.end();
 		// Log
 		

@@ -1,12 +1,15 @@
 package com.skyhouse.projectrpg.server.listeners;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.controllers.Controller;
+import com.badlogic.gdx.controllers.Controllers;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.skyhouse.projectrpg.ProjectRPGGame;
 import com.skyhouse.projectrpg.entities.Character;
 import com.skyhouse.projectrpg.entities.data.CharacterData;
 import com.skyhouse.projectrpg.entities.data.CharacterData.CharacterActionState;
+import com.skyhouse.projectrpg.input.GameplayControllerProcess;
 import com.skyhouse.projectrpg.input.GameplayInputProcess;
 import com.skyhouse.projectrpg.physics.CharacterBody;
 import com.skyhouse.projectrpg.server.ProjectRPGServer;
@@ -27,6 +30,10 @@ public class LoginListener {
 						ProjectRPGGame.characters.putIfAbsent(connection.getID(), new Character(response.data));
 						ProjectRPGGame.maincharacter = ProjectRPGGame.characters.get(connection.getID());
 						Gdx.input.setInputProcessor(new GameplayInputProcess(ProjectRPGGame.maincharacter));
+						if(Controllers.getControllers().size > 0) {
+							Controller controller = Controllers.getControllers().get(0);
+							controller.addListener(new GameplayControllerProcess(ProjectRPGGame.maincharacter));
+						}
 					}
 				});
 			}
