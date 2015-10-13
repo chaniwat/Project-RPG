@@ -1,9 +1,7 @@
 package com.skyhouse.projectrpg.graphics.viewports;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.entities.Character;
 
 public class GameplayViewport extends Viewport {
@@ -23,7 +21,6 @@ public class GameplayViewport extends Viewport {
 		float viewportWidth = (viewWorldSize * ((float)screenWidth / (float)screenHeight)) * viewWorldScale;
 		float viewportHeight = viewWorldSize * viewWorldScale;
 		
-		Gdx.app.log(ProjectRPG.TITLE, "w : "+viewportWidth+" , h : "+viewportHeight);
 		setWorldSize(viewportWidth, viewportHeight);
 		setScreenBounds(0, 0, screenWidth, screenHeight);
 		

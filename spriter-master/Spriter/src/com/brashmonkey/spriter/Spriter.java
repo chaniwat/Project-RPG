@@ -189,23 +189,6 @@ public class Spriter {
 	}
 	
 	/**
-	 * Update each create player by this class and immediately draws it, Except given player.
-	 * This method should only be caaled if you want to update and render on the same thread.
-	 * @throws SpriterException if {@link #init(Class, Class)} was not called before
-	 * @author Meranote
-	 */
-	@SuppressWarnings("unchecked")
-	public static void updateAndDrawExcept(Player except) {
-		if(!initialized) throw new SpriterException("Call init() before updating!");
-		for(Player player: players){
-			if(player.equals(except)) continue;
-			player.update();
-			drawer.loader = entityToLoader.get(player.getEntity());
-			drawer.draw(player);
-		}
-	}
-	
-	/**
 	 * Updates each created player by this class.
 	 * @throws SpriterException if {@link #init(Class, Class)} was not called before
 	 */
@@ -229,15 +212,20 @@ public class Spriter {
 	}
 	
 	/**
-	 * Draw the select player using drawer by this class.
+	 * Draws each created player except given one by this class.
 	 * @throws SpriterException if {@link #init(Class, Class)} was not called before
 	 * @author Meranote
 	 */
 	@SuppressWarnings("unchecked")
-	public static void draw(Player player){
+	public static void drawAndLast(Player last){
 		if(!initialized) throw new SpriterException("Call init() before drawing!");
-		drawer.loader = entityToLoader.get(player.getEntity());
-		drawer.draw(player);
+		for(Player player: players){
+			if(player.equals(last)) continue;
+			drawer.loader = entityToLoader.get(player.getEntity());
+			drawer.draw(player);
+		}
+		drawer.loader = entityToLoader.get(last.getEntity());
+		drawer.draw(last);
 	}
 	
 	/**

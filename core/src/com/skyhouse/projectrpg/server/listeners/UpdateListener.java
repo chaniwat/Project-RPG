@@ -5,15 +5,20 @@ import java.util.Map.Entry;
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.skyhouse.projectrpg.ProjectRPGGame;
-import com.skyhouse.projectrpg.entities.Character;
 import com.skyhouse.projectrpg.entities.data.CharacterData;
+import com.skyhouse.projectrpg.scene.GameScene;
 import com.skyhouse.projectrpg.server.ProjectRPGServer;
 import com.skyhouse.projectrpg.server.packets.CharacterDataPacket;
 
 public class UpdateListener {
 	
 	public static class ClientSide extends Listener {
+		
+		GameScene scene;
+		
+		public ClientSide(GameScene scene) {
+			this.scene = scene;
+		}
 		
 		@Override
 		public void received(Connection connection, Object object) {
@@ -26,12 +31,8 @@ public class UpdateListener {
 						for(Entry<Integer, CharacterData> character : update.characters.entrySet()) {
 							int connectionid = character.getKey();
 							CharacterData data = character.getValue();
-							if(ProjectRPGGame.characters.getOrDefault(connectionid, null) == null) {
-								ProjectRPGGame.characters.put(connectionid, new Character(data));
-							}
-							ProjectRPGGame.characters.get(connectionid).setPosition(data.getPositionX(), data.getPositionY());
-							ProjectRPGGame.characters.get(connectionid).setFilpX(data.isFlipX());
-							ProjectRPGGame.characters.get(connectionid).actionstate = data.actionstate;
+							scene.addCharacter(connectionid, data);
+							scene.updateCharacter(connectionid, data);
 						}
 					}
 				});

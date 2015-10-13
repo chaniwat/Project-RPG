@@ -17,7 +17,6 @@ public class GameplayControllerProcess extends ControllerAdapter {
 	
 	@Override
 	public boolean buttonDown(Controller controller, int buttonIndex) {
-		Gdx.app.log(ProjectRPG.TITLE, "Controller:" + controller.getName() + " | Button: " + buttonIndex);
 		switch(buttonIndex) {
 			case 2:
 				character.inputstate.jump_flag = true;
@@ -27,7 +26,6 @@ public class GameplayControllerProcess extends ControllerAdapter {
 	
 	@Override
 	public boolean buttonUp(Controller controller, int buttonIndex) {
-		Gdx.app.log(ProjectRPG.TITLE, "Controller:" + controller.getName() + " | Button: " + buttonIndex);
 		switch(buttonIndex) {
 			case 2:
 				character.inputstate.jump_flag = false;
@@ -37,7 +35,6 @@ public class GameplayControllerProcess extends ControllerAdapter {
 	
 	@Override
 	public boolean axisMoved(Controller controller, int axisIndex, float value) {
-		Gdx.app.log(ProjectRPG.TITLE, "Controller:" + controller.getName() + " | Axis: " + axisIndex + " | value: " + value);
 		switch(axisIndex) {
 			case 3:
 				if(value > 0.01) {

@@ -1,4 +1,4 @@
-package com.skyhouse.projectrpg.graphics;
+package com.skyhouse.projectrpg.actor;
 
 import com.badlogic.gdx.Gdx;
 import com.brashmonkey.spriter.PlayerTweener;

@@ -80,15 +80,17 @@
 			<behaviors></behaviors>
 		</structure>
 	</structures>
-	<npcs></npcs>
-	<triggerareas>
+	<npcs>
 		
-	</triggerareas>
-	<connections>
+	</npcs>
+	<triggerarea>
+		
+	</triggerarea>
+	<connection>
 		<point>
 			<tomap>L02</tomap>
 			<position_x></position_x>
 			<position_y></position_y>
 		</point>
-	</connections>
+	</connection>
 </map>

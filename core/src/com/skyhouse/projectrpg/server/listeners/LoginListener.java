@@ -1,17 +1,12 @@
 package com.skyhouse.projectrpg.server.listeners;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.controllers.Controller;
-import com.badlogic.gdx.controllers.Controllers;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.skyhouse.projectrpg.ProjectRPGGame;
-import com.skyhouse.projectrpg.entities.Character;
 import com.skyhouse.projectrpg.entities.data.CharacterData;
 import com.skyhouse.projectrpg.entities.data.CharacterData.CharacterActionState;
-import com.skyhouse.projectrpg.input.GameplayControllerProcess;
-import com.skyhouse.projectrpg.input.GameplayInputProcess;
 import com.skyhouse.projectrpg.physics.CharacterBody;
+import com.skyhouse.projectrpg.scene.GameScene;
 import com.skyhouse.projectrpg.server.ProjectRPGServer;
 import com.skyhouse.projectrpg.server.packets.InitialRequest;
 import com.skyhouse.projectrpg.server.packets.InitialResponse;
@@ -20,6 +15,12 @@ public class LoginListener {
 	
 	public static class ClientSide extends Listener {
 		
+		GameScene scene;
+		
+		public ClientSide(GameScene scene) {
+			this.scene = scene;
+		}
+		
 		@Override
 		public void received(final Connection connection, Object object) {
 			if(object instanceof InitialResponse) {
@@ -27,13 +28,7 @@ public class LoginListener {
 				Gdx.app.postRunnable(new Runnable() {
 					@Override
 					public void run() {
-						ProjectRPGGame.characters.putIfAbsent(connection.getID(), new Character(response.data));
-						ProjectRPGGame.maincharacter = ProjectRPGGame.characters.get(connection.getID());
-						Gdx.input.setInputProcessor(new GameplayInputProcess(ProjectRPGGame.maincharacter));
-						if(Controllers.getControllers().size > 0) {
-							Controller controller = Controllers.getControllers().get(0);
-							controller.addListener(new GameplayControllerProcess(ProjectRPGGame.maincharacter));
-						}
+						scene.setMainCharacter(connection.getID(), response.data);
 					}
 				});
 			}

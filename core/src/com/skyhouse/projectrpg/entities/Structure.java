@@ -2,6 +2,7 @@ package com.skyhouse.projectrpg.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Disposable;
 import com.skyhouse.projectrpg.entities.data.StructureData;
 import com.skyhouse.projectrpg.graphics.TileTexture;
 
