@@ -3,7 +3,7 @@ package com.skyhouse.projectrpg.server.listeners;
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.skyhouse.projectrpg.ProjectRPGGame;
+import com.skyhouse.projectrpg.client.ProjectRPGClient;
 import com.skyhouse.projectrpg.scene.GameScene;
 import com.skyhouse.projectrpg.server.ProjectRPGServer;
 import com.skyhouse.projectrpg.server.packets.DisconnectRequest;

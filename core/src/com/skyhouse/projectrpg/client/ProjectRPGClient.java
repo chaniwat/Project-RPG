@@ -1,4 +1,4 @@
-package com.skyhouse.projectrpg;
+package com.skyhouse.projectrpg.client;
 
 import java.io.IOException;
 
@@ -13,10 +13,12 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.utils.Logger;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
+import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.graphics.SpriterGlobal;
 import com.skyhouse.projectrpg.map.Map;
 import com.skyhouse.projectrpg.map.MapLoader;
@@ -29,37 +31,34 @@ import com.skyhouse.projectrpg.server.packets.DisconnectRequest;
 import com.skyhouse.projectrpg.server.packets.InitialRequest;
 import com.skyhouse.projectrpg.utils.spriter.ThaiCharacter;
 
-public class ProjectRPGGame extends ApplicationAdapter {
+/**
+ * Client class of ProjectRPG.
+ * @author Meranote
+ *
+ */
+public class ProjectRPGClient extends ApplicationAdapter {
 	
 	public static Client client;
 	
-	SpriteBatch batch;
 	AssetManager assetmanager;
+	
+	SpriteBatch batch;
 	BitmapFont font;
 
 	GameScene gamescene;
 	
 	@Override
-	public void create () {
+	public void create()  {
 		Gdx.app.setLogLevel(Logger.DEBUG);
+		GLProfiler.enable();
 		
 		initialNetwork();
-		initialPhysics();
 		initialGraphics();
-		initialAssets();
-		
-		gamescene = new GameScene(batch, assetmanager);
-		gamescene.loadMap("L01", true);
-		
-		client.addListener(new LoginListener.ClientSide(gamescene));
-		client.addListener(new DisconnectListener.ClientSide(gamescene));
-		client.addListener(new UpdateListener.ClientSide(gamescene));
-		client.sendTCP(new InitialRequest());
+		initialAssets();		
+		startNetwork();
 		
 		Gdx.app.debug(ProjectRPG.TITLE, "Version = " + ProjectRPG.VERSION);
 		Gdx.app.debug(ProjectRPG.TITLE, "created");
-		
-		GLProfiler.enable();
 	}
 	
 	private void initialNetwork() {
@@ -75,14 +74,17 @@ public class ProjectRPGGame extends ApplicationAdapter {
 		}
 	}
 	
-	private void initialPhysics() {
-		
+	private void startNetwork() {
+		client.addListener(new LoginListener.ClientSide(gamescene));
+		client.addListener(new DisconnectListener.ClientSide(gamescene));
+		client.addListener(new UpdateListener.ClientSide(gamescene));
+		client.sendTCP(new InitialRequest());
 	}
 	
 	private void initialGraphics() {
 		batch = new SpriteBatch();
 		
-		SpriterGlobal.init(batch);
+		SpriterGlobal.init(batch, new ShapeRenderer());
 	}
 	
 	private void initialAssets() {
@@ -98,6 +100,9 @@ public class ProjectRPGGame extends ApplicationAdapter {
 		assetmanager.load("fonts/Roboto-Regular.ttf", BitmapFont.class, fontparams);
 		
 		assetmanager.finishLoading();
+		
+		gamescene = new GameScene(batch, assetmanager);
+		gamescene.loadMap("L01", true);
 	}
 	
 	@Override

@@ -66,7 +66,9 @@ public class ProjectRPGServer extends ApplicationAdapter {
 		server.addListener(new LoginListener.ServerSide());
 		server.addListener(new DisconnectListener.ServerSide());
 		server.addListener(new UpdateListener.ServerSide());
-		new Thread(new CommandListener()).start(); // New Thread
+		
+		// New Thread
+		new Thread(new CommandListener()).start();
 }
 
 	@Override

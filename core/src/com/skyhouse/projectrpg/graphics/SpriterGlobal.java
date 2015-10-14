@@ -9,11 +9,9 @@ import com.skyhouse.projectrpg.utils.spriter.SpriterLoader;
 
 public class SpriterGlobal extends Spriter {
 	
-	private static ShapeRenderer renderer;
-	
 	private SpriterGlobal() {}
 	
-	public static void init(SpriteBatch batch) {
+	public static void init(SpriteBatch batch,  ShapeRenderer renderer) {
 		renderer = new ShapeRenderer();
 		
 		Spriter.setDrawerDependencies(batch, renderer);
@@ -27,6 +25,5 @@ public class SpriterGlobal extends Spriter {
 	
 	public static void dispose() {
 		Spriter.dispose();
-		renderer.dispose();
 	}
 }

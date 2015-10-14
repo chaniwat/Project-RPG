@@ -15,14 +15,14 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 
-public class MapLoader extends SynchronousAssetLoader<Map, MapLoader.MapParameter> {
+public class MapLoader extends SynchronousAssetLoader<Map, MapLoader.MapLoaderParameter> {
 	
 	public MapLoader(FileHandleResolver resolver) {
 		super(resolver);
 	}
 
 	@Override
-	public Map load(AssetManager assetManager, String fileName, FileHandle file, MapParameter parameter) {
+	public Map load(AssetManager assetManager, String fileName, FileHandle file, MapLoaderParameter parameter) {
 		try {
 			return new Map(file, parameter.assetmanager);
 		} catch (IOException e) {
@@ -34,7 +34,7 @@ public class MapLoader extends SynchronousAssetLoader<Map, MapLoader.MapParamete
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, MapParameter parameter) {
+	public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, MapLoaderParameter parameter) {
 		Array<AssetDescriptor> dependency = new Array<AssetDescriptor>();
 		
 		XmlReader reader = new XmlReader();
@@ -54,10 +54,10 @@ public class MapLoader extends SynchronousAssetLoader<Map, MapLoader.MapParamete
 		return dependency;
 	}
 
-	public static class MapParameter extends AssetLoaderParameters<Map> {
+	public static class MapLoaderParameter extends AssetLoaderParameters<Map> {
 		AssetManager assetmanager;
 		
-		public MapParameter(AssetManager assetmanager) {
+		public MapLoaderParameter(AssetManager assetmanager) {
 			this.assetmanager = assetmanager;
 		}
 	}

@@ -1,6 +1,7 @@
 package com.skyhouse.projectrpg.input;
 
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.skyhouse.projectrpg.entities.Character;
 
@@ -28,6 +29,9 @@ public class GameplayInputProcess extends InputAdapter {
 				break;
 			case Keys.CONTROL_LEFT:
 				character.inputstate.jump_flag = false;
+				break;
+			case Keys.ESCAPE:
+				Gdx.app.exit();
 				break;
 		}
 		return true;

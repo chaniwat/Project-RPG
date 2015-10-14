@@ -5,7 +5,7 @@ import com.brashmonkey.spriter.PlayerTweener;
 import com.brashmonkey.spriter.Spriter;
 
 /**
- * SpriterActor for Spriter
+ * SpriterActor for Spriter.
  * @author Meranote
  *
  */
@@ -25,8 +25,8 @@ public class SpriterActor {
 	}
 	
 	/**
-	 * Set new animation to changed to
-	 * @param newAnimation animation name
+	 * Set new animation to changed to.
+	 * @param newanimation animation name
 	 */
 	public void setNewAnimation(String newanimation) {
 		this.newanimation  = newanimation;
@@ -34,17 +34,17 @@ public class SpriterActor {
 	}
 	
 	/**
-	 * Update the tweener animation with default speed (4)
-	 * @param deltaTime
+	 * Update the tweener animation with default speed (4).
+	 * @param deltaTime deltatime
 	 */
 	public void updateTweener(float deltaTime) {
 		updateTweener(deltaTime, 4);
 	}
 	
 	/**
-	 * Update the tweener animation with given speed
-	 * @param deltaTime
-	 * @param speed
+	 * Update the tweener animation with given speed.
+	 * @param deltaTime deltatime
+	 * @param speed tween speed
 	 */
 	public void updateTweener(float deltaTime, float speed) {
 		if(player.getFirstPlayer().getAnimation().name.equals(newanimation)) {
@@ -61,7 +61,7 @@ public class SpriterActor {
 	}
 	
 	/**
-	 * Get the {@link PlayerTweener} of this actor
+	 * Get the {@link PlayerTweener} of this actor.
 	 * @return {@link PlayerTweener} Player
 	 */
 	public PlayerTweener getPlayer() {
@@ -69,7 +69,7 @@ public class SpriterActor {
 	}
 	
 	/**
-	 * Clear this SpriterActor
+	 * Clear this SpriterActor.
 	 */
 	public void dispose() {
 		Spriter.removePlayer(player);

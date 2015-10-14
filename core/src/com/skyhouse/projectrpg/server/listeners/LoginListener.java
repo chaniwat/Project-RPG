@@ -40,7 +40,7 @@ public class LoginListener {
 		@Override
 		public void received(Connection connection, Object object) {
 			if(object instanceof InitialRequest) {
-				CharacterData character = new CharacterData(connection.getID(), -7f, 4f, CharacterActionState.IDLE);
+				CharacterData character = new CharacterData(connection.getID(), ((float)Math.random() * 13f) - 3, ((float)Math.random() * 5f) + 4, CharacterActionState.IDLE);
 				ProjectRPGServer.characters.putIfAbsent(connection.getID(), new CharacterBody(character));
 				
 				InitialResponse response = new InitialResponse();
