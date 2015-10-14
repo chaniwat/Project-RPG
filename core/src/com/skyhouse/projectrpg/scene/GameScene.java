@@ -4,8 +4,6 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.controllers.Controller;
-import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -26,7 +24,7 @@ import com.skyhouse.projectrpg.map.Map;
 import com.skyhouse.projectrpg.map.MapLoader;
 
 public class GameScene extends SceneAdapter {
-
+	
 	AssetManager assetmanager;
 	
 	SpriteBatch batch;
@@ -145,11 +143,13 @@ public class GameScene extends SceneAdapter {
 	public void setMainCharacter(int id, CharacterData data) {
 		addCharacter(id, data);
 		maincharacter = characters.get(id);
-		Gdx.input.setInputProcessor(new GameplayInputProcess(maincharacter));
-		if(Controllers.getControllers().size > 0) {
-			Controller controller = Controllers.getControllers().get(0);
-			controller.addListener(new GameplayControllerProcess(maincharacter));
-		}
+		input.setInputProcessor(new GameplayInputProcess(maincharacter));
+		input.setControllerProcessor(new GameplayControllerProcess(maincharacter));
+		input.use();
+	}
+	
+	public Character getMainCharacter() {
+		return maincharacter;
 	}
 	
 	@Override

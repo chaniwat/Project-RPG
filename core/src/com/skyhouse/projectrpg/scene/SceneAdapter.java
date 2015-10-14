@@ -1,7 +1,15 @@
 package com.skyhouse.projectrpg.scene;
 
+import com.skyhouse.projectrpg.scene.input.SceneInput;
+
 public class SceneAdapter implements Scene {
 
+	SceneInput input;
+	
+	public SceneAdapter() {
+		input = new SceneInput();
+	}
+	
 	@Override
 	public void dispose() {
 		
@@ -20,6 +28,10 @@ public class SceneAdapter implements Scene {
 	@Override
 	public void draw(float deltatime) {
 		
+	}
+	
+	public void setSceneInputProcessor(SceneInput listener) {
+		input = listener;
 	}
 	
 	public void updateAndDraw(float deltatime) {
