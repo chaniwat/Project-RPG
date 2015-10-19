@@ -1,4 +1,4 @@
-package com.skyhouse.projectrpg.server.packets;
+package com.skyhouse.projectrpg.net.packets;
 
 import java.util.HashMap;
 

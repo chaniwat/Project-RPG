@@ -1,4 +1,4 @@
-package com.skyhouse.projectrpg.utils.spriter;
+package com.skyhouse.projectrpg.spriter;
 
 import com.brashmonkey.spriter.Animation;
 import com.brashmonkey.spriter.Mainline.Key;

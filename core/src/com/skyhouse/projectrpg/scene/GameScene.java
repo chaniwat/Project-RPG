@@ -23,7 +23,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.skyhouse.projectrpg.client.ProjectRPGClient;
+import com.skyhouse.projectrpg.ProjectRPGClient;
 import com.skyhouse.projectrpg.entities.Character;
 import com.skyhouse.projectrpg.entities.data.CharacterData;
 import com.skyhouse.projectrpg.entities.data.CharacterData.CharacterActionState;
@@ -51,10 +51,11 @@ public class GameScene extends SceneAdapter {
 	
 	World world;
 	HashMap<String, Map> maps;
+	Map mainmap;
 	Sprite background;
 
-	Character maincharacter;
 	HashMap<Integer, Character> characters;
+	Character maincharacter;
 	
 	public GameScene(SpriteBatch batch, AssetManager assetmanager) {
 		this.batch = batch;
@@ -109,6 +110,7 @@ public class GameScene extends SceneAdapter {
 		for(Character character : characters.values()) {
 			character.update(Gdx.graphics.getDeltaTime());
 		}
+		
 		gameViewport.setViewCenterToCharacter(maincharacter, 0, 2.45f);
 		gameViewport.setViewSize(16f);
 		background.setPosition(-(background.getWidth() / 2f) + (maincharacter.getPositionX() * 0.35f), -2f + (maincharacter.getPositionY() * 0.35f));
@@ -142,9 +144,10 @@ public class GameScene extends SceneAdapter {
 		Vector2 hpposition = new Vector2((uiViewport.getScreenWidth() / 2f), 128f);
 		Vector2 hpsize = new Vector2(352f, 15f);
 		float hpbordersize = 3f;
-		float hpremain = 80f;
-		float hpmax = 100f;
+		float hpremain = 244520f;
+		float hpmax = 365210f;
 		float hpprocess = hpremain / hpmax;
+		if(hpprocess > 1f) hpprocess = 1f;
 		
 		Vector2 expposition = new Vector2(hpposition.x, hpposition.y - 10f);
 		Vector2 expsize = new Vector2(hpsize.x + hpbordersize * 2f, 5f);
@@ -200,7 +203,7 @@ public class GameScene extends SceneAdapter {
 			font.draw(batch, "Lantacy : "+ProjectRPGClient.client.getReturnTripTime()+" ms", 20, uiViewport.getScreenHeight() - 40);
 			textlayout.setText(font, String.format("%.0f", hpremain));
 			font.draw(batch, textlayout, (hpposition.x - (hpsize.x / 2f)) + (hpsize.x - textlayout.width) / 2, hpposition.y + (hpsize.y + 5f + textlayout.height) / 2f);
-			textlayout.setText(font, "1 | Private");
+			textlayout.setText(font, "86 | Gunner");
 			font.draw(batch, textlayout, (hpposition.x - (hpsize.x / 2f)) + (hpsize.x - textlayout.width) / 2, hpposition.y + (hpsize.y + 5f + textlayout.height) / 2f  + 24f);
 			textlayout.setText(font, "QH");
 			font.draw(batch, textlayout, qhposition.x - (textlayout.width / 2f), qhposition.y + (textlayout.height / 2f));
@@ -214,7 +217,7 @@ public class GameScene extends SceneAdapter {
 			font.draw(batch, textlayout, n2position.x + 20f, n2position.y + 35f);
 			textlayout.setText(font, "MOD1");
 			font.draw(batch, textlayout, mods1position.x + modsbordersize + ((modssize.x - textlayout.width) / 2f), mods1position.y + (modssize.y + 5f + textlayout.height) / 2f);
-			textlayout.setText(font, "MOD2");
+			textlayout.setText(font, "ERR");
 			font.draw(batch, textlayout, mods2position.x + modsbordersize + ((modssize.x - textlayout.width) / 2f), mods2position.y + (modssize.y + 5f + textlayout.height) / 2f);
 		batch.end();
 	}

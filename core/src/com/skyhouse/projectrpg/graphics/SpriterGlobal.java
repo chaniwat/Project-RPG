@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.brashmonkey.spriter.Player;
 import com.brashmonkey.spriter.Spriter;
-import com.skyhouse.projectrpg.utils.spriter.SpriterDrawer;
-import com.skyhouse.projectrpg.utils.spriter.SpriterLoader;
+import com.skyhouse.projectrpg.spriter.SpriterDrawer;
+import com.skyhouse.projectrpg.spriter.SpriterLoader;
 
 public class SpriterGlobal extends Spriter {
 	

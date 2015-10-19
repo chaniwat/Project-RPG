@@ -1271,7 +1271,7 @@
             </timeline>
             <timeline id="17" obj="2" name="head" object_type="bone">
                 <key id="0" spin="0">
-                    <bone x="212.156536" y="-1.061004" angle="355.388645" scale_x="2.718625"/>
+                    <bone x="212.073272" y="-2.060796" angle="355.388645" scale_x="2.718625"/>
                 </key>
                 <key id="1" time="196" spin="0">
                     <bone x="212.156536" y="-1.061004" angle="355.388645" scale_x="2.718625"/>

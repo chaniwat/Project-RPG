@@ -1,4 +1,4 @@
-package com.skyhouse.projectrpg.utils.spriter;
+package com.skyhouse.projectrpg.graphics.font;
 
 public class ThaiCharacter {
 	

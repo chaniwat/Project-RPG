@@ -4,11 +4,11 @@ import java.util.HashMap;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.skyhouse.projectrpg.entities.data.CharacterData;
-import com.skyhouse.projectrpg.server.packets.CharacterDataPacket;
-import com.skyhouse.projectrpg.server.packets.DisconnectRequest;
-import com.skyhouse.projectrpg.server.packets.DisconnectResponse;
-import com.skyhouse.projectrpg.server.packets.InitialRequest;
-import com.skyhouse.projectrpg.server.packets.InitialResponse;
+import com.skyhouse.projectrpg.net.packets.CharacterDataPacket;
+import com.skyhouse.projectrpg.net.packets.DisconnectRequest;
+import com.skyhouse.projectrpg.net.packets.DisconnectResponse;
+import com.skyhouse.projectrpg.net.packets.InitialRequest;
+import com.skyhouse.projectrpg.net.packets.InitialResponse;
 
 public class Network {
 

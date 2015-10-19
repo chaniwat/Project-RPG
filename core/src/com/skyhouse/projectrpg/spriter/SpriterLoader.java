@@ -1,4 +1,4 @@
-package com.skyhouse.projectrpg.utils.spriter;
+package com.skyhouse.projectrpg.spriter;
 
 import java.util.HashMap;
 import java.util.Set;

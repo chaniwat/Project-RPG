@@ -1,4 +1,4 @@
-package com.skyhouse.projectrpg.client;
+package com.skyhouse.projectrpg;
 
 import java.io.IOException;
 
@@ -18,18 +18,17 @@ import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.utils.Logger;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
-import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.graphics.SpriterGlobal;
+import com.skyhouse.projectrpg.graphics.font.ThaiCharacter;
 import com.skyhouse.projectrpg.map.Map;
 import com.skyhouse.projectrpg.map.MapLoader;
 import com.skyhouse.projectrpg.net.Network;
+import com.skyhouse.projectrpg.net.listeners.DisconnectListener;
+import com.skyhouse.projectrpg.net.listeners.LoginListener;
+import com.skyhouse.projectrpg.net.listeners.UpdateListener;
+import com.skyhouse.projectrpg.net.packets.DisconnectRequest;
+import com.skyhouse.projectrpg.net.packets.InitialRequest;
 import com.skyhouse.projectrpg.scene.GameScene;
-import com.skyhouse.projectrpg.server.listeners.DisconnectListener;
-import com.skyhouse.projectrpg.server.listeners.LoginListener;
-import com.skyhouse.projectrpg.server.listeners.UpdateListener;
-import com.skyhouse.projectrpg.server.packets.DisconnectRequest;
-import com.skyhouse.projectrpg.server.packets.InitialRequest;
-import com.skyhouse.projectrpg.utils.spriter.ThaiCharacter;
 
 /**
  * Client class of ProjectRPG.

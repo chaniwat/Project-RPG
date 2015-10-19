@@ -1,4 +1,4 @@
-package com.skyhouse.projectrpg.server;
+package com.skyhouse.projectrpg;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -9,22 +9,17 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Server;
-import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.entities.data.CharacterData;
 import com.skyhouse.projectrpg.map.Map;
 import com.skyhouse.projectrpg.net.Network;
+import com.skyhouse.projectrpg.net.listeners.CommandListener;
+import com.skyhouse.projectrpg.net.listeners.DisconnectListener;
+import com.skyhouse.projectrpg.net.listeners.LoginListener;
+import com.skyhouse.projectrpg.net.listeners.UpdateListener;
+import com.skyhouse.projectrpg.net.packets.CharacterDataPacket;
 import com.skyhouse.projectrpg.physics.CharacterBody;
 import com.skyhouse.projectrpg.physics.PhysicGlobal;
 import com.skyhouse.projectrpg.physics.StructureBody;
-import com.skyhouse.projectrpg.server.listeners.CommandListener;
-import com.skyhouse.projectrpg.server.listeners.DisconnectListener;
-import com.skyhouse.projectrpg.server.listeners.LoginListener;
-import com.skyhouse.projectrpg.server.listeners.UpdateListener;
-import com.skyhouse.projectrpg.server.packets.CharacterDataPacket;
-import com.skyhouse.projectrpg.server.packets.DisconnectRequest;
-import com.skyhouse.projectrpg.server.packets.DisconnectResponse;
-import com.skyhouse.projectrpg.server.packets.InitialRequest;
-import com.skyhouse.projectrpg.server.packets.InitialResponse;
 
 public class ProjectRPGServer extends ApplicationAdapter {
 	

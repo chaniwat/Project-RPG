@@ -1,4 +1,4 @@
-package com.skyhouse.projectrpg.utils.spriter;
+package com.skyhouse.projectrpg.spriter;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
