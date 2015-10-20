@@ -7,26 +7,17 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.Filter;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.ProjectRPGClient;
 import com.skyhouse.projectrpg.entities.Character;
 import com.skyhouse.projectrpg.entities.data.CharacterData;
-import com.skyhouse.projectrpg.entities.data.CharacterData.CharacterActionState;
 import com.skyhouse.projectrpg.graphics.SpriterGlobal;
 import com.skyhouse.projectrpg.graphics.viewports.GameplayViewport;
 import com.skyhouse.projectrpg.graphics.viewports.UIViewport;
@@ -34,19 +25,11 @@ import com.skyhouse.projectrpg.input.GameplayControllerProcess;
 import com.skyhouse.projectrpg.input.GameplayInputProcess;
 import com.skyhouse.projectrpg.map.Map;
 import com.skyhouse.projectrpg.map.MapLoader;
-import com.skyhouse.projectrpg.physics.CharacterBody;
-import com.skyhouse.projectrpg.physics.PhysicGlobal;
 
-public class GameScene extends SceneAdapter {
+public class GameScene extends Scene {
 	
-	AssetManager assetmanager;
-	
-	SpriteBatch batch;
 	ShapeRenderer renderer;
-	BitmapFont font;
 	
-	GameplayViewport gameViewport;
-	UIViewport uiViewport;
 	GlyphLayout textlayout;
 	
 	World world;
@@ -57,22 +40,14 @@ public class GameScene extends SceneAdapter {
 	HashMap<Integer, Character> characters;
 	Character maincharacter;
 	
-	public GameScene(SpriteBatch batch, AssetManager assetmanager) {
-		this.batch = batch;
+	public GameScene(SpriteBatch batch) {
+		super(batch);
 		this.renderer = new ShapeRenderer();
-		this.assetmanager = assetmanager;
-		
-		gameViewport = new GameplayViewport(15f);
-		uiViewport = new UIViewport();
+		addViewport("Gameplay", new GameplayViewport(16f));
+		addViewport("UI", new UIViewport());
 		textlayout = new GlyphLayout();
-		
 		maps = new HashMap<String, Map>();
 		characters = new HashMap<Integer, Character>();
-		
-		font = assetmanager.get("fonts/Roboto-Regular.ttf", BitmapFont.class);
-		font.getData().markupEnabled = true;
-		font.setColor(Color.BLACK);
-		
 		world = new World(new Vector2(0, -10f), true);
 	}
 	
@@ -80,9 +55,7 @@ public class GameScene extends SceneAdapter {
 		String pathtomap = "mapdata/" + map + ".map";
 		assetmanager.load(pathtomap, Map.class, new MapLoader.MapLoaderParameter(assetmanager));
 		if(waitforload) assetmanager.finishLoading();
-		
 		maps.put(assetmanager.get(pathtomap, Map.class).getName(), assetmanager.get(pathtomap, Map.class));
-		
 		setBackgroundFromMap(maps.get("L01"));
 	}
 	
@@ -95,24 +68,19 @@ public class GameScene extends SceneAdapter {
 	
 	@Override
 	public void resize(int width, int height) {
-		gameViewport.update(width, height);
-		uiViewport.update(width, height);
+		updateViewport(width, height);
 	}
 
 	@Override
 	public void update(float deltatime) {
 		world.step(1/60f, 8, 3);
-		
 		if(maincharacter == null) return;
 		CharacterData maindata = new CharacterData(maincharacter);
-		ProjectRPGClient.client.sendUDP(maindata);
-		
+		ProjectRPG.Client.net.sendUDP(maindata);
 		for(Character character : characters.values()) {
 			character.update(Gdx.graphics.getDeltaTime());
 		}
-		
-		gameViewport.setViewCenterToCharacter(maincharacter, 0, 2.45f);
-		gameViewport.setViewSize(16f);
+		((GameplayViewport)getViewport("Gameplay")).setViewCenterToCharacter(maincharacter, 0, 2.45f);
 		background.setPosition(-(background.getWidth() / 2f) + (maincharacter.getPositionX() * 0.35f), -2f + (maincharacter.getPositionY() * 0.35f));
 	}
 
@@ -124,9 +92,7 @@ public class GameScene extends SceneAdapter {
 	}
 	
 	private void drawEntities() {
-		gameViewport.apply();
-		batch.setProjectionMatrix(gameViewport.getCamera().combined);
-		
+		useViewport("Gameplay");
 		batch.begin();
 			background.draw(batch);
 			for(Map map : maps.values()) {
@@ -137,11 +103,10 @@ public class GameScene extends SceneAdapter {
 	}
 	
 	private void drawUI() {
-		uiViewport.apply();
-		batch.setProjectionMatrix(uiViewport.getCamera().combined);
-		renderer.setProjectionMatrix(uiViewport.getCamera().combined);
+		useViewport("UI");
+		renderer.setProjectionMatrix(getViewport("UI").getCamera().combined);
 		
-		Vector2 hpposition = new Vector2((uiViewport.getScreenWidth() / 2f), 128f);
+		Vector2 hpposition = new Vector2((getViewport("UI").getScreenWidth() / 2f), 128f);
 		Vector2 hpsize = new Vector2(352f, 15f);
 		float hpbordersize = 3f;
 		float hpremain = 244520f;
@@ -199,8 +164,8 @@ public class GameScene extends SceneAdapter {
 		renderer.end();
 		
 		batch.begin();
-			font.draw(batch, "FPS : "+Gdx.graphics.getFramesPerSecond(), 20, uiViewport.getScreenHeight() - 20);
-			font.draw(batch, "Lantacy : "+ProjectRPGClient.client.getReturnTripTime()+" ms", 20, uiViewport.getScreenHeight() - 40);
+			font.draw(batch, "FPS : "+Gdx.graphics.getFramesPerSecond(), 20, getViewport("UI").getScreenHeight() - 20);
+			font.draw(batch, "Lantacy : "+ProjectRPG.Client.net.getReturnTripTime()+" ms", 20, getViewport("UI").getScreenHeight() - 40);
 			textlayout.setText(font, String.format("%.0f", hpremain));
 			font.draw(batch, textlayout, (hpposition.x - (hpsize.x / 2f)) + (hpsize.x - textlayout.width) / 2, hpposition.y + (hpsize.y + 5f + textlayout.height) / 2f);
 			textlayout.setText(font, "86 | Gunner");
