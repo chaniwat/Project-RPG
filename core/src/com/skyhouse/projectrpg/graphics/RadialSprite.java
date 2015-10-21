@@ -7,10 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
-/** 
- * Edited by Meranote. 
- * @author Xoppa 
- */
+/** @author Xoppa */
 public class RadialSprite implements Drawable {
 	private final static int TOPRIGHT1 = 0;
 	private final static int BOTTOMRIGHT1 = 5;
@@ -32,7 +29,7 @@ public class RadialSprite implements Drawable {
 	private boolean dirty = true;
 	private int draw = 0;
 	private float angleOffset = 270f;
-	private float originX, originY;
+	private float originX = 0f, originY = 0f;
 	private float scaleX = 1f, scaleY = 1f;
 	
 	public RadialSprite(final TextureRegion textureRegion) {

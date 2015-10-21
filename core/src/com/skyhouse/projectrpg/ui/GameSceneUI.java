@@ -11,14 +11,18 @@ import com.skyhouse.projectrpg.ui.gameplay.UISkillSlot;
 
 public class GameSceneUI extends Stage {
 	
-	private UISkillSlot s1;
+	private UISkillSlot s1, s2;
 	
 	public GameSceneUI(Viewport viewport, SpriteBatch batch) {
 		super(viewport, batch);
 		loadAssets();
 		
 		s1 = new UISkillSlot(new TextureRegion(ProjectRPG.Client.assetmanager.get("textures/gamesceneui/SkillCircle_ext.png", Texture.class)), new TextureRegion(ProjectRPG.Client.assetmanager.get("textures/gamesceneui/SkillCircle_ovr.png", Texture.class)));
+		s2 = new UISkillSlot(new TextureRegion(ProjectRPG.Client.assetmanager.get("textures/gamesceneui/SkillCircle_ext.png", Texture.class)), new TextureRegion(ProjectRPG.Client.assetmanager.get("textures/gamesceneui/SkillCircle_ovr.png", Texture.class)));
 		addActor(s1);
+		addActor(s2);
+		
+		s1.setPosition(300f, 0f);
 	}
 	
 	private void loadAssets() {
