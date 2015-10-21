@@ -1,1 +1,1 @@
-include 'desktop', 'core', 'spriter-master/Spriter'
+include 'desktop', 'core', 'spriter'

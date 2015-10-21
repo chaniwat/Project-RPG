@@ -64,4 +64,4 @@ build/
 .DS_Store
 
 ## Spriter-Tests
-Spriter-master/SpriterTests/
+spritertests/
