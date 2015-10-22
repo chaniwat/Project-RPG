@@ -38,15 +38,15 @@ public class DisconnectListener {
 	public static class ServerSide extends Listener {
 		
 		@Override
-		public void received(Connection connection, Object object) {
-			if(object instanceof DisconnectRequest) {
+		public void disconnected(Connection connection) {
+			if(ProjectRPGServer.characters.get(connection.getID()) != null) {
 				ProjectRPGServer.characters.get(connection.getID()).dispose();
-				ProjectRPGServer.characters.remove(connection.getID());
-				
-				DisconnectResponse response = new DisconnectResponse();
-				response.connectionid = connection.getID();
-				ProjectRPGServer.server.sendToAllExceptTCP(connection.getID(), response);
+				ProjectRPGServer.characters.remove(connection.getID());				
 			}
+			
+			DisconnectResponse response = new DisconnectResponse();
+			response.connectionid = connection.getID();
+			ProjectRPGServer.server.sendToAllExceptTCP(connection.getID(), response);
 		}
 		
 	}

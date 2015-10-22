@@ -9,10 +9,10 @@ public class Character extends CharacterData {
 	private SpriterActor actor;
 	
 	private boolean idleflag,
-								   walkflag,
-								   jumpflag,
-								   fallflag,
-								   flipflag = false;
+					walkflag,
+					jumpflag,
+					fallflag,
+					flipflag = false;
 	
 	public Character(CharacterData data) {
 		super(data);

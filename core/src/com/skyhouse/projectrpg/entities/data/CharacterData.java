@@ -15,6 +15,7 @@ public class CharacterData {
 		
 		public boolean up_flag, left_flag, right_flag, jump_flag;
 		public float x_value;
+		public boolean s1_flag, s2_flag;
 		
 		public CharacterInputState() {
 			up_flag = false;

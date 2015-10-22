@@ -29,6 +29,7 @@ import com.skyhouse.projectrpg.input.GameplayInputProcess;
 import com.skyhouse.projectrpg.map.Map;
 import com.skyhouse.projectrpg.map.MapLoader;
 import com.skyhouse.projectrpg.ui.GameSceneUI;
+import com.skyhouse.projectrpg.ui.GameSceneUI.SlotPosition;
 
 public class GameScene extends Scene {
 	
@@ -49,7 +50,7 @@ public class GameScene extends Scene {
 		maps = new HashMap<String, Map>();
 		characters = new HashMap<Integer, Character>();
 		world = new World(new Vector2(0, -10f), true);
-		ui = new GameSceneUI(getViewport("UI"), batch);
+		ui = new GameSceneUI(getViewport("UI"), batch, font);
 	}
 	
 	public void loadMap(String map, boolean waitforload) {
@@ -57,11 +58,14 @@ public class GameScene extends Scene {
 		assetmanager.load(pathtomap, Map.class, new MapLoader.MapLoaderParameter(assetmanager));
 		if(waitforload) assetmanager.finishLoading();
 		maps.put(assetmanager.get(pathtomap, Map.class).getName(), assetmanager.get(pathtomap, Map.class));
-		setBackgroundFromMap(maps.get("L01"));
+		if(mainmap == null) {
+			mainmap = maps.get(map);
+			updateBackground();
+		}
 	}
 	
-	private void setBackgroundFromMap(Map map) {
-		Map.BackgroundData bgdata = map.getBackgroundData();
+	private void updateBackground() {
+		Map.BackgroundData bgdata = mainmap.getBackgroundData();
 		background = new Sprite(assetmanager.get(bgdata.path, Texture.class));
 		background.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		background.setSize(bgdata.width, bgdata.height);
@@ -70,6 +74,7 @@ public class GameScene extends Scene {
 	@Override
 	public void resize(int width, int height) {
 		updateViewport(width, height);
+		ui.update();
 	}
 
 	@Override
@@ -84,6 +89,44 @@ public class GameScene extends Scene {
 		((GameplayViewport)getViewport("Gameplay")).setViewCenterToCharacter(maincharacter, 0, 2.45f);
 		background.setPosition(-(background.getWidth() / 2f) + (maincharacter.getPositionX() * 0.35f), -2f + (maincharacter.getPositionY() * 0.35f));
 		ui.act(deltatime);
+		
+		checkUseSkill(deltatime);
+	}
+	
+	boolean processedS1 = false, processedS2 = false;
+	boolean cooldownings1 = false, cooldownings2 = false;
+	float s1time = 0f, s2time = 0f, cds1 = 10f, cds2 = 3f;
+	private void checkUseSkill(float deltatime) {
+		if(maincharacter.inputstate.s1_flag && !processedS1 && !cooldownings1) {
+			ui.useSkill(SlotPosition.FIRST, cds1);
+			cooldownings1 = true;
+			processedS1 = true;
+		} else {
+			processedS1 = false;
+		}
+		
+		if(maincharacter.inputstate.s2_flag && !processedS2 && !cooldownings2) {
+			ui.useSkill(SlotPosition.SECOND, cds2);
+			cooldownings2 = true;
+			processedS2 = true;
+		} else {
+			processedS2 = false;
+		}
+		
+		if(cooldownings1) {
+			if(s1time > cds1) {
+				s1time = 0f;
+				cooldownings1 = false;
+			}
+			s1time += deltatime;
+		}
+		if(cooldownings2) {
+			if(s2time > cds2) {
+				s2time = 0f;
+				cooldownings2 = false;
+			}
+			s2time += deltatime;
+		}
 	}
 
 	@Override
@@ -136,10 +179,6 @@ public class GameScene extends Scene {
 		input.setInputProcessor(new GameplayInputProcess(maincharacter));
 		input.setControllerProcessor(new GameplayControllerProcess(maincharacter));
 		input.use();
-	}
-	
-	public Character getMainCharacter() {
-		return maincharacter;
 	}
 	
 	@Override

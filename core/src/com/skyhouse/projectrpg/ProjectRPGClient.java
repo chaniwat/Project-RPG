@@ -121,7 +121,6 @@ public class ProjectRPGClient extends ApplicationAdapter {
 	
 	@Override
 	public void dispose () {
-		net.sendTCP(new DisconnectRequest());
 		net.close();
 		SpriterGlobal.dispose();
 	}

@@ -20,6 +20,13 @@ public class GameplayControllerProcess extends ControllerAdapter {
 		switch(buttonIndex) {
 			case 2:
 				character.inputstate.jump_flag = true;
+				break;
+			case 6:
+				character.inputstate.s2_flag = true;
+				break;
+			case 7:
+				character.inputstate.s1_flag = true;
+				break;
 		}
 		return true;
 	}
@@ -29,6 +36,13 @@ public class GameplayControllerProcess extends ControllerAdapter {
 		switch(buttonIndex) {
 			case 2:
 				character.inputstate.jump_flag = false;
+				break;
+			case 6:
+				character.inputstate.s2_flag = false;
+				break;
+			case 7:
+				character.inputstate.s1_flag = false;
+				break;
 		}
 		return super.buttonUp(controller, buttonIndex);
 	}
