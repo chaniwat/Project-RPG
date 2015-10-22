@@ -19,15 +19,11 @@ public class UISkillSlot extends Actor {
 
 	private Sprite outside, skill;
 	private RadialSprite overlay;
-	private BitmapFont font;
-	private GlyphLayout layout;
 	private float cooldowntime, currenttime, cooldownprocess;
 	private boolean isCooldown = false;
 	private boolean isSkillSet = false;
 	
-	public UISkillSlot(TextureRegion outside, TextureRegion overlay, BitmapFont font) {
-		this.font = font;
-		this.layout = new GlyphLayout();
+	public UISkillSlot(TextureRegion outside, TextureRegion overlay) {
 		this.skill = new Sprite();
 		this.outside = new Sprite(outside);
 		this.outside.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -76,8 +72,6 @@ public class UISkillSlot extends Actor {
 		if(isSkillSet) skill.draw(batch);
 		if(isCooldown) {
 			overlay.draw(batch, getX(), getY(), 360f * cooldownprocess);
-			//layout.setText(font, String.format("[WHITE]%.0f", cooldowntime - currenttime));
-			//font.draw(batch, layout, outside.getOriginX() - (layout.width / 2f) + getX(), outside.getOriginY() + (layout.height / 2f) + getY());
 		}
 	}
 	

@@ -18,6 +18,9 @@ public class GameplayControllerProcess extends ControllerAdapter {
 	@Override
 	public boolean buttonDown(Controller controller, int buttonIndex) {
 		switch(buttonIndex) {
+			case 0:
+				character.inputstate.qh_flag = true;
+				break;
 			case 2:
 				character.inputstate.jump_flag = true;
 				break;
@@ -34,6 +37,9 @@ public class GameplayControllerProcess extends ControllerAdapter {
 	@Override
 	public boolean buttonUp(Controller controller, int buttonIndex) {
 		switch(buttonIndex) {
+			case 0:
+				character.inputstate.qh_flag = false;
+				break;
 			case 2:
 				character.inputstate.jump_flag = false;
 				break;

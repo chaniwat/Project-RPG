@@ -90,13 +90,13 @@ public class GameScene extends Scene {
 		background.setPosition(-(background.getWidth() / 2f) + (maincharacter.getPositionX() * 0.35f), -2f + (maincharacter.getPositionY() * 0.35f));
 		ui.act(deltatime);
 		
-		checkUseSkill(deltatime);
+		checkUse(deltatime);
 	}
 	
-	boolean processedS1 = false, processedS2 = false;
-	boolean cooldownings1 = false, cooldownings2 = false;
-	float s1time = 0f, s2time = 0f, cds1 = 10f, cds2 = 3f;
-	private void checkUseSkill(float deltatime) {
+	boolean processedS1 = false, processedS2 = false, processedqh = false;
+	boolean cooldownings1 = false, cooldownings2 = false, cooldowningqh = false;
+	float s1time = 0f, s2time = 0f, cds1 = 10f, cds2 = 3f, qhtime = 0f, cdqh = 50f;
+	private void checkUse(float deltatime) {
 		if(maincharacter.inputstate.s1_flag && !processedS1 && !cooldownings1) {
 			ui.useSkill(SlotPosition.FIRST, cds1);
 			cooldownings1 = true;
@@ -113,6 +113,14 @@ public class GameScene extends Scene {
 			processedS2 = false;
 		}
 		
+		if(maincharacter.inputstate.qh_flag && !processedqh && !cooldowningqh) {
+			ui.useQuickHeal(cdqh);
+			cooldowningqh = true;
+			processedqh = true;
+		} else {
+			processedqh = false;
+		}
+		
 		if(cooldownings1) {
 			if(s1time > cds1) {
 				s1time = 0f;
@@ -126,6 +134,13 @@ public class GameScene extends Scene {
 				cooldownings2 = false;
 			}
 			s2time += deltatime;
+		}
+		if(cooldowningqh) {
+			if(qhtime > cdqh) {
+				qhtime = 0f;
+				cooldowningqh = false;
+			}
+			qhtime += deltatime;
 		}
 	}
 

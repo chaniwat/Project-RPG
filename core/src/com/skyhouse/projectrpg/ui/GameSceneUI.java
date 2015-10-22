@@ -14,6 +14,7 @@ import com.kotcrab.vis.ui.VisUI.SkinScale;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.entities.Character;
+import com.skyhouse.projectrpg.ui.gameplay.QuickHealSlot;
 import com.skyhouse.projectrpg.ui.gameplay.UISkillSlot;
 
 public class GameSceneUI extends Stage {
@@ -23,6 +24,7 @@ public class GameSceneUI extends Stage {
 	}
 	
 	private UISkillSlot s1, s2;
+	private QuickHealSlot qh;
 	private AssetManager assetmanager;
 	private BitmapFont font;
 	
@@ -33,13 +35,11 @@ public class GameSceneUI extends Stage {
 		loadRequireAssets();
 		
 		s1 = new UISkillSlot(
-				new TextureRegion(ProjectRPG.Client.assetmanager.get("textures/gamesceneui/SkillCircle_ext.png", Texture.class)), 
-				new TextureRegion(ProjectRPG.Client.assetmanager.get("textures/gamesceneui/SkillCircle_ovr.png", Texture.class)),
-				font);
+				new TextureRegion(assetmanager.get("textures/gamesceneui/SkillCircle_ext.png", Texture.class)), 
+				new TextureRegion(assetmanager.get("textures/gamesceneui/SkillCircle_ovr.png", Texture.class)));
 		s2 = new UISkillSlot(
-				new TextureRegion(ProjectRPG.Client.assetmanager.get("textures/gamesceneui/SkillCircle_ext.png", Texture.class)), 
-				new TextureRegion(ProjectRPG.Client.assetmanager.get("textures/gamesceneui/SkillCircle_ovr.png", Texture.class)),
-				font);
+				new TextureRegion(assetmanager.get("textures/gamesceneui/SkillCircle_ext.png", Texture.class)), 
+				new TextureRegion(assetmanager.get("textures/gamesceneui/SkillCircle_ovr.png", Texture.class)));
 		
 		addActor(s1);
 		addActor(s2);
@@ -52,6 +52,18 @@ public class GameSceneUI extends Stage {
 		
 		s1.setScale(0.5f);
 		s2.setScale(0.5f);
+		
+		qh = new QuickHealSlot(
+				new TextureRegion(assetmanager.get("textures/gamesceneui/QuickHeal_ext.png", Texture.class)), 
+				new TextureRegion(assetmanager.get("textures/gamesceneui/QuickHeal_ovr.png", Texture.class)));
+		
+		addActor(qh);
+		
+		assetmanager.load("textures/item/potion/heal/hp.png", Texture.class);
+		assetmanager.finishLoading();
+		qh.setHeal(new TextureRegion(assetmanager.get("textures/item/potion/heal/hp.png", Texture.class)));
+		
+		qh.setScale(0.5f);
 	}
 	
 	private void loadRequireAssets() {
@@ -76,9 +88,14 @@ public class GameSceneUI extends Stage {
 		}
 	}
 	
+	public void useQuickHeal(float cdtime) {
+		qh.startCooldown(cdtime);
+	}
+	
 	public void update() {
-		s2.setPosition(getViewport().getWorldWidth() / 2f - 120f, 0);
-		s1.setPosition(s2.getX() + (158f * s1.getScaleX()), 0);
+		qh.setPosition(getViewport().getWorldWidth() / 2f - 160f, 32f);
+		s2.setPosition(qh.getX() + (114f * s2.getScaleX()), 0);
+		s1.setPosition(s2.getX() + (150f * s1.getScaleX()), 0);
 	}
 	
 }
