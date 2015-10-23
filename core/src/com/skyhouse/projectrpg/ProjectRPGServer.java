@@ -18,14 +18,12 @@ import com.skyhouse.projectrpg.net.listeners.LoginListener;
 import com.skyhouse.projectrpg.net.listeners.UpdateListener;
 import com.skyhouse.projectrpg.net.packets.CharacterDataPacket;
 import com.skyhouse.projectrpg.net.utils.NetworkUtils;
-import com.skyhouse.projectrpg.physicsO.CharacterBody;
-import com.skyhouse.projectrpg.physicsO.PhysicGlobal;
-import com.skyhouse.projectrpg.physicsO.StructureBody;
 
 public class ProjectRPGServer extends ApplicationAdapter {
 	
 	private Server server;
 	private HashMap<String, Instance> instances;
+	private CommandListener commandListener;
 		
 	@Override
 	public void create() {
@@ -44,15 +42,17 @@ public class ProjectRPGServer extends ApplicationAdapter {
 		}
 		ProjectRPG.Server.net = server;
 		
-		server.addListener(new LoginListener.ServerSide());
-		server.addListener(new DisconnectListener.ServerSide());
-		server.addListener(new UpdateListener.ServerSide());
+		//server.addListener(new LoginListener.ServerSide());
+		//server.addListener(new DisconnectListener.ServerSide());
+		//server.addListener(new UpdateListener.ServerSide());
 		
-		// New Thread
-		new Thread(new CommandListener()).start();
+		// New Thread		
+		instances.put("main", new Instance(new MapData(Gdx.files.internal("mapdata/L01.map"))));
+		instances.get("main").start();
 		
-		instances.put("main", new Instance(new MapData(Gdx.files.internal("assets/mapdata/L01.map"))));
-}
+		commandListener = new CommandListener();
+		commandListener.start();
+	}
 
 	@Override
 	public void render() {		
@@ -61,6 +61,14 @@ public class ProjectRPGServer extends ApplicationAdapter {
 
 	@Override
 	public void dispose() {
-		
+		for(Instance i : instances.values()) {
+			i.finish();
+		}
+		server.stop();
+		try {
+			server.dispose();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

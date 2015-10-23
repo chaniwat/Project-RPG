@@ -28,14 +28,21 @@ public class Instance extends Thread {
     
     private boolean isFinish = false;
 	
-	public Instance(MapData map) {
+    public Instance(MapData map) {
+    	this("Instance", map);
+    }
+    
+	public Instance(String name, MapData map) {
+		super(name);
 		structures = new HashMap<String, B2DStructure>();
 		characters = new HashMap<Integer, B2DCharacter>();
-		world = new World(new Vector2(0, -10f), true);
+		postRunnableList = new ArrayList<Runnable>();
 	}
 	
 	@Override
 	public void run() {
+		world = new World(new Vector2(0, -10f), true);
+		
 		while(!isFinish) {
 			double newTime = TimeUtils.millis() / 1000.0;
 	        double frameTime = Math.min(newTime - currentTime, 0.25);
@@ -49,7 +56,7 @@ public class Instance extends Thread {
 	        	accumulator -= step;
 	        }
 	        
-	        for(B2DCharacter character : characters.values()) {
+	        /*for(B2DCharacter character : characters.values()) {
 	        	character.update();
 	        }
 	        
@@ -60,22 +67,43 @@ public class Instance extends Thread {
 			}
 			for(Integer id : characters.keySet()) {
 				ProjectRPG.Server.net.sendToUDP(id, update);
-			}
+			}*/
 	        
 	        while(!postRunnableList.isEmpty()) {
 	        	Runnable runnable = postRunnableList.remove(0);
 	        	runnable.run();
 	        }
 		}
+		
+		world.dispose();		
 	}
 	
-	public void addCharacter(CharacterData data) {
-		characters.put(data.id, new B2DCharacter(world, data));
+	public void finish() {
+		postRunnableList.add(new Runnable() {
+			@Override
+			public void run() {
+				isFinish = true;
+			}
+		});
 	}
 	
-	public void removeCharacter(int id) {
-		B2DCharacter o = characters.remove(id);
-		o.dispose();
+	public void addCharacter(final CharacterData data) {
+		postRunnableList.add(new Runnable() {
+					@Override
+					public void run() {
+						characters.put(data.id, new B2DCharacter(world, data));
+					}
+		});
+	}
+	
+	public void removeCharacter(final int id) {
+		postRunnableList.add(new Runnable() {
+			@Override
+			public void run() {
+				B2DCharacter o = characters.remove(id);
+				o.dispose();
+			}
+		});
 	}
 
 }
