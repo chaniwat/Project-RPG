@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.data.CharacterData;
 import com.skyhouse.projectrpg.entity.Character;
 import com.skyhouse.projectrpg.game.GameManager;
@@ -24,23 +25,19 @@ public class GameScene extends Scene {
 		super(batch);
 		manager = new GameManager(assetmanager, input);
 		renderer = new ShapeRenderer();
+		SpriterPlayer.init(batch, renderer);
 		addViewport("Gameplay", new GameplayViewport(16f));
 		addViewport("UI", new UIViewport());
 		background = new Sprite();
-		manager.loadMap("mapdata/L01.map");
-		CharacterData data = new CharacterData();
-		data.id = 1;
-		data.x = 6f;
-		data.y = 6f;
-		manager.addCharacter(new Character(manager.getB2DWorld(), new SpriterPlayer("entity/GreyGuy/player.scml", batch, renderer), data));
-		manager.setControlCharacter(data.id);
+		manager.addMap("mapdata/L01.map");
 	}
 
 	@Override
 	public void update(float deltatime) {
 		manager.update(deltatime);
-
-		((GameplayViewport)getViewport("Gameplay")).setViewCenterToCharacter(manager.getControCharacter(), 0, 1.5f);
+		
+		if(manager.getAllCharacter().isEmpty() || manager.getAllMap().isEmpty()) return;
+		((GameplayViewport)getViewport("Gameplay")).setViewCenterToCharacter(manager.getControlCharacter(), 0, 1.5f);
 		updateBackground();
 	}
 	
@@ -53,7 +50,7 @@ public class GameScene extends Scene {
 			background.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);			
 		}
 		
-		background.setPosition(-(background.getWidth() / 2f) + (manager.getControCharacter().getData().x * 0.35f), -2f + (manager.getControCharacter().getData().y * 0.35f));
+		background.setPosition(-(background.getWidth() / 2f) + (manager.getControlCharacter().getData().x * 0.35f), -2f + (manager.getControlCharacter().getData().y * 0.35f));
 	}
 	
 	@Override
@@ -71,10 +68,10 @@ public class GameScene extends Scene {
 				m.draw(batch);
 			}
 			for(Character c : manager.getAllCharacter()) {
-				if(c.equals(manager.getControCharacter())) continue;
+				if(c.equals(manager.getControlCharacter())) continue;
 				c.draw();
 			}
-			manager.getControCharacter().draw();
+			manager.getControlCharacter().draw();
 		batch.end();
 	}
 	

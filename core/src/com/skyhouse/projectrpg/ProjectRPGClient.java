@@ -48,10 +48,10 @@ public class ProjectRPGClient extends ApplicationAdapter {
 		Gdx.app.setLogLevel(Logger.DEBUG);
 		GLProfiler.enable();
 		
-		//initialNetwork();
+		initialNetwork();
 		initialGraphics();
 		initialAssets();		
-		//startNetwork();
+		startNetwork();
 		
 		Gdx.app.debug(ProjectRPG.TITLE, "Version = " + ProjectRPG.VERSION);
 		Gdx.app.debug(ProjectRPG.TITLE, "created");
@@ -105,8 +105,8 @@ public class ProjectRPGClient extends ApplicationAdapter {
 	@SuppressWarnings("unused")
 	private void startNetwork() {
 		net.addListener(new LoginListener.ClientSide());
-		net.addListener(new DisconnectListener.ClientSide());
-		net.addListener(new UpdateListener.ClientSide());
+		//net.addListener(new DisconnectListener.ClientSide());
+		//net.addListener(new UpdateListener.ClientSide());
 		net.sendTCP(new InitialRequest());
 	}
 	

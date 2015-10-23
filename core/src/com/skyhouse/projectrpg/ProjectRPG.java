@@ -1,6 +1,9 @@
 package com.skyhouse.projectrpg;
 
+import java.util.HashMap;
+
 import com.badlogic.gdx.assets.AssetManager;
+import com.skyhouse.projectrpg.net.instance.Instance;
 import com.skyhouse.projectrpg.scene.SceneManager;
 
 /**
@@ -46,6 +49,7 @@ public class ProjectRPG {
 		 * @see com.esotericsoftware.kryonet.Server 
 		 */
 		public static com.esotericsoftware.kryonet.Server net;
+		public static HashMap<String, Instance> instances;
 		
 	}
 	

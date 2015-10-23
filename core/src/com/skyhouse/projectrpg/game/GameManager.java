@@ -8,11 +8,13 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.skyhouse.projectrpg.data.CharacterData;
 import com.skyhouse.projectrpg.entity.Character;
 import com.skyhouse.projectrpg.input.GameplayControllerProcess;
 import com.skyhouse.projectrpg.input.GameplayInputProcess;
 import com.skyhouse.projectrpg.map.Map;
 import com.skyhouse.projectrpg.scene.input.SceneInput;
+import com.skyhouse.projectrpg.spriter.SpriterPlayer;
 import com.skyhouse.projectrpg.utils.assetloader.MapLoader.MapLoaderParameter;
 
 public class GameManager {
@@ -65,11 +67,15 @@ public class GameManager {
 		return world;
 	}
 
-	public void loadMap(String pathToMap) {
+	public void addMap(String pathToMap) {
 		MapLoaderParameter params = new MapLoaderParameter();
 		params.world = world;
 		assetmanager.load(pathToMap, Map.class, params);
 		loadingMapPath.add(pathToMap);
+	}
+	
+	public void addCharacter(CharacterData data, SpriterPlayer player) {
+		characters.put(data.id, new Character(world, player, data));
 	}
 	
 	public Collection<Map> getAllMap() {
@@ -92,11 +98,7 @@ public class GameManager {
 		currentMap = name;
 	}
 	
-	public void addCharacter(Character character) {
-		characters.put(character.getData().id, character);
-	}
-	
-	public Character getControCharacter() {
+	public Character getControlCharacter() {
 		return characters.get(currentCharacter);
 	}
 	

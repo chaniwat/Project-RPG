@@ -17,6 +17,9 @@ import com.brashmonkey.spriter.Spriter;
  */
 public class SpriterPlayer extends PlayerTweener {
 
+	private static SpriteBatch batch;
+	private static ShapeRenderer renderer;
+	
 	private String newanimation = "";
 	private SpriterDrawer drawer;
 	
@@ -24,7 +27,7 @@ public class SpriterPlayer extends PlayerTweener {
 	 * Create a new SpriterActor for character, monster, etc. 
 	 * @param pathtoscml path to .scml file
 	 */
-	public SpriterPlayer(String pathToScml, SpriteBatch batch, ShapeRenderer renderer) {
+	public SpriterPlayer(String pathToScml) {
 		super();
 		FileHandle handle = Gdx.files.internal(pathToScml);
 		SCMLReader reader = new SCMLReader(handle.read());
@@ -76,5 +79,10 @@ public class SpriterPlayer extends PlayerTweener {
 	
 	public void draw() {
 		drawer.draw(this);
+	}
+	
+	public static void init(SpriteBatch batch, ShapeRenderer renderer) {
+		 SpriterPlayer.batch = batch;
+		 SpriterPlayer.renderer = renderer;
 	}
 }

@@ -1,6 +1,7 @@
 package com.skyhouse.projectrpg;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Map.Entry;
@@ -22,17 +23,21 @@ import com.skyhouse.projectrpg.net.utils.NetworkUtils;
 public class ProjectRPGServer extends ApplicationAdapter {
 	
 	private Server server;
+	private boolean serverRunning;
 	private HashMap<String, Instance> instances;
+	private ArrayList<String> finishInstances;
 	private CommandListener commandListener;
 		
 	@Override
 	public void create() {
 		instances = new HashMap<String, Instance>();
+		finishInstances = new ArrayList<String>();
 		
 		server = new Server();
 		Kryo kryo = server.getKryo();
 		NetworkUtils.registerKryoClass(kryo);
 		server.start();
+		serverRunning = true;
 		try {
 			server.bind(54555, 54556);
 		} catch (IOException e) {
@@ -40,14 +45,16 @@ public class ProjectRPGServer extends ApplicationAdapter {
 			Gdx.app.exit();
 			return;
 		}
-		ProjectRPG.Server.net = server;
 		
-		//server.addListener(new LoginListener.ServerSide());
+		ProjectRPG.Server.net = server;
+		ProjectRPG.Server.instances = instances;
+		
+		server.addListener(new LoginListener.ServerSide());
 		//server.addListener(new DisconnectListener.ServerSide());
 		//server.addListener(new UpdateListener.ServerSide());
 		
-		// New Thread		
-		instances.put("main", new Instance(new MapData(Gdx.files.internal("mapdata/L01.map"))));
+		// New Instance
+		instances.put("main", new Instance("main", new MapData(Gdx.files.internal("mapdata/L01.map"))));
 		instances.get("main").start();
 		
 		commandListener = new CommandListener();
@@ -64,11 +71,25 @@ public class ProjectRPGServer extends ApplicationAdapter {
 		for(Instance i : instances.values()) {
 			i.finish();
 		}
-		server.stop();
-		try {
-			server.dispose();
-		} catch (IOException e) {
-			e.printStackTrace();
+		
+		while(serverRunning) {
+			for(Entry<String, Instance> entry : instances.entrySet()) {
+				if(!entry.getValue().isAlive()) {
+					finishInstances.add(entry.getKey());
+				}
+			}
+			while(!finishInstances.isEmpty()) instances.remove(finishInstances.remove(0));
+			
+			if(instances.isEmpty()) {
+				server.stop();
+				serverRunning = false;
+				try {
+					server.dispose();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
+		
 	}
 }

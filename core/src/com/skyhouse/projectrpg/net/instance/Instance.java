@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.TimeUtils;
@@ -29,11 +30,11 @@ public class Instance extends Thread {
     private boolean isFinish = false;
 	
     public Instance(MapData map) {
-    	this("Instance", map);
+    	this("", map);
     }
     
 	public Instance(String name, MapData map) {
-		super(name);
+		super(name + "-Instance");
 		structures = new HashMap<String, B2DStructure>();
 		characters = new HashMap<Integer, B2DCharacter>();
 		postRunnableList = new ArrayList<Runnable>();
@@ -75,7 +76,8 @@ public class Instance extends Thread {
 	        }
 		}
 		
-		world.dispose();		
+		world.dispose();
+		Gdx.app.log(ProjectRPG.TITLE, this.getName() + " finished.");
 	}
 	
 	public void finish() {

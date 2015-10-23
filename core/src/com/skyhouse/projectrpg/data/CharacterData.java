@@ -6,7 +6,7 @@ public class CharacterData extends Data {
 		IDLE, WALK, JUMP, FALL, ACTION, DEATH
 	}
 	
-	public class CharacterInputState {
+	public static class CharacterInputState {
 		
 		public boolean upPressed = false, 
 					   leftPressed = false, 
