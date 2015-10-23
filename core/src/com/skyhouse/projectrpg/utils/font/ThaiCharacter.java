@@ -1,4 +1,4 @@
-package com.skyhouse.projectrpg.graphics.font;
+package com.skyhouse.projectrpg.utils.font;
 
 public class ThaiCharacter {
 	

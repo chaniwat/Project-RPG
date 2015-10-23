@@ -17,7 +17,7 @@ import com.brashmonkey.spriter.Spriter;
  */
 public class SpriterPlayer extends PlayerTweener {
 
-	private String newanimation;
+	private String newanimation = "";
 	private SpriterDrawer drawer;
 	
 	/**
@@ -41,6 +41,7 @@ public class SpriterPlayer extends PlayerTweener {
 	 * @param newanimation animation name
 	 */
 	public void setNewAnimation(String newanimation) {
+		if(this.newanimation.equals(newanimation)) return;
 		this.newanimation = newanimation;
 		getSecondPlayer().setTime(0);
 	}
@@ -50,7 +51,7 @@ public class SpriterPlayer extends PlayerTweener {
 	 * @param deltaTime deltatime
 	 */
 	public void update(float deltaTime) {
-		update(deltaTime, 4);
+		update(deltaTime, 3.5f);
 	}
 	
 	/**
@@ -75,12 +76,5 @@ public class SpriterPlayer extends PlayerTweener {
 	
 	public void draw() {
 		drawer.draw(this);
-	}
-	
-	/**
-	 * Clear this SpriterActor.
-	 */
-	public void dispose() {
-		Spriter.removePlayer(this);
 	}
 }

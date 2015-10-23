@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.physics.box2d.World;
@@ -16,16 +18,20 @@ import com.skyhouse.projectrpg.graphics.TileTexture.TileTexturePosition;
 
 public class Map {
 
-	private String pathToBG;
+	private MapData data;
 	private HashMap<String, Structure> structures;
+	private Texture background;
 	
-	public Map(World world, MapData data) {
+	public Map(World world, MapData data) {	
+		this(world, data, 
+				new TextureAtlas(Gdx.files.internal("texture/structure/" + data.mapTextureAtlasPath + ".pack")), 
+				new Texture(Gdx.files.internal("texture/background" + data.mapBackgroundPath + ".png")));
+	}
+	
+	public Map(World world, MapData data, TextureAtlas mapTexture, Texture mapBackground) {
 		structures = new HashMap<String, Structure>();
-		
-		String pathToTexture = "texture/structure/" + data.mapTexture + ".pack";
-		TextureAtlas mapTexture = new TextureAtlas(Gdx.files.internal(pathToTexture));
-		
-		pathToBG = "texture/background/" + data.mapBackground + ".png";
+		this.data = data;
+		this.background = mapBackground;
 		
 		for(Entry<String, StructureData> entry : data.structures.entrySet()) {
 			String sName = entry.getKey();
@@ -48,8 +54,12 @@ public class Map {
 		}
 	}
 	
-	public String getBackgroundPath() {
-		return pathToBG;
+	public Texture getBackground() {
+		return background;
+	}
+	
+	public MapData getData() {
+		return data;
 	}
 	
 }

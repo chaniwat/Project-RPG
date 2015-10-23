@@ -13,12 +13,11 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.utils.Logger;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
-import com.skyhouse.projectrpg.graphics.font.ThaiCharacter;
+import com.skyhouse.projectrpg.map.Map;
 import com.skyhouse.projectrpg.net.listeners.DisconnectListener;
 import com.skyhouse.projectrpg.net.listeners.LoginListener;
 import com.skyhouse.projectrpg.net.listeners.UpdateListener;
@@ -30,6 +29,8 @@ import com.skyhouse.projectrpg.scene.LoadingScene;
 import com.skyhouse.projectrpg.scene.MenuScene;
 import com.skyhouse.projectrpg.scene.SceneManager;
 import com.skyhouse.projectrpg.scene.StartScene;
+import com.skyhouse.projectrpg.utils.assetloader.MapLoader;
+import com.skyhouse.projectrpg.utils.font.ThaiCharacter;
 
 /**
  * Client class of ProjectRPG.
@@ -56,6 +57,7 @@ public class ProjectRPGClient extends ApplicationAdapter {
 		Gdx.app.debug(ProjectRPG.TITLE, "created");
 	}
 	
+	@SuppressWarnings("unused")
 	private void initialNetwork() {
 		net = new Client();
 		Kryo kryo = net.getKryo();
@@ -77,6 +79,7 @@ public class ProjectRPGClient extends ApplicationAdapter {
 	private void initialAssets() {
 		InternalFileHandleResolver resolver = new InternalFileHandleResolver();
 		assetmanager = new AssetManager();
+		assetmanager.setLoader(Map.class, new MapLoader(resolver));
 		assetmanager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
 		assetmanager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
 		ProjectRPG.Client.assetmanager = assetmanager;
@@ -99,6 +102,7 @@ public class ProjectRPGClient extends ApplicationAdapter {
 		scenemanager.setUseScene("gamescene");
 	}
 	
+	@SuppressWarnings("unused")
 	private void startNetwork() {
 		net.addListener(new LoginListener.ClientSide());
 		net.addListener(new DisconnectListener.ClientSide());
@@ -112,7 +116,9 @@ public class ProjectRPGClient extends ApplicationAdapter {
 	}
 
 	@Override
-	public void render () {		
+	public void render () {
+		assetmanager.update();
+		
 		// Clear buffer
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);

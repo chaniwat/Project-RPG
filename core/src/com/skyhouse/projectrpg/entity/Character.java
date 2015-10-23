@@ -10,11 +10,7 @@ public class Character {
 	private SpriterPlayer player;
 	private CharacterData data;
 	private B2DCharacter body;
-	private boolean idleflag,
-					walkflag,
-					jumpflag,
-					fallflag,
-					flipflag = false;
+	private boolean flipflag = false;
 	
 	public Character(World world, SpriterPlayer player, CharacterData data) {
 		body = new B2DCharacter(world, data);
@@ -28,40 +24,16 @@ public class Character {
 		
 		switch(data.actionstate) {
 			case IDLE:
-				if(!idleflag) {
-					player.setNewAnimation("idle");
-					idleflag = true;
-					walkflag = false;
-					jumpflag = false;
-					fallflag = false;
-				}
+				player.setNewAnimation("idle");
 				break;
 			case WALK:
-				if(!walkflag) {
-					player.setNewAnimation("walk");
-					idleflag = false;
-					walkflag = true;
-					jumpflag = false;
-					fallflag = false;
-				}
+				player.setNewAnimation("walk");
 				break;
 			case JUMP:
-				if(!jumpflag) {
-					player.setNewAnimation("jump");
-					idleflag = false;
-					walkflag = false;
-					jumpflag = true;
-					fallflag = false;
-				}
+				player.setNewAnimation("jump");
 				break;
 			case FALL:
-				if(!fallflag) {
-					player.setNewAnimation("fall");
-					idleflag = false;
-					walkflag = false;
-					jumpflag = false;
-					fallflag = true;
-				}
+				player.setNewAnimation("fall");
 				break;
 			default:
 				break;
@@ -86,9 +58,5 @@ public class Character {
 	
 	public CharacterData getData() {
 		return data;
-	}
-	
-	public void dispose() {
-		player.dispose();
 	}
 }

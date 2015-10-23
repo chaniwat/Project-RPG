@@ -27,9 +27,10 @@ public class MapData extends Data {
 		
 	}
 	
+	public String path;
 	public String name;
 	public MapType type;
-	public String mapTexture, mapBackground;
+	public String mapTextureAtlasPath, mapBackgroundPath;
 	public HashMap<String, StructureData> structures;
 	public HashMap<String, MapStructureTexture> structureTextureMapper; 
 	public HashMap<String, StructureBehavior> structureBehaviorMapper;
@@ -38,6 +39,7 @@ public class MapData extends Data {
 		structures = new HashMap<String, StructureData>();
 		structureTextureMapper = new HashMap<String, MapData.MapStructureTexture>();
 		structureBehaviorMapper = new HashMap<String, StructureData.StructureBehavior>();
+		path = handle.path();
 		
 		// Make XML reader
 		XmlReader reader = new XmlReader();
@@ -59,8 +61,8 @@ public class MapData extends Data {
 		Element data = root.getChildByName("mapdata");
 		name = data.getChildByName("name").getText();
 		type = MapType.valueOf(data.getChildByName("type").getText().toUpperCase());
-		mapTexture = data.getChildByName("texture").getText();
-		mapBackground = data.getChildByName("background").getText();
+		mapTextureAtlasPath = "texture/structure/" + data.getChildByName("texture").getText() + ".pack";
+		mapBackgroundPath = "texture/background/" + data.getChildByName("background").getText() + ".png";
 	}
 	
 	private void getStructureData(Element root) {

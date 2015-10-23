@@ -45,7 +45,7 @@ public class Instance extends Thread {
 	        accumulator += deltaTime;
 	        
 	        while(accumulator >= step) {
-	        	world.step(1/60f, 8, 3);
+	        	world.step(step, 8, 3);
 	        	accumulator -= step;
 	        }
 	        

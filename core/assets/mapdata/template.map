@@ -34,7 +34,7 @@
 			<behavior>clumbable solid</behavior>
 		</structure>
 	</structures>
-	
+		
 	<objects>
 		<object>
 			 <!-- type : door, lever, warp, monstergenerator -->
