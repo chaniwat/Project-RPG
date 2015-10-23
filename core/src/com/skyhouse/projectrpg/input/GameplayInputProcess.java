@@ -3,32 +3,33 @@ package com.skyhouse.projectrpg.input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
-import com.skyhouse.projectrpg.entities.Character;
+import com.skyhouse.projectrpg.data.CharacterData;
+import com.skyhouse.projectrpg.entity.Character;
 
 public class GameplayInputProcess extends InputAdapter {
 	
-	Character character;
+	CharacterData characterdata;
 	
 	public  GameplayInputProcess(Character maincharacter) {
-		this.character = maincharacter;
+		this.characterdata = maincharacter.getData();
 	}
 	
 	@Override
 	public boolean keyUp(int keycode) {
 		switch(keycode) {
 			case Keys.LEFT:
-				character.inputstate.left_flag = false;
-				if(character.inputstate.right_flag == false) character.inputstate.x_value = 0;
+				characterdata.inputstate.leftPressed = false;
+				if(characterdata.inputstate.rightPressed == false) characterdata.inputstate.xAxisValue = 0;
 				break;
 			case Keys.RIGHT:
-				character.inputstate.right_flag = false;
-				if(character.inputstate.left_flag == false) character.inputstate.x_value = 0;
+				characterdata.inputstate.rightPressed = false;
+				if(characterdata.inputstate.leftPressed == false) characterdata.inputstate.xAxisValue = 0;
 				break;
 			case Keys.UP:
-				character.inputstate.up_flag = false;
+				characterdata.inputstate.upPressed = false;
 				break;
 			case Keys.CONTROL_LEFT:
-				character.inputstate.jump_flag = false;
+				characterdata.inputstate.jumpPressed = false;
 				break;
 			case Keys.ESCAPE:
 				Gdx.app.exit();
@@ -41,18 +42,18 @@ public class GameplayInputProcess extends InputAdapter {
 	public boolean keyDown(int keycode) {
 		switch(keycode) {
 			case Keys.LEFT:
-				character.inputstate.left_flag = true;
-				character.inputstate.x_value = 1;
+				characterdata.inputstate.leftPressed = true;
+				characterdata.inputstate.xAxisValue = 1;
 				break;
 			case Keys.RIGHT:
-				character.inputstate.right_flag = true;
-				character.inputstate.x_value = 1;
+				characterdata.inputstate.rightPressed = true;
+				characterdata.inputstate.xAxisValue = 1;
 				break;
 			case Keys.UP:
-				character.inputstate.up_flag = true;
+				characterdata.inputstate.upPressed = true;
 				break;
 			case Keys.CONTROL_LEFT:
-				character.inputstate.jump_flag = true;
+				characterdata.inputstate.jumpPressed = true;
 				break;
 		}
 		return true;

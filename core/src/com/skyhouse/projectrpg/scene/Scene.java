@@ -33,7 +33,7 @@ public abstract class Scene {
 		this.assetmanager = ProjectRPG.Client.assetmanager;
 		viewport = new HashMap<String, Viewport>();
 		input = new SceneInput();
-		font = assetmanager.get("fonts/Roboto-Regular.ttf", BitmapFont.class);
+		font = assetmanager.get("font/Roboto-Regular.ttf", BitmapFont.class);
 		font.getData().markupEnabled = true;
 		font.setColor(Color.BLACK);
 	}
@@ -69,11 +69,8 @@ public abstract class Scene {
 		}
 	}
 	
-	/** 
-	 * **Need to be called in resize().
-	 * @see ApplicationListener#resize(int width, int height) 
-	 */
-	public abstract void resize(int width, int height);
+	/** First call before use this scene */
+	public abstract void start();
 	/** Update scene. */
 	public abstract void update(float deltatime);
 	/** Draw scene. */

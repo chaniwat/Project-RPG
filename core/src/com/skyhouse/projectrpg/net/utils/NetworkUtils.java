@@ -1,16 +1,16 @@
-package com.skyhouse.projectrpg.net;
+package com.skyhouse.projectrpg.net.utils;
 
 import java.util.HashMap;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.skyhouse.projectrpg.entities.data.CharacterData;
+import com.skyhouse.projectrpg.data.CharacterData;
 import com.skyhouse.projectrpg.net.packets.CharacterDataPacket;
 import com.skyhouse.projectrpg.net.packets.DisconnectRequest;
 import com.skyhouse.projectrpg.net.packets.DisconnectResponse;
 import com.skyhouse.projectrpg.net.packets.InitialRequest;
 import com.skyhouse.projectrpg.net.packets.InitialResponse;
 
-public class Network {
+public class NetworkUtils {
 
 	/**
 	 * Registering the class before start the client or server

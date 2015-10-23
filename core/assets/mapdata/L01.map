@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map>
-	<head>
-		<name>L01</name>
-		<mapname>TestLevel</mapname>
-		<texture>greenland</texture>
-		<background>
-			<url>background</url>
-			<width>auto</width>
-			<height>17</height>
-		</background>
-	</head>
+	
+	<mapdata>
+		<name>TestLevel</name>
+		<type>World</type>
+		<texture>GreenLand</texture>
+		<background>background</background>
+	</mapdata>
+	
 	<structures>
 		<structure>
 			<name>ground</name>
-			<position_x>-20</position_x>
-			<position_y>0</position_y>
+			<positionx>-20</positionx>
+			<positiony>0</positiony>
 			<width>60</width>
 			<height>5</height>
 			<textureregions>
@@ -22,75 +20,75 @@
 				<region position="MiddleHorizontal">grassCenter</region>
 				<region position="Bottom">grassCenter</region>
 			</textureregions>
-			<behaviors></behaviors>
+			<behavior>solid</behavior>
 		</structure>
 		<structure>
 			<name>box1</name>
-			<position_x>1</position_x>
-			<position_y>1</position_y>
+			<positionx>1</positionx>
+			<positiony>1</positiony>
 			<width>1</width>
 			<height>1</height>
 			<textureregions>
 				<region position="ALL">boxAlt</region>
 			</textureregions>
-			<behaviors></behaviors>
+			<behavior>solid</behavior>
 		</structure>
 		<structure>
 			<name>box2</name>
-			<position_x>2</position_x>
-			<position_y>2</position_y>
+			<positionx>2</positionx>
+			<positiony>2</positiony>
 			<width>1</width>
 			<height>2</height>
 			<textureregions>
 				<region position="ALL">boxAlt</region>
 			</textureregions>
-			<behaviors></behaviors>
+			<behavior>solid</behavior>
 		</structure>
 		<structure>
 			<name>box3</name>
-			<position_x>3</position_x>
-			<position_y>3</position_y>
+			<positionx>3</positionx>
+			<positiony>3</positiony>
 			<width>3</width>
 			<height>3</height>
 			<textureregions>
 				<region position="ALL">boxAlt</region>
 			</textureregions>
-			<behaviors></behaviors>
+			<behavior>solid</behavior>
 		</structure>
 		<structure>
 			<name>box4</name>
-			<position_x>6</position_x>
-			<position_y>2</position_y>
+			<positionx>6</positionx>
+			<positiony>2</positiony>
 			<width>1</width>
 			<height>2</height>
 			<textureregions>
 				<region position="ALL">boxAlt</region>
 			</textureregions>
-			<behaviors></behaviors>
+			<behavior>solid</behavior>
 		</structure>
 		<structure>
 			<name>box5</name>
-			<position_x>7</position_x>
-			<position_y>1</position_y>
+			<positionx>7</positionx>
+			<positiony>1</positiony>
 			<width>1</width>
 			<height>1</height>
 			<textureregions>
 				<region position="ALL">boxAlt</region>
 			</textureregions>
-			<behaviors></behaviors>
+			<behavior>solid</behavior>
 		</structure>
 	</structures>
+	
+	<objects>
+		
+	</objects>
+	
 	<npcs>
 		
 	</npcs>
-	<triggerarea>
+	
+	<connections>
 		
-	</triggerarea>
-	<connection>
-		<point>
-			<tomap>L02</tomap>
-			<position_x></position_x>
-			<position_y></position_y>
-		</point>
-	</connection>
+	</connections>
+	
 </map>

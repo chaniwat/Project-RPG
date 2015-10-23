@@ -3,6 +3,7 @@ package com.skyhouse.projectrpg.net.listeners;
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.ProjectRPGClient;
 import com.skyhouse.projectrpg.ProjectRPGServer;
 import com.skyhouse.projectrpg.net.packets.DisconnectRequest;
@@ -13,12 +14,6 @@ public class DisconnectListener {
 	
 	public static class ClientSide extends Listener {
 		
-		GameScene scene;
-		
-		public  ClientSide(GameScene scene) {
-			this.scene = scene;
-		}
-		
 		@Override
 		public void received(Connection connection, Object object) {
 			if(object instanceof DisconnectResponse) {
@@ -27,7 +22,7 @@ public class DisconnectListener {
 				Gdx.app.postRunnable(new Runnable() {
 					@Override
 					public void run() {
-						scene.removeCharacter(response.connectionid);
+						ProjectRPG.Client.scenemanager.getScene("gamescene", GameScene.class).removeCharacter(response.connectionid);
 					}
 				});
 			}

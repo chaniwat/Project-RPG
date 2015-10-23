@@ -18,18 +18,18 @@ import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.utils.Logger;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
-import com.skyhouse.projectrpg.graphics.SpriterGlobal;
 import com.skyhouse.projectrpg.graphics.font.ThaiCharacter;
-import com.skyhouse.projectrpg.map.Map;
-import com.skyhouse.projectrpg.map.MapLoader;
-import com.skyhouse.projectrpg.net.Network;
 import com.skyhouse.projectrpg.net.listeners.DisconnectListener;
 import com.skyhouse.projectrpg.net.listeners.LoginListener;
 import com.skyhouse.projectrpg.net.listeners.UpdateListener;
-import com.skyhouse.projectrpg.net.packets.DisconnectRequest;
 import com.skyhouse.projectrpg.net.packets.InitialRequest;
+import com.skyhouse.projectrpg.net.utils.NetworkUtils;
 import com.skyhouse.projectrpg.scene.GameScene;
+import com.skyhouse.projectrpg.scene.HomeScene;
+import com.skyhouse.projectrpg.scene.LoadingScene;
+import com.skyhouse.projectrpg.scene.MenuScene;
 import com.skyhouse.projectrpg.scene.SceneManager;
+import com.skyhouse.projectrpg.scene.StartScene;
 
 /**
  * Client class of ProjectRPG.
@@ -47,10 +47,10 @@ public class ProjectRPGClient extends ApplicationAdapter {
 		Gdx.app.setLogLevel(Logger.DEBUG);
 		GLProfiler.enable();
 		
-		initialNetwork();
+		//initialNetwork();
 		initialGraphics();
 		initialAssets();		
-		startNetwork();
+		//startNetwork();
 		
 		Gdx.app.debug(ProjectRPG.TITLE, "Version = " + ProjectRPG.VERSION);
 		Gdx.app.debug(ProjectRPG.TITLE, "created");
@@ -59,7 +59,7 @@ public class ProjectRPGClient extends ApplicationAdapter {
 	private void initialNetwork() {
 		net = new Client();
 		Kryo kryo = net.getKryo();
-		Network.registerKryoClass(kryo);
+		NetworkUtils.registerKryoClass(kryo);
 		net.start();
 		try {
 			net.connect(5000, "server.projectrpg.dev", 54555, 54556);
@@ -70,36 +70,40 @@ public class ProjectRPGClient extends ApplicationAdapter {
 		ProjectRPG.Client.net = net;
 	}
 	
-	private void startNetwork() {
-		GameScene gamescene = scenemanager.getCurrentScene(GameScene.class); 
-		net.addListener(new LoginListener.ClientSide(gamescene));
-		net.addListener(new DisconnectListener.ClientSide(gamescene));
-		net.addListener(new UpdateListener.ClientSide(gamescene));
-		net.sendTCP(new InitialRequest());
-	}
-	
 	private void initialGraphics() {
 		batch = new SpriteBatch();
-		SpriterGlobal.init(batch, new ShapeRenderer());
 	}
 	
 	private void initialAssets() {
 		InternalFileHandleResolver resolver = new InternalFileHandleResolver();
 		assetmanager = new AssetManager();
-		assetmanager.setLoader(Map.class, new MapLoader(resolver));
 		assetmanager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
 		assetmanager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
-		FreeTypeFontLoaderParameter fontparams = new FreeTypeFontLoaderParameter();
-		fontparams.fontFileName = "fonts/Roboto-Regular.ttf";
-		fontparams.fontParameters.characters = FreeTypeFontGenerator.DEFAULT_CHARS + ThaiCharacter.THAI_CHARS;
-		assetmanager.load("fonts/Roboto-Regular.ttf", BitmapFont.class, fontparams);
-		assetmanager.finishLoading();
 		ProjectRPG.Client.assetmanager = assetmanager;
+		
+		FreeTypeFontLoaderParameter fontparams = new FreeTypeFontLoaderParameter();
+		fontparams.fontFileName = "font/Roboto-Regular.ttf";
+		fontparams.fontParameters.characters = FreeTypeFontGenerator.DEFAULT_CHARS + ThaiCharacter.THAI_CHARS;
+		assetmanager.load("font/Roboto-Regular.ttf", BitmapFont.class, fontparams);
+		assetmanager.finishLoading();
+		
 		scenemanager = new SceneManager();
-		scenemanager.addScene("gamescene", new GameScene(batch));
-		scenemanager.getScene("gamescene", GameScene.class).loadMap("L01", true);
-		scenemanager.setUseScene("gamescene");
 		ProjectRPG.Client.scenemanager = scenemanager;
+		
+		scenemanager.addScene("startscene", new StartScene(batch));
+		scenemanager.addScene("homescene", new HomeScene(batch));
+		scenemanager.addScene("loadingscene", new LoadingScene(batch));
+		scenemanager.addScene("gamescene", new GameScene(batch));
+		scenemanager.addScene("menuscene", new MenuScene(batch));
+		
+		scenemanager.setUseScene("gamescene");
+	}
+	
+	private void startNetwork() {
+		net.addListener(new LoginListener.ClientSide());
+		net.addListener(new DisconnectListener.ClientSide());
+		net.addListener(new UpdateListener.ClientSide());
+		net.sendTCP(new InitialRequest());
 	}
 	
 	@Override
@@ -121,7 +125,6 @@ public class ProjectRPGClient extends ApplicationAdapter {
 	
 	@Override
 	public void dispose () {
-		net.close();
-		SpriterGlobal.dispose();
+		//net.close();
 	}
 }

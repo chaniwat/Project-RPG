@@ -10,8 +10,8 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
  */
 public class SceneManager {
 	
-	HashMap<String, Scene> scenes;
-	Scene currentscene;
+	private HashMap<String, Scene> scenes;
+	private Scene currentscene;
 	
 	/**
 	 * Construct a SceneManager.
@@ -68,6 +68,7 @@ public class SceneManager {
 	public void setUseScene(String name) {
 		currentscene = scenes.get(name);
 		if(currentscene == null) throw new GdxRuntimeException("No given scene added.");
+		currentscene.start();
 	}
 	
 	/**
@@ -76,7 +77,7 @@ public class SceneManager {
 	 */
 	public void resize(int screenwidth, int screenheight) {
 		if(currentscene == null) throw new GdxRuntimeException("Set scene before call this.");
-		currentscene.resize(screenwidth, screenheight);
+		currentscene.updateViewport(screenwidth, screenheight);
 	}
 	
 	/**

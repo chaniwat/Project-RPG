@@ -5,8 +5,9 @@ import java.util.Map.Entry;
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.ProjectRPGServer;
-import com.skyhouse.projectrpg.entities.data.CharacterData;
+import com.skyhouse.projectrpg.data.CharacterData;
 import com.skyhouse.projectrpg.net.packets.CharacterDataPacket;
 import com.skyhouse.projectrpg.scene.GameScene;
 
@@ -14,10 +15,10 @@ public class UpdateListener {
 	
 	public static class ClientSide extends Listener {
 		
-		GameScene scene;
+		private GameScene scene;
 		
-		public ClientSide(GameScene scene) {
-			this.scene = scene;
+		public ClientSide() {
+			this.scene = ProjectRPG.Client.scenemanager.getScene("gamescene", GameScene.class);
 		}
 		
 		@Override

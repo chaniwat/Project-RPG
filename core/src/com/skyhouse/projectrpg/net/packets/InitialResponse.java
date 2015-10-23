@@ -1,6 +1,6 @@
 package com.skyhouse.projectrpg.net.packets;
 
-import com.skyhouse.projectrpg.entities.data.CharacterData;
+import com.skyhouse.projectrpg.data.CharacterData;
 
 public class InitialResponse {
 	

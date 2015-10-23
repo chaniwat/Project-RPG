@@ -9,36 +9,31 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Server;
-import com.skyhouse.projectrpg.entities.data.CharacterData;
-import com.skyhouse.projectrpg.map.Map;
-import com.skyhouse.projectrpg.net.Network;
+import com.skyhouse.projectrpg.data.CharacterData;
+import com.skyhouse.projectrpg.data.MapData;
+import com.skyhouse.projectrpg.net.instance.Instance;
 import com.skyhouse.projectrpg.net.listeners.CommandListener;
 import com.skyhouse.projectrpg.net.listeners.DisconnectListener;
 import com.skyhouse.projectrpg.net.listeners.LoginListener;
 import com.skyhouse.projectrpg.net.listeners.UpdateListener;
 import com.skyhouse.projectrpg.net.packets.CharacterDataPacket;
-import com.skyhouse.projectrpg.physics.CharacterBody;
-import com.skyhouse.projectrpg.physics.PhysicGlobal;
-import com.skyhouse.projectrpg.physics.StructureBody;
+import com.skyhouse.projectrpg.net.utils.NetworkUtils;
+import com.skyhouse.projectrpg.physicsO.CharacterBody;
+import com.skyhouse.projectrpg.physicsO.PhysicGlobal;
+import com.skyhouse.projectrpg.physicsO.StructureBody;
 
 public class ProjectRPGServer extends ApplicationAdapter {
 	
-	public static Server server;
-	public static HashMap<Integer, CharacterBody> characters;
-	public static HashMap<String, StructureBody> structures;
-	
-	public static Map map;
-	
-	float ctime = 0f;
-	
-	Scanner input;
-	String command;
-	
+	private Server server;
+	private HashMap<String, Instance> instances;
+		
 	@Override
-	public void create() {	
+	public void create() {
+		instances = new HashMap<String, Instance>();
+		
 		server = new Server();
 		Kryo kryo = server.getKryo();
-		Network.registerKryoClass(kryo);
+		NetworkUtils.registerKryoClass(kryo);
 		server.start();
 		try {
 			server.bind(54555, 54556);
@@ -47,16 +42,7 @@ public class ProjectRPGServer extends ApplicationAdapter {
 			Gdx.app.exit();
 			return;
 		}
-		
-		characters = new HashMap<Integer, CharacterBody>();
-		structures = new HashMap<String, StructureBody>();
-		
-		PhysicGlobal.init(0f, -10f,  true, false);
-		try {
-			map = new Map(Gdx.files.internal("mapdata/L01.map"), null);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		ProjectRPG.Server.net = server;
 		
 		server.addListener(new LoginListener.ServerSide());
 		server.addListener(new DisconnectListener.ServerSide());
@@ -64,25 +50,13 @@ public class ProjectRPGServer extends ApplicationAdapter {
 		
 		// New Thread
 		new Thread(new CommandListener()).start();
+		
+		instances.put("main", new Instance(new MapData(Gdx.files.internal("assets/mapdata/L01.map"))));
 }
 
 	@Override
 	public void render() {		
-		// Simulate Physics
-		PhysicGlobal.getWorld().step(1/60f, 8, 3);
 		
-		for(CharacterBody character : characters.values()) {
-			character.update();
-		}
-		
-		CharacterDataPacket update = new CharacterDataPacket();
-		update.characters = new HashMap<Integer, CharacterData>();
-		for(Entry<Integer, CharacterBody> character : ProjectRPGServer.characters.entrySet()) {
-			update.characters.put(character.getKey(), character.getValue().getData());
-		}
-		server.sendToAllUDP(update);
-		
-		// log
 	}
 
 	@Override

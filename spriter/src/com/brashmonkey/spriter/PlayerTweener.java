@@ -22,6 +22,10 @@ public class PlayerTweener extends Player{
 	 */
 	public String baseBoneName = null;
 	
+	public PlayerTweener() {
+		super();
+	}
+	
 	/**
 	 * Creates a player tweener which will tween the given two players.
 	 * @param player1 the first player

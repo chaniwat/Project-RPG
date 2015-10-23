@@ -5,52 +5,53 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerAdapter;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.skyhouse.projectrpg.ProjectRPG;
-import com.skyhouse.projectrpg.entities.Character;
+import com.skyhouse.projectrpg.entity.Character;
+import com.skyhouse.projectrpg.data.CharacterData;
 
 public class GameplayControllerProcess extends ControllerAdapter {
 
-	Character character;
+	CharacterData characterdata;
 	
-	public  GameplayControllerProcess(Character maincharacter) {
-		this.character = maincharacter;
+	public GameplayControllerProcess(Character maincharacter) {
+		this.characterdata = maincharacter.getData();
 	}
 	
 	@Override
 	public boolean buttonDown(Controller controller, int buttonIndex) {
 		switch(buttonIndex) {
-			case 0:
-				character.inputstate.qh_flag = true;
-				break;
+			/*case 0:
+				characterdata.inputstate.qh_flag = true;
+				break;*/
 			case 2:
-				character.inputstate.jump_flag = true;
+				characterdata.inputstate.jumpPressed = true;
 				break;
-			case 6:
-				character.inputstate.s2_flag = true;
+			/*case 6:
+				characterdata.inputstate.s2_flag = true;
 				break;
 			case 7:
-				character.inputstate.s1_flag = true;
-				break;
+				characterdata.inputstate.s1_flag = true;
+				break;*/
 		}
-		return true;
+		return false;
 	}
 	
 	@Override
 	public boolean buttonUp(Controller controller, int buttonIndex) {
 		switch(buttonIndex) {
-			case 0:
-				character.inputstate.qh_flag = false;
-				break;
+			/*case 0:
+				characterdata.inputstate.qh_flag = false;
+				break;*/
 			case 2:
-				character.inputstate.jump_flag = false;
+				characterdata.inputstate.jumpPressed = false;
 				break;
-			case 6:
-				character.inputstate.s2_flag = false;
+			/*case 6:
+				characterdata.inputstate.s2_flag = false;
 				break;
 			case 7:
-				character.inputstate.s1_flag = false;
-				break;
+				characterdata.inputstate.s1_flag = false;
+				break;*/
 		}
-		return super.buttonUp(controller, buttonIndex);
+		return false;
 	}
 	
 	@Override
@@ -58,20 +59,20 @@ public class GameplayControllerProcess extends ControllerAdapter {
 		switch(axisIndex) {
 			case 3:
 				if(value > 0.01) {
-					character.inputstate.left_flag = false;
-					character.inputstate.right_flag = true;
-					character.inputstate.x_value = value;
+					characterdata.inputstate.leftPressed = false;
+					characterdata.inputstate.rightPressed = true;
+					characterdata.inputstate.xAxisValue = value;
 				} else if(value < -0.01) {
-					character.inputstate.left_flag = true;
-					character.inputstate.right_flag = false;
-					character.inputstate.x_value = (float) Math.pow(value, 2);
+					characterdata.inputstate.leftPressed = true;
+					characterdata.inputstate.rightPressed = false;
+					characterdata.inputstate.xAxisValue = (float) Math.pow(value, 2);
 				} else {
-					character.inputstate.right_flag = false;
-					character.inputstate.left_flag = false;
-					character.inputstate.x_value = 0;
+					characterdata.inputstate.rightPressed = false;
+					characterdata.inputstate.leftPressed = false;
+					characterdata.inputstate.xAxisValue = 0;
 				}
 		}
-		return super.axisMoved(controller, axisIndex, value);
+		return false;
 	}
 	
 	@Override

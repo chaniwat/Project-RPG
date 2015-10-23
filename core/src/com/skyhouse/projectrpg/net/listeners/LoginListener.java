@@ -3,23 +3,18 @@ package com.skyhouse.projectrpg.net.listeners;
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.ProjectRPGServer;
-import com.skyhouse.projectrpg.entities.data.CharacterData;
-import com.skyhouse.projectrpg.entities.data.CharacterData.CharacterActionState;
+import com.skyhouse.projectrpg.data.CharacterData;
+import com.skyhouse.projectrpg.data.CharacterData.CharacterActionState;
 import com.skyhouse.projectrpg.net.packets.InitialRequest;
 import com.skyhouse.projectrpg.net.packets.InitialResponse;
-import com.skyhouse.projectrpg.physics.CharacterBody;
+import com.skyhouse.projectrpg.physicsO.CharacterBody;
 import com.skyhouse.projectrpg.scene.GameScene;
 
 public class LoginListener {
 	
 	public static class ClientSide extends Listener {
-		
-		GameScene scene;
-		
-		public ClientSide(GameScene scene) {
-			this.scene = scene;
-		}
 		
 		@Override
 		public void received(final Connection connection, Object object) {
@@ -28,11 +23,12 @@ public class LoginListener {
 				Gdx.app.postRunnable(new Runnable() {
 					@Override
 					public void run() {
-						scene.setMainCharacter(connection.getID(), response.data);
+						ProjectRPG.Client.scenemanager.getScene("gamescene", GameScene.class).setMainCharacter(connection.getID(), response.data);
 					}
 				});
 			}
 		}
+		
 	}
 	
 	public static class ServerSide extends Listener {

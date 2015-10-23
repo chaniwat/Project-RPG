@@ -2,7 +2,7 @@ package com.skyhouse.projectrpg.graphics.viewports;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.skyhouse.projectrpg.entities.Character;
+import com.skyhouse.projectrpg.entity.Character;
 
 public class GameplayViewport extends Viewport {
 	
@@ -29,7 +29,7 @@ public class GameplayViewport extends Viewport {
 	
 	public void setViewCenterToCharacter(Character character, float offsetX, float offsetY) {
 		if(!character.equals(null)) {
-				getCamera().position.set(character.getPositionX() + offsetX, character.getPositionY() + offsetY, 0.0f);
+				getCamera().position.set(character.getData().x + offsetX, character.getData().y + offsetY, 0.0f);
 				getCamera().update();
 		}
 	}

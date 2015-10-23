@@ -48,6 +48,15 @@ public class Player {
 	private Mainline.Key currentKey, prevKey;
 	public boolean copyObjects = true;
 	
+	protected Player() {
+		this.boneIterator = new BoneIterator();
+		this.objectIterator = new ObjectIterator();
+		this.speed = 15;
+		this.rect = new Rectangle(0,0,0,0);
+		this.prevBBox = new Box();
+		this.listeners = new ArrayList<PlayerListener>();
+	}
+	
 	/**
 	 * Creates a {@link Player} instance with the given entity.
 	 * @param entity the entity this player will animate

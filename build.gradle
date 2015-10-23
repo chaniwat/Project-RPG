@@ -56,7 +56,6 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
         compile "net.dermetfan.libgdx-utils:libgdx-utils:0.13.0"
         compile "net.dermetfan.libgdx-utils:libgdx-utils-box2d:0.13.0"
-        compile "net.onedaybeard.artemis:artemis-odb:1.0.1"
         compile "com.kotcrab.vis:vis-ui:$visuiVersion"
         compile "com.esotericsoftware:kryonet:2.22.0-RC1"
         compile fileTree(dir: '../libs', include: '*.jar')
