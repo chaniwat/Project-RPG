@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MenuScene extends Scene {
 
-	public MenuScene(SpriteBatch batch) {
-		super(batch);
+	public MenuScene() {
+		super();
 		// TODO Auto-generated constructor stub
 	}
 	

@@ -19,8 +19,8 @@ public class Character {
 		this.player.setScale(2.7f / player.getBoundingRectangle(null).size.height);
 	}
 	
-	public void update(float deltaTime) {
-		body.update();
+	public void update(float deltaTime, boolean controlable) {
+		if(controlable) body.update();
 		
 		switch(data.actionstate) {
 			case IDLE:
@@ -46,6 +46,14 @@ public class Character {
 		
 		player.update(deltaTime);
 		player.setPosition(data.x, data.y - 1f);
+	}
+	
+	public void updateCharacter(CharacterData data) {
+		this.body.getBody().setTransform(data.x, data.y, 0);
+		this.data.x = data.x;
+		this.data.y = data.y;
+		this.data.flipX = data.flipX;
+		this.data.actionstate = data.actionstate;
 	}
 	
 	public void draw() {

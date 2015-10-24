@@ -1,8 +1,10 @@
 package com.skyhouse.projectrpg.scene;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -18,14 +20,14 @@ import com.skyhouse.projectrpg.spriter.SpriterPlayer;
 public class GameScene extends Scene {
 	
 	private GameManager manager;
-	private ShapeRenderer renderer;
 	private Sprite background;
+	private BitmapFont font;
 	
-	public GameScene(SpriteBatch batch) {
-		super(batch);
+	public GameScene() {
+		font = assetmanager.get("font/Roboto-Regular.ttf", BitmapFont.class);
+		font.getData().markupEnabled = true;
+		font.setColor(Color.BLACK);
 		manager = new GameManager(assetmanager, input);
-		renderer = new ShapeRenderer();
-		SpriterPlayer.init(batch, renderer);
 		addViewport("Gameplay", new GameplayViewport(16f));
 		addViewport("UI", new UIViewport());
 		background = new Sprite();

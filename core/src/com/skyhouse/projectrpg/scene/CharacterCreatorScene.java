@@ -4,8 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class CharacterCreatorScene extends Scene {
 
-	public CharacterCreatorScene(SpriteBatch batch) {
-		super(batch);
+	public CharacterCreatorScene() {
 		// TODO Auto-generated constructor stub
 	}
 

@@ -5,9 +5,6 @@ import com.skyhouse.projectrpg.data.CharacterData;
 public class InitialResponse {
 	
 	public CharacterData data;
-
-	public InitialResponse() {
-		data = new CharacterData();
-	}
+	public String instance;
 	
 }

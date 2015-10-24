@@ -3,16 +3,19 @@ package com.skyhouse.projectrpg.game;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.data.CharacterData;
 import com.skyhouse.projectrpg.entity.Character;
 import com.skyhouse.projectrpg.input.GameplayControllerProcess;
 import com.skyhouse.projectrpg.input.GameplayInputProcess;
 import com.skyhouse.projectrpg.map.Map;
+import com.skyhouse.projectrpg.net.packets.UpdateRequest;
 import com.skyhouse.projectrpg.scene.input.SceneInput;
 import com.skyhouse.projectrpg.spriter.SpriterPlayer;
 import com.skyhouse.projectrpg.utils.assetloader.MapLoader.MapLoaderParameter;
@@ -51,16 +54,33 @@ public class GameManager {
 			}
 		}
 		while(!finishLoadMapPath.isEmpty()) loadingMapPath.remove(finishLoadMapPath.remove(0));
+		
+		if(getControlCharacter() != null) {
+			UpdateRequest request = new UpdateRequest();
+			request.input = getControlCharacter().getData().inputstate;
+			request.currentInstance = ProjectRPG.Client.network.currentInstance;
+			ProjectRPG.Client.network.net.sendUDP(request);
+		}
 
         accumulator += deltaTime;
 		
         while(accumulator >= step) {
 			world.step(step, 8, 3);
 			for(Character c : characters.values()) {
-				c.update(step);
+				if(c.equals(getControlCharacter())) c.update(step, true);
+				else c.update(step, false);
 			}
 			accumulator -= step;
         }
+	}
+	
+	public void updateCharacter(HashMap<Integer, CharacterData> data) {
+		for(Entry<Integer, CharacterData> entry : data.entrySet()) {
+			if(characters.get(entry.getKey()) == null) {
+				addCharacter(entry.getValue(), new SpriterPlayer("entity/GreyGuy/player.scml"));
+			}
+			characters.get(entry.getKey()).updateCharacter(entry.getValue());
+		}
 	}
 	
 	public World getB2DWorld() {

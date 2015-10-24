@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.utils.Logger;
 import com.esotericsoftware.kryo.Kryo;
@@ -23,12 +24,14 @@ import com.skyhouse.projectrpg.net.listeners.LoginListener;
 import com.skyhouse.projectrpg.net.listeners.UpdateListener;
 import com.skyhouse.projectrpg.net.packets.InitialRequest;
 import com.skyhouse.projectrpg.net.utils.NetworkUtils;
+import com.skyhouse.projectrpg.scene.CharacterCreatorScene;
 import com.skyhouse.projectrpg.scene.GameScene;
 import com.skyhouse.projectrpg.scene.HomeScene;
 import com.skyhouse.projectrpg.scene.LoadingScene;
 import com.skyhouse.projectrpg.scene.MenuScene;
 import com.skyhouse.projectrpg.scene.SceneManager;
 import com.skyhouse.projectrpg.scene.StartScene;
+import com.skyhouse.projectrpg.spriter.SpriterPlayer;
 import com.skyhouse.projectrpg.utils.assetloader.MapLoader;
 import com.skyhouse.projectrpg.utils.font.ThaiCharacter;
 
@@ -40,8 +43,9 @@ public class ProjectRPGClient extends ApplicationAdapter {
 	
 	private Client net;
 	private AssetManager assetmanager;
-	private SpriteBatch batch;
 	private SceneManager scenemanager;
+	private SpriteBatch batch;
+	private ShapeRenderer renderer;
 	
 	@Override
 	public void create()  {		
@@ -57,7 +61,6 @@ public class ProjectRPGClient extends ApplicationAdapter {
 		Gdx.app.debug(ProjectRPG.TITLE, "created");
 	}
 	
-	@SuppressWarnings("unused")
 	private void initialNetwork() {
 		net = new Client();
 		Kryo kryo = net.getKryo();
@@ -69,11 +72,16 @@ public class ProjectRPGClient extends ApplicationAdapter {
 			Gdx.app.error(ProjectRPG.TITLE, "Can't connect to server");
 			Gdx.app.exit();
 		}
-		ProjectRPG.Client.net = net;
+		ProjectRPG.Client.network.net = net;
+		ProjectRPG.Client.network.currentInstance = "none";
 	}
 	
 	private void initialGraphics() {
 		batch = new SpriteBatch();
+		renderer = new ShapeRenderer();
+		ProjectRPG.Client.graphic.batch = batch;
+		ProjectRPG.Client.graphic.renderer = renderer;
+		SpriterPlayer.init(batch, renderer);
 	}
 	
 	private void initialAssets() {
@@ -93,20 +101,20 @@ public class ProjectRPGClient extends ApplicationAdapter {
 		scenemanager = new SceneManager();
 		ProjectRPG.Client.scenemanager = scenemanager;
 		
-		scenemanager.addScene("startscene", new StartScene(batch));
-		scenemanager.addScene("homescene", new HomeScene(batch));
-		scenemanager.addScene("loadingscene", new LoadingScene(batch));
-		scenemanager.addScene("gamescene", new GameScene(batch));
-		scenemanager.addScene("menuscene", new MenuScene(batch));
+		scenemanager.addScene("startscene", new StartScene());
+		scenemanager.addScene("homescene", new HomeScene());
+		scenemanager.addScene("homescene", new CharacterCreatorScene());
+		scenemanager.addScene("loadingscene", new LoadingScene());
+		scenemanager.addScene("gamescene", new GameScene());
+		scenemanager.addScene("menuscene", new MenuScene());
 		
 		scenemanager.setUseScene("gamescene");
 	}
 	
-	@SuppressWarnings("unused")
 	private void startNetwork() {
 		net.addListener(new LoginListener.ClientSide());
 		//net.addListener(new DisconnectListener.ClientSide());
-		//net.addListener(new UpdateListener.ClientSide());
+		net.addListener(new UpdateListener.ClientSide());
 		net.sendTCP(new InitialRequest());
 	}
 	

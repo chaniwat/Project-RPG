@@ -18,7 +18,8 @@ public class LoginListener {
 		@Override
 		public void received(final Connection connection, Object object) {
 			if(object instanceof InitialResponse) {
-				final CharacterData data = ((InitialResponse)object).data;
+				final InitialResponse response = ((InitialResponse)object);
+				final CharacterData data = response.data;
 				Gdx.app.postRunnable(new Runnable() {
 					
 					@Override
@@ -26,6 +27,7 @@ public class LoginListener {
 						GameManager manager = ProjectRPG.Client.scenemanager.getScene("gamescene", GameScene.class).getGameManager();
 						manager.addCharacter(data, new SpriterPlayer("entity/GreyGuy/player.scml"));
 						manager.setControlCharacter(data.id);
+						ProjectRPG.Client.network.currentInstance = response.instance;
 					}
 				});
 				
@@ -39,14 +41,15 @@ public class LoginListener {
 		@Override
 		public void received(Connection connection, Object object) {
 			if(object instanceof InitialRequest) {
-				CharacterData c = new CharacterData();
-				c.id = connection.getID();
-				c.x = (float)((Math.random() * 7) + 5);
-				c.y = 8f;
-				ProjectRPG.Server.instances.get("main").addCharacter(c);
-				InitialResponse r = new InitialResponse();
-				r.data = c;
-				connection.sendTCP(r);
+				CharacterData data = new CharacterData();
+				data.id = connection.getID();
+				data.x = (float)((Math.random() * 7) + 5);
+				data.y = 8f;
+				ProjectRPG.Server.instances.get("TestLevel").addCharacter(data);
+				InitialResponse response = new InitialResponse();
+				response.data = data;
+				response.instance = "TestLevel";
+				connection.sendTCP(response);
 			}
 		}
 	}

@@ -2,11 +2,9 @@ package com.skyhouse.projectrpg.scene;
 
 import java.util.HashMap;
 
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.scene.input.SceneInput;
@@ -18,24 +16,24 @@ import com.skyhouse.projectrpg.scene.input.SceneInput;
 public abstract class Scene {
 	
 	protected AssetManager assetmanager;
+	protected SceneManager scenemanager;
 	protected SpriteBatch batch;
-	protected BitmapFont font;
-	private HashMap<String, Viewport> viewport;
+	protected ShapeRenderer renderer;
 	protected SceneInput input;
+	private HashMap<String, Viewport> viewport;
 		
 	/**
 	 * Construct a new {@link Scene}.
 	 * @param batch
 	 * @param assetmanager
 	 */
-	public Scene(SpriteBatch batch) {
-		this.batch = batch;
+	public Scene() {
 		this.assetmanager = ProjectRPG.Client.assetmanager;
+		this.scenemanager = ProjectRPG.Client.scenemanager;
+		this.batch = ProjectRPG.Client.graphic.batch;
+		this.renderer = ProjectRPG.Client.graphic.renderer;
 		viewport = new HashMap<String, Viewport>();
 		input = new SceneInput();
-		font = assetmanager.get("font/Roboto-Regular.ttf", BitmapFont.class);
-		font.getData().markupEnabled = true;
-		font.setColor(Color.BLACK);
 	}
 	
 	/**
@@ -69,7 +67,7 @@ public abstract class Scene {
 		}
 	}
 	
-	/** First call before use this scene */
+	/** First call before use this scene. */
 	public abstract void start();
 	/** Update scene. */
 	public abstract void update(float deltatime);

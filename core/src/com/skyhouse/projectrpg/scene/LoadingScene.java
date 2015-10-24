@@ -4,8 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class LoadingScene extends Scene {
 
-	public LoadingScene(SpriteBatch batch) {
-		super(batch);
+	public LoadingScene() {
 		// TODO Auto-generated constructor stub
 	}
 	

@@ -4,10 +4,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class StartScene extends Scene {
 
-	
-	public StartScene(SpriteBatch batch) {
-		super(batch);
-		
+	public StartScene() {
+		// TODO Auto-generated constructor stub
 	}
 	
 	@Override

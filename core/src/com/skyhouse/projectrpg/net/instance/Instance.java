@@ -6,18 +6,22 @@ import java.util.Map.Entry;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.data.CharacterData;
 import com.skyhouse.projectrpg.data.MapData;
-import com.skyhouse.projectrpg.net.packets.CharacterDataPacket;
+import com.skyhouse.projectrpg.data.StructureData;
+import com.skyhouse.projectrpg.data.CharacterData.CharacterInputState;
+import com.skyhouse.projectrpg.net.packets.UpdateResponse;
 import com.skyhouse.projectrpg.physics.B2DCharacter;
 import com.skyhouse.projectrpg.physics.B2DStructure;
 
 public class Instance extends Thread {
 	
 	private World world;
+	private MapData mapData;
 	private HashMap<String, B2DStructure> structures;
 	private HashMap<Integer, B2DCharacter> characters;
 	
@@ -35,15 +39,19 @@ public class Instance extends Thread {
     
 	public Instance(String name, MapData map) {
 		super(name + "-Instance");
+		this.mapData = map;
 		structures = new HashMap<String, B2DStructure>();
 		characters = new HashMap<Integer, B2DCharacter>();
 		postRunnableList = new ArrayList<Runnable>();
+		
+		world = new World(new Vector2(0, -10f), true);
+		for(Entry<String, StructureData> entry : map.structures.entrySet()) {
+			structures.put(entry.getKey(), new B2DStructure(world, entry.getValue(), BodyType.StaticBody));
+		}
 	}
 	
 	@Override
-	public void run() {
-		world = new World(new Vector2(0, -10f), true);
-		
+	public void run() {		
 		while(!isFinish) {
 			double newTime = TimeUtils.millis() / 1000.0;
 	        double frameTime = Math.min(newTime - currentTime, 0.25);
@@ -57,22 +65,23 @@ public class Instance extends Thread {
 	        	accumulator -= step;
 	        }
 	        
-	        /*for(B2DCharacter character : characters.values()) {
+	        for(B2DCharacter character : characters.values()) {
 	        	character.update();
 	        }
 	        
-	        CharacterDataPacket update = new CharacterDataPacket();
-			update.characters = new HashMap<Integer, CharacterData>();
+	        UpdateResponse update = new UpdateResponse();
+	        update.currentInstance = this.mapData.name;
+			update.data = new HashMap<Integer, CharacterData>();
 			for(Entry<Integer, B2DCharacter> character : characters.entrySet()) {
-				update.characters.put(character.getKey(), character.getValue().getData());
+				update.data.put(character.getKey(), character.getValue().getData());
 			}
 			for(Integer id : characters.keySet()) {
 				ProjectRPG.Server.net.sendToUDP(id, update);
-			}*/
+			}
 	        
 	        while(!postRunnableList.isEmpty()) {
 	        	Runnable runnable = postRunnableList.remove(0);
-	        	runnable.run();
+	        	if(runnable != null) runnable.run();
 	        }
 		}
 		
@@ -104,6 +113,15 @@ public class Instance extends Thread {
 			public void run() {
 				B2DCharacter o = characters.remove(id);
 				o.dispose();
+			}
+		});
+	}
+	
+	public void updateCharacter(final int id, final CharacterInputState data) {
+		postRunnableList.add(new Runnable() {
+			@Override
+			public void run() {
+				characters.get(id).getData().inputstate = data;
 			}
 		});
 	}
