@@ -22,7 +22,7 @@ public class DisconnectListener {
 				Gdx.app.postRunnable(new Runnable() {
 					@Override
 					public void run() {
-						ProjectRPG.Client.scenemanager.getScene("gamescene", GameScene.class).removeCharacter(response.connectionid);
+						ProjectRPG.Client.scenemanager.getScene("gamescene", GameScene.class).getGameManager().removeCharacter(response.connectionid);
 					}
 				});
 			}
@@ -33,15 +33,15 @@ public class DisconnectListener {
 	public static class ServerSide extends Listener {
 		
 		@Override
-		public void disconnected(Connection connection) {
-			if(ProjectRPGServer.characters.get(connection.getID()) != null) {
-				ProjectRPGServer.characters.get(connection.getID()).dispose();
-				ProjectRPGServer.characters.remove(connection.getID());				
+		public void received(Connection connection, Object object) {
+			if(object instanceof DisconnectRequest) {
+				DisconnectRequest request =(DisconnectRequest)object;
+				ProjectRPG.Server.instances.get(request.instance).removeCharacter(connection.getID());
+				
+				DisconnectResponse response = new DisconnectResponse();
+				response.connectionid = connection.getID();
+				ProjectRPG.Server.net.sendToAllExceptTCP(connection.getID(), response);
 			}
-			
-			DisconnectResponse response = new DisconnectResponse();
-			response.connectionid = connection.getID();
-			ProjectRPGServer.server.sendToAllExceptTCP(connection.getID(), response);
 		}
 		
 	}

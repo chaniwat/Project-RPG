@@ -50,7 +50,7 @@ public class ProjectRPGServer extends ApplicationAdapter {
 		ProjectRPG.Server.instances = instances;
 		
 		server.addListener(new LoginListener.ServerSide());
-		//server.addListener(new DisconnectListener.ServerSide());
+		server.addListener(new DisconnectListener.ServerSide());
 		server.addListener(new UpdateListener.ServerSide());
 		
 		// New Instance

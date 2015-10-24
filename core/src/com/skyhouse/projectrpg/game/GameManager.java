@@ -6,12 +6,17 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.data.CharacterData;
 import com.skyhouse.projectrpg.entity.Character;
+import com.skyhouse.projectrpg.graphics.viewports.GameplayViewport;
 import com.skyhouse.projectrpg.input.GameplayControllerProcess;
 import com.skyhouse.projectrpg.input.GameplayInputProcess;
 import com.skyhouse.projectrpg.map.Map;
@@ -30,7 +35,9 @@ public class GameManager {
 	private HashMap<Integer, Character> characters;
 	private String currentMap;
 	private int currentCharacter;
+	private Sprite background;
 	private SceneInput input;
+	private GameplayViewport viewport;
 	private double accumulator;
     private float step = 1.0f / 60.0f;
 	
@@ -41,6 +48,7 @@ public class GameManager {
 		characters = new HashMap<Integer, Character>();
 		loadingMapPath = new ArrayList<String>();
 		finishLoadMapPath = new ArrayList<String>();
+		background = new Sprite();
 		world = new World(new Vector2(0, -10f), true);
 	}
 	
@@ -54,6 +62,8 @@ public class GameManager {
 			}
 		}
 		while(!finishLoadMapPath.isEmpty()) loadingMapPath.remove(finishLoadMapPath.remove(0));
+		
+		updateBackground();
 		
 		if(getControlCharacter() != null) {
 			UpdateRequest request = new UpdateRequest();
@@ -70,8 +80,22 @@ public class GameManager {
 				if(c.equals(getControlCharacter())) c.update(step, true);
 				else c.update(step, false);
 			}
+			background.setPosition(-(background.getWidth() / 2f) + (getControlCharacter().getData().x * 0.35f), -2f + (getControlCharacter().getData().y * 0.35f));
+			if(getControlCharacter() != null) {
+				viewport.setViewCenterToCharacter(getControlCharacter(), 0, 1.5f);				
+			}
 			accumulator -= step;
         }
+	}
+	
+	private void updateBackground() {
+		if((background.getTexture() == null || !background.getTexture().equals(getCurrentMap().getBackground())) && getCurrentMap() != null) {
+			float baseHeight = 17f;
+			Texture t = getCurrentMap().getBackground();
+			background.setRegion(t);
+			background.setSize(baseHeight * (t.getWidth()/t.getHeight()), baseHeight);
+			background.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);			
+		}
 	}
 	
 	public void updateCharacter(HashMap<Integer, CharacterData> data) {
@@ -131,5 +155,17 @@ public class GameManager {
 	
 	public void dispose() {
 		world.dispose();
+	}
+
+	public void removeCharacter(int connectionid) {
+		characters.remove(connectionid).getBody().dispose();
+	}
+	
+	public Sprite getBackground() {
+		return background;
+	}
+
+	public void setGameplayViewport(GameplayViewport viewport) {
+		this.viewport = viewport;
 	}
 }

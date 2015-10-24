@@ -27,6 +27,7 @@ public abstract class B2DObject {
 	 * @param density
 	 */
 	public B2DObject(World world, Vector2 position, Vector2 size, BodyType type, float density) {
+		this.world = world;
 		BodyDef bodydef = new BodyDef();
 		bodydef.type = type;
 		bodydef.position.set(position.x , position.y);

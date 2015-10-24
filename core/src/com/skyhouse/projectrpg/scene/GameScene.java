@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.data.CharacterData;
 import com.skyhouse.projectrpg.entity.Character;
@@ -20,8 +21,9 @@ import com.skyhouse.projectrpg.spriter.SpriterPlayer;
 public class GameScene extends Scene {
 	
 	private GameManager manager;
-	private Sprite background;
 	private BitmapFont font;
+	
+	private Box2DDebugRenderer b2ddebug = new Box2DDebugRenderer();
 	
 	public GameScene() {
 		font = assetmanager.get("font/Roboto-Regular.ttf", BitmapFont.class);
@@ -30,29 +32,13 @@ public class GameScene extends Scene {
 		manager = new GameManager(assetmanager, input);
 		addViewport("Gameplay", new GameplayViewport(16f));
 		addViewport("UI", new UIViewport());
-		background = new Sprite();
+		manager.setGameplayViewport((GameplayViewport)getViewport("Gameplay"));
 		manager.addMap("mapdata/L01.map");
 	}
 
 	@Override
 	public void update(float deltatime) {
 		manager.update(deltatime);
-		
-		if(manager.getAllCharacter().isEmpty() || manager.getAllMap().isEmpty()) return;
-		((GameplayViewport)getViewport("Gameplay")).setViewCenterToCharacter(manager.getControlCharacter(), 0, 1.5f);
-		updateBackground();
-	}
-	
-	private void updateBackground() {
-		if((background.getTexture() == null || !background.getTexture().equals(manager.getCurrentMap().getBackground())) && manager.getCurrentMap() != null) {
-			float baseHeight = 17f;
-			Texture t = manager.getCurrentMap().getBackground();
-			background.setRegion(t);
-			background.setSize(baseHeight * (t.getWidth()/t.getHeight()), baseHeight);
-			background.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);			
-		}
-		
-		background.setPosition(-(background.getWidth() / 2f) + (manager.getControlCharacter().getData().x * 0.35f), -2f + (manager.getControlCharacter().getData().y * 0.35f));
 	}
 	
 	@Override
@@ -60,12 +46,13 @@ public class GameScene extends Scene {
 		if(manager.getAllCharacter().isEmpty() || manager.getAllMap().isEmpty()) return;
 		drawEntities();
 		drawUI();
+		b2ddebug.render(manager.getB2DWorld(), getViewport("Gameplay").getCamera().combined);
 	}
 	
 	private void drawEntities() {
 		useViewport("Gameplay");
 		batch.begin();
-			background.draw(batch);
+			manager.getBackground().draw(batch);
 			for(Map m : manager.getAllMap()) {
 				m.draw(batch);
 			}
@@ -82,7 +69,7 @@ public class GameScene extends Scene {
 		
 		batch.begin();
 			font.draw(batch, "FPS : "+Gdx.graphics.getFramesPerSecond(), 20, getViewport("UI").getScreenHeight() - 20);
-			//font.draw(batch, "Lantacy : "+ProjectRPG.Client.net.getReturnTripTime()+" ms", 20, getViewport("UI").getScreenHeight() - 40);
+			font.draw(batch, "Lantacy : "+ProjectRPG.Client.network.net.getReturnTripTime()+" ms", 20, getViewport("UI").getScreenHeight() - 40);
 		batch.end();
 	}
 	

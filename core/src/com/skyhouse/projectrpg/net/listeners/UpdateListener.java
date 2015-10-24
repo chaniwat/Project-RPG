@@ -1,14 +1,10 @@
 package com.skyhouse.projectrpg.net.listeners;
 
-import java.util.Map.Entry;
-
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.ProjectRPGServer;
-import com.skyhouse.projectrpg.data.CharacterData;
-import com.skyhouse.projectrpg.game.GameManager;
 import com.skyhouse.projectrpg.net.packets.UpdateRequest;
 import com.skyhouse.projectrpg.net.packets.UpdateResponse;
 import com.skyhouse.projectrpg.scene.GameScene;

@@ -22,6 +22,7 @@ import com.skyhouse.projectrpg.map.Map;
 import com.skyhouse.projectrpg.net.listeners.DisconnectListener;
 import com.skyhouse.projectrpg.net.listeners.LoginListener;
 import com.skyhouse.projectrpg.net.listeners.UpdateListener;
+import com.skyhouse.projectrpg.net.packets.DisconnectRequest;
 import com.skyhouse.projectrpg.net.packets.InitialRequest;
 import com.skyhouse.projectrpg.net.utils.NetworkUtils;
 import com.skyhouse.projectrpg.scene.CharacterCreatorScene;
@@ -113,7 +114,7 @@ public class ProjectRPGClient extends ApplicationAdapter {
 	
 	private void startNetwork() {
 		net.addListener(new LoginListener.ClientSide());
-		//net.addListener(new DisconnectListener.ClientSide());
+		net.addListener(new DisconnectListener.ClientSide());
 		net.addListener(new UpdateListener.ClientSide());
 		net.sendTCP(new InitialRequest());
 	}
@@ -139,6 +140,14 @@ public class ProjectRPGClient extends ApplicationAdapter {
 	
 	@Override
 	public void dispose () {
-		//net.close();
+		DisconnectRequest request = new DisconnectRequest();
+		request.instance = ProjectRPG.Client.network.currentInstance;
+		net.sendTCP(request);
+		net.close();
+		try {
+			net.dispose();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
