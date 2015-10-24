@@ -80,9 +80,9 @@ public class GameManager {
 				if(c.equals(getControlCharacter())) c.update(step, true);
 				else c.update(step, false);
 			}
-			background.setPosition(-(background.getWidth() / 2f) + (getControlCharacter().getData().x * 0.35f), -2f + (getControlCharacter().getData().y * 0.35f));
 			if(getControlCharacter() != null) {
-				viewport.setViewCenterToCharacter(getControlCharacter(), 0, 1.5f);				
+				viewport.setViewCenterToCharacter(getControlCharacter(), 0, 1.5f);
+				background.setPosition(-(background.getWidth() / 2f) + (getControlCharacter().getData().x * 0.35f), -2f + (getControlCharacter().getData().y * 0.35f));
 			}
 			accumulator -= step;
         }
