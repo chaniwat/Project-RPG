@@ -24,7 +24,7 @@ public class Map {
 	
 	public Map(World world, MapData data) {	
 		this(world, data, 
-				new TextureAtlas(Gdx.files.internal("texture/structure/" + data.mapTextureAtlasPath + ".pack")), 
+				new TextureAtlas(Gdx.files.internal("texture/structure/" + data.mapTexturePackPath + ".pack")), 
 				new Texture(Gdx.files.internal("texture/background" + data.mapBackgroundPath + ".png")));
 	}
 	
@@ -60,6 +60,12 @@ public class Map {
 	
 	public MapData getData() {
 		return data;
+	}
+
+	public void dispose() {
+		for(Structure structure : structures.values()) {
+			structure.dispose();
+		}
 	}
 	
 }

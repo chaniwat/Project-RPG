@@ -1,10 +1,10 @@
 package com.skyhouse.projectrpg.net.packets;
 
-import com.skyhouse.projectrpg.data.CharacterData.CharacterInputState;
+import com.skyhouse.projectrpg.data.InputData;
 
 public class UpdateRequest {
 
-	public CharacterInputState input;
+	public InputData input;
 	public String currentInstance;
 	
 }

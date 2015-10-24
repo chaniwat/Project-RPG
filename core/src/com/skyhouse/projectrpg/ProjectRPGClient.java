@@ -30,11 +30,11 @@ import com.skyhouse.projectrpg.scene.GameScene;
 import com.skyhouse.projectrpg.scene.HomeScene;
 import com.skyhouse.projectrpg.scene.LoadingScene;
 import com.skyhouse.projectrpg.scene.MenuScene;
-import com.skyhouse.projectrpg.scene.SceneManager;
 import com.skyhouse.projectrpg.scene.StartScene;
 import com.skyhouse.projectrpg.spriter.SpriterPlayer;
-import com.skyhouse.projectrpg.utils.assetloader.MapLoader;
+import com.skyhouse.projectrpg.utils.asset.loader.MapLoader;
 import com.skyhouse.projectrpg.utils.font.ThaiCharacter;
+import com.skyhouse.projectrpg.utils.scene.SceneManager;
 
 /**
  * Client class of ProjectRPG.

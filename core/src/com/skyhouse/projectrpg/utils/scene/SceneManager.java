@@ -1,8 +1,9 @@
-package com.skyhouse.projectrpg.scene;
+package com.skyhouse.projectrpg.utils.scene;
 
 import java.util.HashMap;
 
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.skyhouse.projectrpg.scene.Scene;
 
 /**
  *  Manage {@link Scene}.

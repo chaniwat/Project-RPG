@@ -29,16 +29,22 @@ public class GameScene extends Scene {
 		font = assetmanager.get("font/Roboto-Regular.ttf", BitmapFont.class);
 		font.getData().markupEnabled = true;
 		font.setColor(Color.BLACK);
-		manager = new GameManager(assetmanager, input);
+		manager = new GameManager(input);
 		addViewport("Gameplay", new GameplayViewport(16f));
 		addViewport("UI", new UIViewport());
-		manager.setGameplayViewport((GameplayViewport)getViewport("Gameplay"));
 		manager.addMap("mapdata/L01.map");
 	}
 
 	@Override
 	public void update(float deltatime) {
 		manager.update(deltatime);
+		
+		if(manager.getControlCharacter() != null) {
+			getViewport("Gameplay", GameplayViewport.class).setViewCenterToCharacter(manager.getControlCharacter(), 0, 1.5f);
+			manager.getBackground().setPosition(
+					-(manager.getBackground().getWidth() / 2f) + (manager.getControlCharacter().getData().x * 0.35f), 
+					-2f + (manager.getControlCharacter().getData().y * 0.35f));
+		}
 	}
 	
 	@Override
@@ -46,7 +52,7 @@ public class GameScene extends Scene {
 		if(manager.getAllCharacter().isEmpty() || manager.getAllMap().isEmpty()) return;
 		drawEntities();
 		drawUI();
-		b2ddebug.render(manager.getB2DWorld(), getViewport("Gameplay").getCamera().combined);
+		b2ddebug.render(manager.getB2DWorld(), getViewport("Gameplay", GameplayViewport.class).getCamera().combined);
 	}
 	
 	private void drawEntities() {
@@ -58,9 +64,9 @@ public class GameScene extends Scene {
 			}
 			for(Character c : manager.getAllCharacter()) {
 				if(c.equals(manager.getControlCharacter())) continue;
-				c.draw();
+				c.draw(batch);
 			}
-			manager.getControlCharacter().draw();
+			manager.getControlCharacter().draw(batch);
 		batch.end();
 	}
 	
@@ -68,8 +74,8 @@ public class GameScene extends Scene {
 		useViewport("UI");
 		
 		batch.begin();
-			font.draw(batch, "FPS : "+Gdx.graphics.getFramesPerSecond(), 20, getViewport("UI").getScreenHeight() - 20);
-			font.draw(batch, "Lantacy : "+ProjectRPG.Client.network.net.getReturnTripTime()+" ms", 20, getViewport("UI").getScreenHeight() - 40);
+			font.draw(batch, "FPS : "+Gdx.graphics.getFramesPerSecond(), 20, getViewport("UI", UIViewport.class).getScreenHeight() - 20);
+			font.draw(batch, "Lantacy : "+ProjectRPG.Client.network.net.getReturnTripTime()+" ms", 20, getViewport("UI", UIViewport.class).getScreenHeight() - 40);
 		batch.end();
 	}
 	

@@ -6,7 +6,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.skyhouse.projectrpg.net.instance.Instance;
-import com.skyhouse.projectrpg.scene.SceneManager;
+import com.skyhouse.projectrpg.utils.scene.SceneManager;
 
 /**
  * ProjectRPG.
@@ -17,13 +17,12 @@ public class ProjectRPG {
 	private ProjectRPG() {}
 	
 	public static final String TITLE = "Project RPG";
-	public static final String VERSION = "0.2.3 WIP (Multiplayer)";
+	public static final String VERSION = "0.2.4 WIP";
+	public static final String VERSION_NAME = "Multiplayer";
 	public static final String AUTHOR = "Skyhouse Team.";
 	
 	/**
-	 * Client of ProjectRPG.
 	 * @author Meranote
-	 *
 	 */
 	public static class Client {
 		
@@ -31,10 +30,18 @@ public class ProjectRPG {
 		
 		public static AssetManager assetmanager;
 		public static SceneManager scenemanager;
+		/**
+		 * @author Meranote
+		 */
+		@SuppressWarnings("typename")
 		public static class graphic {
 			public static SpriteBatch batch;
 			public static ShapeRenderer renderer;			
 		}
+		/**
+		 * @author Meranote
+		 */
+		@SuppressWarnings("typename")
 		public static class network {
 			public static com.esotericsoftware.kryonet.Client net;
 			public static String currentInstance;
@@ -43,7 +50,6 @@ public class ProjectRPG {
 	}
 	
 	/**
-	 * Server of ProjectRPG.
 	 * @author Meranote
 	 */
 	public static class Server {

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.scene.input.SceneInput;
+import com.skyhouse.projectrpg.utils.scene.SceneManager;
 
 /**
  * Scene.
@@ -50,8 +51,9 @@ public abstract class Scene {
 	 * @param name
 	 * @return {@link Viewport}
 	 */
-	public final Viewport getViewport(String name) {
-		return viewport.get(name);
+	@SuppressWarnings("unchecked")
+	public final <T extends Viewport> T getViewport(String name, Class<T> viewportClass) {
+		return (T)(viewport.get(name));
 	}
 	
 	/** Use the given viewport.  */

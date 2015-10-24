@@ -15,59 +15,46 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.data.CharacterData;
+import com.skyhouse.projectrpg.data.InputData;
 import com.skyhouse.projectrpg.entity.Character;
 import com.skyhouse.projectrpg.graphics.viewports.GameplayViewport;
-import com.skyhouse.projectrpg.input.GameplayControllerProcess;
-import com.skyhouse.projectrpg.input.GameplayInputProcess;
+import com.skyhouse.projectrpg.input.listener.GameplayControllerProcess;
+import com.skyhouse.projectrpg.input.listener.GameplayInputProcess;
 import com.skyhouse.projectrpg.map.Map;
 import com.skyhouse.projectrpg.net.packets.UpdateRequest;
 import com.skyhouse.projectrpg.scene.input.SceneInput;
 import com.skyhouse.projectrpg.spriter.SpriterPlayer;
-import com.skyhouse.projectrpg.utils.assetloader.MapLoader.MapLoaderParameter;
+import com.skyhouse.projectrpg.utils.asset.loader.MapLoader.MapLoaderParameter;
+import com.skyhouse.projectrpg.utils.scene.SceneManager;
 
 public class GameManager {
 	
-	private AssetManager assetmanager;
-	private ArrayList<String> loadingMapPath;
-	private ArrayList<String> finishLoadMapPath;
-	private World world;
-	private HashMap<String, Map> maps;
-	private HashMap<Integer, Character> characters;
+	private AssetManager assetmanager = ProjectRPG.Client.assetmanager;
+	private SceneManager scenemanager = ProjectRPG.Client.scenemanager;
+	private ArrayList<String> loadingMapPath = new ArrayList<String>();
+	private ArrayList<String> finishLoadMapPath = new ArrayList<String>();
+	private SceneInput inputHandle;
+	private InputData inputData = new InputData();
+	private World world = new World(new Vector2(0, -10f), true);
+	private HashMap<String, Map> maps = new HashMap<String, Map>();
+	private HashMap<Integer, Character> characters = new HashMap<Integer, Character>();
 	private String currentMap;
 	private int currentCharacter;
-	private Sprite background;
-	private SceneInput input;
-	private GameplayViewport viewport;
+	private Sprite background = new Sprite();
 	private double accumulator;
     private float step = 1.0f / 60.0f;
 	
-	public GameManager(AssetManager assetmanager, SceneInput input) {
-		this.assetmanager = assetmanager;
-		this.input = input;
-		maps = new HashMap<String, Map>();
-		characters = new HashMap<Integer, Character>();
-		loadingMapPath = new ArrayList<String>();
-		finishLoadMapPath = new ArrayList<String>();
-		background = new Sprite();
-		world = new World(new Vector2(0, -10f), true);
+	public GameManager(SceneInput gameSceneInput) {
+		this.inputHandle = gameSceneInput;
 	}
 	
 	public void update(float deltaTime) {
-		for(String path : loadingMapPath) {
-			if(assetmanager.isLoaded(path)) {
-				Map m = assetmanager.get(path, Map.class);
-				maps.put(m.getData().name, m);
-				if(getCurrentMap() == null) setCurrentMap(m.getData().name);
-				finishLoadMapPath.add(path);
-			}
-		}
-		while(!finishLoadMapPath.isEmpty()) loadingMapPath.remove(finishLoadMapPath.remove(0));
-		
+		checkLoadedMap();
 		updateBackground();
 		
 		if(getControlCharacter() != null) {
 			UpdateRequest request = new UpdateRequest();
-			request.input = getControlCharacter().getData().inputstate;
+			request.input = inputData;
 			request.currentInstance = ProjectRPG.Client.network.currentInstance;
 			ProjectRPG.Client.network.net.sendUDP(request);
 		}
@@ -77,15 +64,23 @@ public class GameManager {
         while(accumulator >= step) {
 			world.step(step, 8, 3);
 			for(Character c : characters.values()) {
-				if(c.equals(getControlCharacter())) c.update(step, true);
-				else c.update(step, false);
-			}
-			if(getControlCharacter() != null) {
-				viewport.setViewCenterToCharacter(getControlCharacter(), 0, 1.5f);
-				background.setPosition(-(background.getWidth() / 2f) + (getControlCharacter().getData().x * 0.35f), -2f + (getControlCharacter().getData().y * 0.35f));
+				if(c.equals(getControlCharacter())) c.update(step);
+				else c.update(step);
 			}
 			accumulator -= step;
         }
+	}
+	
+	private void checkLoadedMap() {
+		for(String path : loadingMapPath) {
+			if(assetmanager.isLoaded(path)) {
+				Map m = assetmanager.get(path, Map.class);
+				maps.put(m.getData().name, m);
+				if(getCurrentMap() == null) setCurrentMap(m.getData().name);
+				finishLoadMapPath.add(path);
+			}
+		}
+		while(!finishLoadMapPath.isEmpty()) loadingMapPath.remove(finishLoadMapPath.remove(0));
 	}
 	
 	private void updateBackground() {
@@ -101,9 +96,9 @@ public class GameManager {
 	public void updateCharacter(HashMap<Integer, CharacterData> data) {
 		for(Entry<Integer, CharacterData> entry : data.entrySet()) {
 			if(characters.get(entry.getKey()) == null) {
-				addCharacter(entry.getValue(), new SpriterPlayer("entity/GreyGuy/player.scml"));
+				addCharacter(0, entry.getValue(), new SpriterPlayer("entity/GreyGuy/player.scml"));
 			}
-			characters.get(entry.getKey()).updateCharacter(entry.getValue());
+			characters.get(entry.getKey()).updateCharacterByData(entry.getValue());
 		}
 	}
 	
@@ -118,10 +113,6 @@ public class GameManager {
 		loadingMapPath.add(pathToMap);
 	}
 	
-	public void addCharacter(CharacterData data, SpriterPlayer player) {
-		characters.put(data.id, new Character(world, player, data));
-	}
-	
 	public Collection<Map> getAllMap() {
 		return maps.values();
 	}
@@ -134,38 +125,42 @@ public class GameManager {
 		return maps.get(name);
 	}
 	
+	public void setCurrentMap(String name) {
+		currentMap = name;
+	}
+	
 	public Map getCurrentMap() {
 		return maps.get(currentMap);
 	}
-
-	public void setCurrentMap(String name) {
-		currentMap = name;
+	
+	public void removeMap(String name) {
+		maps.get(name).dispose();
+	}
+	
+	public void addCharacter(int id, CharacterData data, SpriterPlayer player) {
+		characters.put(id, new Character(player, data));
+	}
+	
+	public void setControlCharacter(int id) {
+		currentCharacter = id;
+		inputHandle.setInputProcessor(new GameplayInputProcess(inputData));
+		inputHandle.setControllerProcessor(new GameplayControllerProcess(inputData));
+		inputHandle.use();
 	}
 	
 	public Character getControlCharacter() {
 		return characters.get(currentCharacter);
 	}
-	
-	public void setControlCharacter(int id) {
-		currentCharacter = id;
-		input.setInputProcessor(new GameplayInputProcess(characters.get(id)));
-		input.setControllerProcessor(new GameplayControllerProcess(characters.get(id)));
-		input.use();
-	}
-	
-	public void dispose() {
-		world.dispose();
-	}
 
 	public void removeCharacter(int connectionid) {
-		characters.remove(connectionid).getBody().dispose();
+		characters.remove(connectionid).dispose();
 	}
 	
 	public Sprite getBackground() {
 		return background;
 	}
-
-	public void setGameplayViewport(GameplayViewport viewport) {
-		this.viewport = viewport;
+	
+	public void dispose() {
+		world.dispose();
 	}
 }
