@@ -4,8 +4,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.skyhouse.projectrpg.data.CharacterData;
-import com.skyhouse.projectrpg.data.CharacterData.CharacterActionState;
+import com.skyhouse.projectrpg.data.Data.ActionState;
+import com.skyhouse.projectrpg.data.InputData;
 
 /**
  * Box2D Character object.
@@ -35,48 +37,59 @@ public class B2DCharacter extends B2DObject {
 		this.data = data;
 	}
 	
-	@Override
+	/**
+	 * Don't use this update method, use {@link #update(InputData)} instead.
+	 */
+	@Override @Deprecated
 	public void update() {
+		new GdxRuntimeException("B2DCharacter update called, use update(InputData) instead.").printStackTrace();
+	}
+	
+	/**
+	 * Update the character object with input data.
+	 * @param input
+	 */
+	public void update(InputData input) {
 		float speed = 2.5f;
 		
-		data.actionstate = CharacterActionState.IDLE;
+		data.state = ActionState.IDLE;
 		
-		if(data.inputstate.leftPressed || data.inputstate.rightPressed) {
-			if(data.inputstate.leftPressed) data.flipX = true;
-			else if(data.inputstate.rightPressed) data.flipX = false;
-			float x_value = data.inputstate.xAxisValue;
+		if(input.leftPressed || input.rightPressed) {
+			if(input.leftPressed) data.flipX = true;
+			else if(input.rightPressed) data.flipX = false;
+			float x_value = input.xAxisValue;
 			if(x_value > 1) x_value = 1f;
 			move(speed * x_value);
-			data.actionstate = CharacterActionState.WALK;
+			data.state = ActionState.WALK;
 		} else {
 			stop();
 		}
 		
-		if(data.inputstate.jumpPressed) {
+		if(input.jumpPressed) {
 			if(!jumpflag && !fallflag) {
 				jump();
-				data.actionstate = CharacterActionState.JUMP;
+				data.state = ActionState.JUMP;
 			}
 		}
 		
 		if(jumpflag) {
-			data.actionstate = CharacterActionState.JUMP;
+			data.state = ActionState.JUMP;
 		}
 		
 		if(body.getLinearVelocity().y < -1f) {
 			jumpflag = false;
 			fallflag = true;
-			data.actionstate = CharacterActionState.FALL;
+			data.state = ActionState.FALL;
 		}
 		
 		if(body.getLinearVelocity().y > -1f && body.getLinearVelocity().y < 1f  && !jumpflag) {
 			fallflag = false;
-			if(walkflag) data.actionstate = CharacterActionState.WALK;
-			else data.actionstate = CharacterActionState.IDLE;
+			if(walkflag) data.state = ActionState.WALK;
+			else data.state = ActionState.IDLE;
 		}
 		
 		data.x = body.getPosition().x;
-		data.y = body.getPosition().y;
+		data.y = body.getPosition().y - 1;
 	}
 	
 	private void move(float speed, boolean stop) {
