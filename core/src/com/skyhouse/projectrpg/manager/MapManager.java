@@ -1,7 +1,6 @@
 package com.skyhouse.projectrpg.manager;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
@@ -12,6 +11,10 @@ import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.map.Map;
 import com.skyhouse.projectrpg.utils.asset.loader.MapLoader.MapLoaderParameter;
 
+/**
+ * Manage map. Contain the collection of {@link Map}.
+ * @author Meranote
+ */
 public class MapManager extends Manager {
 
 	private AssetManager assetmanager = ProjectRPG.Client.assetmanager;
@@ -35,6 +38,9 @@ public class MapManager extends Manager {
 		while(!finishLoadMapPath.isEmpty()) loadingMapPath.remove(finishLoadMapPath.remove(0));
 	}
 	
+	/**
+	 * Add new map .
+	 */
 	public void addMap(String pathToMap, World world) {
 		if(assetmanager.isLoaded(pathToMap)) {
 			Gdx.app.log(ProjectRPG.TITLE, "already load this map.");
@@ -50,6 +56,10 @@ public class MapManager extends Manager {
 		loadingMapPath.add(pathToMap);
 	}
 	
+	/**
+	 * Get the map by given map name.
+	 * @return {@link Map}
+	 */
 	public Map getMap(String name) {
 		if(!maps.containsKey(name)) {
 			assetmanager.finishLoadingAsset(loadingMapPath.get(loadingMapPath.size() - 1));
@@ -59,14 +69,23 @@ public class MapManager extends Manager {
 		return maps.get(name);
 	}
 	
-	public Collection<Map> getAllMap() {
+	/**
+	 * Return the collection of {@link Map}. <br>
+	 * <b>Key is represent to map name</b>
+	 * @return {@link HashMap}<{@link String}, {@link Map}>
+	 */
+	public HashMap<String, Map> getAllMap() {
 		if(!loadingMapPath.isEmpty()) {
 			assetmanager.finishLoadingAsset(loadingMapPath.get(loadingMapPath.size() - 1));
 			loadingMapPath.clear();
 		}
-		return maps.values();
+		return maps;
 	}
 	
+	/**
+	 * Remove the map by given map name.
+	 * @param name
+	 */
 	public void removeMap(String name) {
 		maps.get(name).dispose();
 	}

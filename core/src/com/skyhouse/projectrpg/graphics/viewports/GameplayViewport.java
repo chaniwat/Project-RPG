@@ -4,15 +4,21 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.skyhouse.projectrpg.entity.Character;
 
+/**
+ * Gameplay viewport.
+ * @author Meranote
+ */
 public class GameplayViewport extends Viewport {
 	
 	private float viewWorldSize;
-	private float viewWorldScale;
+	private float viewWorldScale = 1f;
 	private boolean isUpdated;
 
+	/**
+	 * Construct a new {@link GameplayViewport} by given view size.
+	 */
 	public GameplayViewport(float viewSize) {
 		viewWorldSize = viewSize;
-		viewWorldScale = 1f;
 		setCamera(new OrthographicCamera());
 	}
 	
@@ -27,6 +33,9 @@ public class GameplayViewport extends Viewport {
 		isUpdated = true;
 	}
 	
+	/**
+	 * Set the view to the center of character and calculate the corrent view with offset value.
+	 */
 	public void setViewCenterToCharacter(Character character, float offsetX, float offsetY) {
 		if(!character.equals(null)) {
 				getCamera().position.set(character.getData().x + offsetX, character.getData().y + offsetY, 0.0f);
@@ -34,6 +43,9 @@ public class GameplayViewport extends Viewport {
 		}
 	}
 	
+	/**
+	 * Set the new view size.
+	 */
 	public void setViewSize(float viewSize) {
 		viewWorldSize = viewSize;
 		
@@ -42,6 +54,11 @@ public class GameplayViewport extends Viewport {
 		}
 	}
 	
+	/**
+	 * Set the view scale.
+	 * <b>Note that not change the view size</b>.
+	 * @param viewScale
+	 */
 	public void setViewScale(float viewScale) {
 		viewWorldScale = viewScale;
 		

@@ -40,14 +40,18 @@ public class MapData extends Data {
 	public String name;
 	public MapType type;
 	public String mapTexturePackPath, mapBackgroundPath;
-	public HashMap<String, StructureData> structures = new HashMap<String, StructureData>();
-	public HashMap<String, MapStructureTexture> structureTextureMapper = new HashMap<String, MapData.MapStructureTexture>(); 
-	public HashMap<String, StructureBehavior> structureBehaviorMapper = new HashMap<String, StructureData.StructureBehavior>();
+	public HashMap<String, StructureData> structures;
+	public HashMap<String, MapStructureTexture> structureTextureMapper;
+	public HashMap<String, StructureBehavior> structureBehaviorMapper;
 	
 	/**
 	 * @param handle
 	 */
 	public MapData(FileHandle handle) {
+		structures = new HashMap<String, StructureData>();
+		structureTextureMapper = new HashMap<String, MapData.MapStructureTexture>(); 
+		structureBehaviorMapper = new HashMap<String, StructureData.StructureBehavior>();
+		
 		// Save internal map path
 		path = handle.path();
 		

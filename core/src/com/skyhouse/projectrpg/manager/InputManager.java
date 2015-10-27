@@ -11,10 +11,14 @@ import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.skyhouse.projectrpg.ProjectRPG;
 
+/**
+ * Manage the input listener and data.
+ * @author Meranote
+ */
 public class InputManager extends Manager {
 
-	private HashMap<Class<? extends InputProcessor>, InputAdapter> inputs = new HashMap<Class<? extends InputProcessor>, InputAdapter>();
-	private HashMap<Class<? extends ControllerListener>, ControllerAdapter> controllers = new HashMap<Class<? extends ControllerListener>, ControllerAdapter>();
+	private HashMap<Class<? extends InputProcessor>, InputAdapter> inputs;
+	private HashMap<Class<? extends ControllerListener>, ControllerAdapter> controllers;
 	private InputAdapter currentInput;
 	private ControllerAdapter currentController;
 	
@@ -35,6 +39,9 @@ public class InputManager extends Manager {
 	 * @param controllerListener 
 	 */
 	public InputManager(InputAdapter inputListener, ControllerAdapter controllerListener) { 
+		inputs = new HashMap<Class<? extends InputProcessor>, InputAdapter>();
+		controllers = new HashMap<Class<? extends ControllerListener>, ControllerAdapter>();
+		
 		if(inputListener != null) {
 			inputs.put(inputListener.getClass(), inputListener);
 			currentInput = inputListener;

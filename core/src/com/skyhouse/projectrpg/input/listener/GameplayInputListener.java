@@ -3,15 +3,21 @@ package com.skyhouse.projectrpg.input.listener;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
-import com.skyhouse.projectrpg.data.CharacterData;
 import com.skyhouse.projectrpg.data.InputData;
-import com.skyhouse.projectrpg.entity.Character;
 
+/**
+ * Gameplay keyboard and mouse listener.
+ * @author Meranote
+ */
 public class GameplayInputListener extends InputAdapter {
 	
 	private InputData inputData;
 	
-	public  GameplayInputListener(InputData inputData) {
+	/**
+	 * Construct a new {@link GameplayInputListener}.
+	 * @param inputData
+	 */
+	public GameplayInputListener(InputData inputData) {
 		this.inputData = inputData;
 	}
 	

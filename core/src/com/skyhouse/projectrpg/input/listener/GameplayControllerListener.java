@@ -5,10 +5,28 @@ import com.badlogic.gdx.controllers.ControllerAdapter;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.skyhouse.projectrpg.data.InputData;
 
+/**
+ * Gameplay controller listener.
+ * @author Meranote
+ */
 public class GameplayControllerListener extends ControllerAdapter {
 
+	/**
+	 * Default button.
+	 * axisIndex : left-axis : 3
+	 * axisIndex : right-axis : _
+	 * button : heal : 0
+	 * button : jump : 2
+	 * button : skillA : 7
+	 * button : skillB : 6
+	 */
+	
 	private InputData inputData;
 	
+	/**
+	 * Construct a new {@link GameplayControllerListener}.
+	 * @param inputData
+	 */
 	public GameplayControllerListener(InputData inputData) {
 		this.inputData = inputData;
 	}

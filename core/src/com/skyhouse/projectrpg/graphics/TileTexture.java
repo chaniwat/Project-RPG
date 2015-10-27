@@ -2,11 +2,20 @@ package com.skyhouse.projectrpg.graphics;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+/**
+ * Tile texture.
+ * @author Meranote
+ */
 public class TileTexture {
 	
+	/**
+	 * Defined the position of texture to bind with {@link TileTexture}.
+	 * @author Meranote
+	 */
 	public enum TileTexturePosition {
 		TopLeft(0,0,1),
 		TopMiddle(1,1,1),
@@ -30,10 +39,18 @@ public class TileTexture {
 			this.data = new int[]{start, end, step};
 		}
 		
+		/**
+		 * Get the current data.
+		 * @return
+		 */
 		public int[] getData() {
 			return data;
 		}
 		
+		/**
+		 * Get the index.
+		 * @return
+		 */
 		public int getIndex() {
 			return data[0];
 		}
@@ -63,15 +80,27 @@ public class TileTexture {
 	 * 3x3 - ALL
 	 */
 	
+	/**
+	 * Construct a new {@link TileTexture}.
+	 */
 	public TileTexture() {
 		this.region = new TextureRegion[9];
 	}
 	
+	/**
+	 * Construct a new {@link TileTexture} with the given {@link TextureRegion} or the region of {@link TextureAtlas}..
+	 * @param region
+	 */
 	public TileTexture(TextureRegion region) {
 		this.region = new TextureRegion[9];
 		setRegionPosition(region, TileTexturePosition.ALL);
 	}
 	
+	/**
+	 * Set the texture and set it to given position.
+	 * @param region
+	 * @param position
+	 */
 	public void setRegionPosition(TextureRegion region, TileTexturePosition position) {
 		int[] positionData = position.getData();
 		for(int i = positionData[0]; i < positionData[1]; i += positionData[2]) {
@@ -79,20 +108,37 @@ public class TileTexture {
 		}
 	}
 	
+	/**
+	 * Set the texture and set it to all given position.
+	 * @param region
+	 * @param position
+	 */
 	public void setRegionPosition(TextureRegion region, TileTexturePosition... position) {
 		for(TileTexturePosition pos : position) {
 			setRegionPosition(region, pos);
 		}
 	}
 	
+	/**
+	 * Get the given position texture that set to.
+	 * @param position
+	 * @return {@link TextureRegion}
+	 */
  	public TextureRegion getRegionPosition(TileTexturePosition position) {
  		return region[position.getIndex()];
  	}
 	
+ 	/**
+ 	 * Get the given position texture the set to.
+ 	 * @return {@link Texture} 
+ 	 */
 	public Texture getTexturePosition(TileTexturePosition position) {
 		return region[position.getIndex()].getTexture();
 	}
 	
+	/**
+	 * Draw the {@link TileTexture}.
+	 */
 	public void draw(SpriteBatch batch, Vector2 position, Vector2 size) {
 		batch.draw(region[TileTexturePosition.TopLeft.getIndex()], position.x, position.y - 1, 1, 1);
 		

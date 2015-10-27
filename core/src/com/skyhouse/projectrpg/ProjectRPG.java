@@ -5,7 +5,6 @@ import java.util.HashMap;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.skyhouse.projectrpg.manager.EntityManager;
 import com.skyhouse.projectrpg.manager.GameManager;
 import com.skyhouse.projectrpg.manager.InputManager;
 import com.skyhouse.projectrpg.net.instance.Instance;

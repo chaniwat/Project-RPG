@@ -17,7 +17,7 @@ public class Character extends Actor {
 	private CharacterData data;
 	private B2DCharacter body;
 	private SpriterPlayer player;
-	private InputData inputData = new InputData();
+	private InputData inputData;
 	private boolean isControlled = false;
 	private boolean flipflag = false;
 	
@@ -48,6 +48,7 @@ public class Character extends Actor {
 	 * @param data
 	 */
 	protected Character(boolean isControlled, World world, SpriterPlayer player, CharacterData data) {
+		inputData = new InputData();
 		this.isControlled = isControlled;
 		this.data = data;
 		this.player = player;

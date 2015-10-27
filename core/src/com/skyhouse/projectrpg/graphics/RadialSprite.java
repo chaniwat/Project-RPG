@@ -7,7 +7,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
-/** @author Xoppa */
+/** 
+ * @author Xoppa 
+*/
 public class RadialSprite implements Drawable {
 	private final static int TOPRIGHT1 = 0;
 	private final static int BOTTOMRIGHT1 = 5;
@@ -32,6 +34,10 @@ public class RadialSprite implements Drawable {
 	private float originX = 0f, originY = 0f;
 	private float scaleX = 1f, scaleY = 1f;
 	
+	/**
+	 * Construct a new {@link RadialSprite}.
+	 * @param textureRegion
+	 */
 	public RadialSprite(final TextureRegion textureRegion) {
 		this.texture = textureRegion.getTexture();
 		this.u1 = textureRegion.getU();
@@ -45,11 +51,17 @@ public class RadialSprite implements Drawable {
 		setColor(Color.WHITE);
 	}
 	
+	/**
+	 * Set color.
+	 */
 	public void setColor(float packedColor) {
 		for (int i = 0; i < 12; i++)
 			verts[i*5+2] = packedColor;
 	}
 	
+	/**
+	 * Set color.
+	 */
 	public void setColor(final Color color) {
 		setColor(color.toFloatBits());
 	}
@@ -141,6 +153,9 @@ public class RadialSprite implements Drawable {
 		this.dirty = false;
 	}
 	
+	/**
+	 * Draw.
+	 */
 	public void draw(final Batch batch, final float x, final float y, float width, float height, final float angle) {
 		if (width < 0) { scaleX = -1f; width = -width; }
 		if (height < 0) { scaleY = -1f; height = -height; }
@@ -148,10 +163,16 @@ public class RadialSprite implements Drawable {
 		batch.draw(texture, verts, 0, 20*draw);
 	}
 	
+	/**
+	 * Draw.
+	 */
 	public void draw(final Batch batch, final float x, final float y, final float angle) {
 		draw(batch, x, y, width, height, angle);
 	}
 	
+	/**
+	 * Set the origin position of this object.
+	 */
 	public void setOrigin(float x, float y) {
 		if (originX == x && originY == y)
 			return;
@@ -160,6 +181,10 @@ public class RadialSprite implements Drawable {
 		dirty = true;
 	}
 	
+	/**
+	 * Set the scale of this object.
+	 * <b>Note that not set the original size</b>
+	 */
 	public void setScale(float x, float y) {
 		if (scaleX == x && scaleY == y)
 			return;
@@ -174,10 +199,16 @@ public class RadialSprite implements Drawable {
 		draw(batch, x, y, width, height, this.angle);
 	}
 
+	/**
+	 * Get the current angle.
+	 */
 	public float getAngle() {
 		return this.angle;
 	}
 	
+	/**
+	 * Set the angle.
+	 */
 	public void setAngle(final float angle) {
 		if (this.angle == angle) 
 			return;
@@ -252,10 +283,16 @@ public class RadialSprite implements Drawable {
 		this.minHeight = minHeight;
 	}
 	
+	/**
+	 * @return {@link Texture}
+	 */
 	public Texture getTexture() {
 		return texture;
 	}
 	
+	/**
+	 * Set new texture by given {@link TextureRegion}.
+	 */
 	public void setTextureRegion(final TextureRegion textureRegion) {
 		this.texture = textureRegion.getTexture();
 		this.u1 = textureRegion.getU();

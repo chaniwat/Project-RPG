@@ -10,7 +10,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.entity.Character;
 import com.skyhouse.projectrpg.graphics.viewports.GameplayViewport;
-import com.skyhouse.projectrpg.graphics.viewports.UIViewport;
+import com.skyhouse.projectrpg.graphics.viewports.ScreenViewport;
 import com.skyhouse.projectrpg.input.listener.GameplayControllerListener;
 import com.skyhouse.projectrpg.input.listener.GameplayInputListener;
 import com.skyhouse.projectrpg.manager.GameManager;
@@ -29,7 +29,7 @@ public class GameScene extends Scene {
 		font.getData().markupEnabled = true;
 		font.setColor(Color.BLACK);
 		addViewport(new GameplayViewport(16f));
-		addViewport(new UIViewport());
+		addViewport(new ScreenViewport());
 	}
 	
 	@Override
@@ -72,7 +72,7 @@ public class GameScene extends Scene {
 		useViewport(GameplayViewport.class);
 		batch.begin();
 			background.draw(batch);
-			for(Map m : manager.getMapManager().getAllMap()) {
+			for(Map m : manager.getMapManager().getAllMap().values()) {
 				m.draw(batch);
 			}
 			for(Character c : manager.getEntityManager().getAllCharacter().values()) {
@@ -84,11 +84,11 @@ public class GameScene extends Scene {
 	}
 	
 	private void drawUI() {
-		useViewport(UIViewport.class);
+		useViewport(ScreenViewport.class);
 		
 		batch.begin();
-			font.draw(batch, "FPS : "+Gdx.graphics.getFramesPerSecond(), 20, getViewport(UIViewport.class).getScreenHeight() - 20);
-			font.draw(batch, "Lantacy : "+ProjectRPG.Client.network.net.getReturnTripTime()+" ms", 20, getViewport(UIViewport.class).getScreenHeight() - 40);
+			font.draw(batch, "FPS : "+Gdx.graphics.getFramesPerSecond(), 20, getViewport(ScreenViewport.class).getScreenHeight() - 20);
+			font.draw(batch, "Lantacy : "+ProjectRPG.Client.network.net.getReturnTripTime()+" ms", 20, getViewport(ScreenViewport.class).getScreenHeight() - 40);
 		batch.end();
 	}
 	

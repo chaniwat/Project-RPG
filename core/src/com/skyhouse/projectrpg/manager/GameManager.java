@@ -21,9 +21,9 @@ import com.skyhouse.projectrpg.spriter.SpriterPlayer;
  */
 public class GameManager extends Manager{
 	
-	private MapManager mapmanager = new MapManager();
-	private EntityManager entitymanager = new EntityManager();
-	private InputData inputData = new InputData();
+	private MapManager mapmanager;
+	private EntityManager entitymanager;
+	private InputData inputData;
 	private World world;
 	private String currentInstance;
 	private int playerCharacter = 0;
@@ -34,6 +34,9 @@ public class GameManager extends Manager{
      * Construct a new {@link GameManager} class.
      */
     public GameManager() {
+    	mapmanager = new MapManager();
+    	entitymanager = new EntityManager();
+    	inputData = new InputData();
     	world = new World(new Vector2(0, -10f), true);
     	ProjectRPG.Client.inputmanager.addInputProcessor(new GameplayInputListener(inputData));
     	ProjectRPG.Client.inputmanager.addControllerProcessor(new GameplayControllerListener(inputData));
@@ -48,6 +51,7 @@ public class GameManager extends Manager{
 		mapmanager.update(deltaTime);
 		
 		if(getPlayerCharacter() != null) {
+			getPlayerCharacter().updateCharacterByInputData(inputData);
 			UpdateRequest request = new UpdateRequest();
 			request.input = inputData;
 			request.currentInstance = currentInstance;
@@ -55,15 +59,9 @@ public class GameManager extends Manager{
 		}
 
         accumulator += deltaTime;
-		
-        if(getPlayerCharacter() != null) getPlayerCharacter().updateCharacterByInputData(inputData);
-        
         while(accumulator >= step) {
 			world.step(step, 8, 3);
-			for(Character c : entitymanager.getAllCharacter().values()) {
-				if(c.equals(getPlayerCharacter())) c.update(step);
-				else c.update(step);
-			}
+			entitymanager.update(step);
 			accumulator -= step;
         }
 	}

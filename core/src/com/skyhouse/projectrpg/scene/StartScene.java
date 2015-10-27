@@ -5,14 +5,14 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.skyhouse.projectrpg.ProjectRPG;
-import com.skyhouse.projectrpg.graphics.viewports.UIViewport;
+import com.skyhouse.projectrpg.graphics.viewports.ScreenViewport;
 
 public class StartScene extends Scene {
 
 	private ShapeRenderer renderer = ProjectRPG.Client.graphic.renderer;
 	
 	public StartScene() {
-		addViewport(new UIViewport());
+		addViewport(new ScreenViewport());
 	}
 	
 	@Override
@@ -29,11 +29,11 @@ public class StartScene extends Scene {
 
 	@Override
 	public void draw(float deltatime) {
-		useViewport(UIViewport.class);
+		useViewport(ScreenViewport.class);
 		
 		renderer.begin(ShapeType.Filled);
 			renderer.setColor(Color.WHITE);
-			renderer.rect(0, 0, getViewport(UIViewport.class).getWorldWidth(), getViewport(UIViewport.class).getWorldHeight());
+			renderer.rect(0, 0, getViewport(ScreenViewport.class).getWorldWidth(), getViewport(ScreenViewport.class).getWorldHeight());
 		renderer.end();
 	}
 

@@ -3,9 +3,17 @@ package com.skyhouse.projectrpg.graphics.viewports;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-public class UIViewport extends Viewport {
+/**
+ * UI viewport. or the screen viewport. <br>
+ * This viewport have the view same size to the screen. 
+ * @author Meranote
+ */
+public class ScreenViewport extends Viewport {
 	
-	public UIViewport() {
+	/**
+	 * Construct a new {@link ScreenViewport}.
+	 */
+	public ScreenViewport() {
 		setCamera(new OrthographicCamera());
 	}
 	

@@ -18,6 +18,10 @@ import com.skyhouse.projectrpg.net.packets.UpdateResponse;
 import com.skyhouse.projectrpg.physics.B2DCharacter;
 import com.skyhouse.projectrpg.physics.B2DStructure;
 
+/**
+ * Instance.
+ * @author Meranote
+ */
 public class Instance extends Thread {
 	
 	private World world;
@@ -34,10 +38,16 @@ public class Instance extends Thread {
     
     private boolean isFinish = false;
 	
+    /**
+     * Construct a new instance.
+     */
     public Instance(MapData map) {
     	this("", map);
     }
     
+    /**
+     * Construct a new instance.
+     */
 	public Instance(String name, MapData map) {
 		super(name + "-Instance");
 		this.mapData = map;
@@ -93,6 +103,9 @@ public class Instance extends Thread {
 		Gdx.app.log(ProjectRPG.TITLE, this.getName() + " finished.");
 	}
 	
+	/**
+	 * Set this instance to finish its job, if it end or not.
+	 */
 	public void finish() {
 		postRunnableList.add(new Runnable() {
 			@Override
@@ -102,6 +115,9 @@ public class Instance extends Thread {
 		});
 	}
 	
+	/**
+	 * Add a new character to this instance.
+	 */
 	public void addCharacter(final int id, final CharacterData data) {
 		postRunnableList.add(new Runnable() {
 					@Override
@@ -112,6 +128,9 @@ public class Instance extends Thread {
 		});
 	}
 	
+	/**
+	 * Remove the given character id.
+	 */
 	public void removeCharacter(final int id) {
 		postRunnableList.add(new Runnable() {
 			@Override
@@ -123,6 +142,9 @@ public class Instance extends Thread {
 		});
 	}
 	
+	/**
+	 * Update the character by {@link InputData}.
+	 */
 	public void updateCharacter(final int id, final InputData data) {
 		postRunnableList.add(new Runnable() {
 			@Override
