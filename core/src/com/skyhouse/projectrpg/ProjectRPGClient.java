@@ -6,7 +6,9 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -14,10 +16,14 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGeneratorLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader;
 import com.badlogic.gdx.graphics.g2d.freetype.FreetypeFontLoader.FreeTypeFontLoaderParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.utils.Logger;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
+import com.skyhouse.projectrpg.graphics.viewports.UIViewport;
+import com.skyhouse.projectrpg.manager.GameManager;
+import com.skyhouse.projectrpg.manager.InputManager;
 import com.skyhouse.projectrpg.map.Map;
 import com.skyhouse.projectrpg.net.listeners.DisconnectListener;
 import com.skyhouse.projectrpg.net.listeners.LoginListener;
@@ -42,44 +48,38 @@ import com.skyhouse.projectrpg.utils.scene.SceneManager;
  */
 public class ProjectRPGClient extends ApplicationAdapter {
 	
-	private Client net;
 	private AssetManager assetmanager;
+	private InputManager inputmanager;
 	private SceneManager scenemanager;
-	private SpriteBatch batch;
-	private ShapeRenderer renderer;
+	private GameManager gamemanager;
+	private Client net;
 	
 	@Override
 	public void create()  {		
 		Gdx.app.setLogLevel(Logger.DEBUG);
 		GLProfiler.enable();
 		
+		inputmanager = new InputManager();
+		ProjectRPG.Client.inputmanager = inputmanager;
+		
 		initialNetwork();
 		initialGraphics();
 		initialAssets();		
-		startNetwork();
+		startGame();
 		
 		Gdx.app.debug(ProjectRPG.TITLE, "Version = " + ProjectRPG.VERSION);
-		Gdx.app.debug(ProjectRPG.TITLE, "created");
 	}
 	
 	private void initialNetwork() {
 		net = new Client();
+		ProjectRPG.Client.network.net = net;
 		Kryo kryo = net.getKryo();
 		NetworkUtils.registerKryoClass(kryo);
-		net.start();
-		try {
-			net.connect(5000, "server.projectrpg.dev", 54555, 54556);
-		} catch (IOException e) {
-			Gdx.app.error(ProjectRPG.TITLE, "Can't connect to server");
-			Gdx.app.exit();
-		}
-		ProjectRPG.Client.network.net = net;
-		ProjectRPG.Client.network.currentInstance = "none";
 	}
 	
 	private void initialGraphics() {
-		batch = new SpriteBatch();
-		renderer = new ShapeRenderer();
+		SpriteBatch batch = new SpriteBatch();
+		ShapeRenderer renderer = new ShapeRenderer();
 		ProjectRPG.Client.graphic.batch = batch;
 		ProjectRPG.Client.graphic.renderer = renderer;
 		SpriterPlayer.init(batch, renderer);
@@ -88,10 +88,10 @@ public class ProjectRPGClient extends ApplicationAdapter {
 	private void initialAssets() {
 		InternalFileHandleResolver resolver = new InternalFileHandleResolver();
 		assetmanager = new AssetManager();
+		ProjectRPG.Client.assetmanager = assetmanager;
 		assetmanager.setLoader(Map.class, new MapLoader(resolver));
 		assetmanager.setLoader(FreeTypeFontGenerator.class, new FreeTypeFontGeneratorLoader(resolver));
 		assetmanager.setLoader(BitmapFont.class, ".ttf", new FreetypeFontLoader(resolver));
-		ProjectRPG.Client.assetmanager = assetmanager;
 		
 		FreeTypeFontLoaderParameter fontparams = new FreeTypeFontLoaderParameter();
 		fontparams.fontFileName = "font/Roboto-Regular.ttf";
@@ -99,20 +99,30 @@ public class ProjectRPGClient extends ApplicationAdapter {
 		assetmanager.load("font/Roboto-Regular.ttf", BitmapFont.class, fontparams);
 		assetmanager.finishLoading();
 		
+		gamemanager = new GameManager();
+		ProjectRPG.Client.gamemanager = gamemanager;
+		
 		scenemanager = new SceneManager();
 		ProjectRPG.Client.scenemanager = scenemanager;
+		scenemanager.addScene(StartScene.class);
+		scenemanager.addScene(HomeScene.class);
+		scenemanager.addScene(CharacterCreatorScene.class);
+		scenemanager.addScene(LoadingScene.class);
+		scenemanager.addScene(GameScene.class);
+		scenemanager.addScene(MenuScene.class);
 		
-		scenemanager.addScene("startscene", new StartScene());
-		scenemanager.addScene("homescene", new HomeScene());
-		scenemanager.addScene("homescene", new CharacterCreatorScene());
-		scenemanager.addScene("loadingscene", new LoadingScene());
-		scenemanager.addScene("gamescene", new GameScene());
-		scenemanager.addScene("menuscene", new MenuScene());
-		
-		scenemanager.setUseScene("gamescene");
+		scenemanager.setUseScene(StartScene.class);
 	}
 	
-	private void startNetwork() {
+	private void startGame() {
+		net.start();
+		try {
+			net.connect(5000, "server.projectrpg.dev", 54555, 54556);
+		} catch (IOException e) {
+			Gdx.app.error(ProjectRPG.TITLE, "Can't connect to server");
+			Gdx.app.exit();
+		}
+		
 		net.addListener(new LoginListener.ClientSide());
 		net.addListener(new DisconnectListener.ClientSide());
 		net.addListener(new UpdateListener.ClientSide());
@@ -126,14 +136,19 @@ public class ProjectRPGClient extends ApplicationAdapter {
 
 	@Override
 	public void render () {
-		assetmanager.update();
-		
 		// Clear buffer
 		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
 		
+		// Update
+		float deltaTime = Gdx.graphics.getDeltaTime();
+		assetmanager.update();
+		scenemanager.update(deltaTime);
+		gamemanager.update(deltaTime);
+		inputmanager.update(deltaTime);
+		
 		// Render
-		scenemanager.updateAndDraw(Gdx.graphics.getDeltaTime());
+		scenemanager.updateAndDraw(deltaTime);
 		
 		GLProfiler.reset();
 	}
@@ -141,9 +156,10 @@ public class ProjectRPGClient extends ApplicationAdapter {
 	@Override
 	public void dispose () {
 		DisconnectRequest request = new DisconnectRequest();
-		request.instance = ProjectRPG.Client.network.currentInstance;
+		request.instance = ProjectRPG.Client.gamemanager.getCurrentInstance();
 		net.sendTCP(request);
 		net.close();
+		net.stop();
 		try {
 			net.dispose();
 		} catch (IOException e) {

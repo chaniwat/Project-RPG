@@ -5,11 +5,11 @@ import com.badlogic.gdx.controllers.ControllerAdapter;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.skyhouse.projectrpg.data.InputData;
 
-public class GameplayControllerProcess extends ControllerAdapter {
+public class GameplayControllerListener extends ControllerAdapter {
 
 	private InputData inputData;
 	
-	public GameplayControllerProcess(InputData inputData) {
+	public GameplayControllerListener(InputData inputData) {
 		this.inputData = inputData;
 	}
 	

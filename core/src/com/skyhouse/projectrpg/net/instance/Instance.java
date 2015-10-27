@@ -11,9 +11,9 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.data.CharacterData;
+import com.skyhouse.projectrpg.data.InputData;
 import com.skyhouse.projectrpg.data.MapData;
 import com.skyhouse.projectrpg.data.StructureData;
-import com.skyhouse.projectrpg.data.CharacterData.CharacterInputState;
 import com.skyhouse.projectrpg.net.packets.UpdateResponse;
 import com.skyhouse.projectrpg.physics.B2DCharacter;
 import com.skyhouse.projectrpg.physics.B2DStructure;
@@ -24,6 +24,7 @@ public class Instance extends Thread {
 	private MapData mapData;
 	private HashMap<String, B2DStructure> structures;
 	private HashMap<Integer, B2DCharacter> characters;
+	private HashMap<Integer, InputData> inputDataCollection;
 	
 	private ArrayList<Runnable> postRunnableList;
 	
@@ -42,6 +43,7 @@ public class Instance extends Thread {
 		this.mapData = map;
 		structures = new HashMap<String, B2DStructure>();
 		characters = new HashMap<Integer, B2DCharacter>();
+		inputDataCollection = new HashMap<Integer, InputData>();
 		postRunnableList = new ArrayList<Runnable>();
 		
 		world = new World(new Vector2(0, -10f), true);
@@ -65,8 +67,10 @@ public class Instance extends Thread {
 	        	accumulator -= step;
 	        }
 	        
-	        for(B2DCharacter character : characters.values()) {
-	        	character.update();
+	        for(Entry<Integer, B2DCharacter> entry : characters.entrySet()) {
+	        	int id = entry.getKey();
+	        	B2DCharacter character = entry.getValue();
+	        	character.update(inputDataCollection.get(id));
 	        }
 	        
 	        UpdateResponse update = new UpdateResponse();
@@ -98,11 +102,12 @@ public class Instance extends Thread {
 		});
 	}
 	
-	public void addCharacter(final CharacterData data) {
+	public void addCharacter(final int id, final CharacterData data) {
 		postRunnableList.add(new Runnable() {
 					@Override
 					public void run() {
-						characters.put(data.id, new B2DCharacter(world, data));
+						characters.put(id, new B2DCharacter(world, data));
+						inputDataCollection.put(id, new InputData());
 					}
 		});
 	}
@@ -111,17 +116,18 @@ public class Instance extends Thread {
 		postRunnableList.add(new Runnable() {
 			@Override
 			public void run() {
+				inputDataCollection.remove(id);
 				B2DCharacter o = characters.remove(id);
 				o.dispose();
 			}
 		});
 	}
 	
-	public void updateCharacter(final int id, final CharacterInputState data) {
+	public void updateCharacter(final int id, final InputData data) {
 		postRunnableList.add(new Runnable() {
 			@Override
 			public void run() {
-				characters.get(id).getData().inputstate = data;
+				inputDataCollection.put(id, data);
 			}
 		});
 	}

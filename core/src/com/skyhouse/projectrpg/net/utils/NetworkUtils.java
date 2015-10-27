@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.skyhouse.projectrpg.data.CharacterData;
+import com.skyhouse.projectrpg.data.Data;
+import com.skyhouse.projectrpg.data.InputData;
 import com.skyhouse.projectrpg.net.packets.UpdateRequest;
 import com.skyhouse.projectrpg.net.packets.UpdateResponse;
 import com.skyhouse.projectrpg.net.packets.DisconnectRequest;
@@ -20,8 +22,8 @@ public class NetworkUtils {
 	public static void registerKryoClass(Kryo kryo) {
 		kryo.register(HashMap.class);
 		kryo.register(CharacterData.class);
-		kryo.register(CharacterData.CharacterActionState.class);
-		kryo.register(CharacterData.CharacterInputState.class);
+		kryo.register(Data.ActionState.class);
+		kryo.register(InputData.class);
 		kryo.register(InitialRequest.class);
 		kryo.register(InitialResponse.class);
 		kryo.register(DisconnectRequest.class);

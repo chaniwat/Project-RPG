@@ -7,11 +7,11 @@ import com.skyhouse.projectrpg.data.CharacterData;
 import com.skyhouse.projectrpg.data.InputData;
 import com.skyhouse.projectrpg.entity.Character;
 
-public class GameplayInputProcess extends InputAdapter {
+public class GameplayInputListener extends InputAdapter {
 	
 	private InputData inputData;
 	
-	public  GameplayInputProcess(InputData inputData) {
+	public  GameplayInputListener(InputData inputData) {
 		this.inputData = inputData;
 	}
 	
@@ -29,7 +29,7 @@ public class GameplayInputProcess extends InputAdapter {
 			case Keys.UP:
 				inputData.upPressed = false;
 				break;
-			case Keys.CONTROL_LEFT:
+			case Keys.C:
 				inputData.jumpPressed = false;
 				break;
 			case Keys.ESCAPE:

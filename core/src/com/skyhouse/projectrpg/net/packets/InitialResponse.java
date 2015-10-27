@@ -6,5 +6,6 @@ public class InitialResponse {
 	
 	public CharacterData data;
 	public String instance;
+	public String pathToMap;
 	
 }

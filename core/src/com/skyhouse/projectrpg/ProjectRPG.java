@@ -5,6 +5,9 @@ import java.util.HashMap;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.skyhouse.projectrpg.manager.EntityManager;
+import com.skyhouse.projectrpg.manager.GameManager;
+import com.skyhouse.projectrpg.manager.InputManager;
 import com.skyhouse.projectrpg.net.instance.Instance;
 import com.skyhouse.projectrpg.utils.scene.SceneManager;
 
@@ -17,7 +20,7 @@ public class ProjectRPG {
 	private ProjectRPG() {}
 	
 	public static final String TITLE = "Project RPG";
-	public static final String VERSION = "0.2.4 WIP";
+	public static final String VERSION = "0.2.5 WIP";
 	public static final String VERSION_NAME = "Multiplayer";
 	public static final String AUTHOR = "Skyhouse Team.";
 	
@@ -30,6 +33,8 @@ public class ProjectRPG {
 		
 		public static AssetManager assetmanager;
 		public static SceneManager scenemanager;
+		public static GameManager gamemanager;
+		public static InputManager inputmanager;
 		/**
 		 * @author Meranote
 		 */
@@ -44,7 +49,6 @@ public class ProjectRPG {
 		@SuppressWarnings("typename")
 		public static class network {
 			public static com.esotericsoftware.kryonet.Client net;
-			public static String currentInstance;
 		}
 		
 	}

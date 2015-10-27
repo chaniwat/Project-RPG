@@ -96,7 +96,7 @@
         <obj_info name="back_thigh" type="bone" w="200" h="10"/>
         <obj_info name="back_shin" type="bone" w="200" h="10"/>
         <obj_info name="back_foot" type="bone" w="200" h="10"/>
-        <animation id="0" name="idle" length="4000" interval="100">
+        <animation id="0" name="idle" length="4000" interval="16">
             <mainline>
                 <key id="0">
                     <bone_ref id="0" timeline="15" key="0"/>
@@ -1271,7 +1271,7 @@
             </timeline>
             <timeline id="17" obj="2" name="head" object_type="bone">
                 <key id="0" spin="0">
-                    <bone x="212.073272" y="-2.060796" angle="355.388645" scale_x="2.718625"/>
+                    <bone x="212.156536" y="-1.061004" angle="355.388645" scale_x="2.718625"/>
                 </key>
                 <key id="1" time="196" spin="0">
                     <bone x="212.156536" y="-1.061004" angle="355.388645" scale_x="2.718625"/>
@@ -1788,7 +1788,7 @@
                 </key>
             </timeline>
         </animation>
-        <animation id="1" name="walk" length="1000" interval="100">
+        <animation id="1" name="walk" length="1000" interval="17">
             <mainline>
                 <key id="0">
                     <bone_ref id="0" timeline="15" key="0"/>
@@ -2399,7 +2399,7 @@
                 </key>
             </timeline>
         </animation>
-        <animation id="2" name="fall" length="312" interval="100" looping="false">
+        <animation id="2" name="fall" length="312" interval="16" looping="false">
             <mainline>
                 <key id="0">
                     <bone_ref id="0" timeline="15" key="0"/>
@@ -2829,7 +2829,7 @@
                 </key>
             </timeline>
         </animation>
-        <animation id="3" name="jump" length="588" interval="100">
+        <animation id="3" name="jump" length="588" interval="16">
             <mainline>
                 <key id="0">
                     <bone_ref id="0" timeline="15" key="0"/>

@@ -22,7 +22,7 @@ public class DisconnectListener {
 				Gdx.app.postRunnable(new Runnable() {
 					@Override
 					public void run() {
-						ProjectRPG.Client.scenemanager.getScene("gamescene", GameScene.class).getGameManager().removeCharacter(response.connectionid);
+						ProjectRPG.Client.gamemanager.getEntityManager().removeCharacter(response.connectionid);
 					}
 				});
 			}

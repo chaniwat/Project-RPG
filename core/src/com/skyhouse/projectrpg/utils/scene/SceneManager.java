@@ -1,8 +1,11 @@
 package com.skyhouse.projectrpg.utils.scene;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.scene.Scene;
 
 /**
@@ -11,14 +14,15 @@ import com.skyhouse.projectrpg.scene.Scene;
  */
 public class SceneManager {
 	
-	private HashMap<String, Scene> scenes;
-	private Scene currentscene;
+	private HashMap<Class<? extends Scene>, Scene> scenes;
+	private Class<? extends Scene> currentscene;
+	private boolean isChanged = false;
 	
 	/**
 	 * Construct a SceneManager.
 	 */
 	public SceneManager() {
-		scenes = new HashMap<String, Scene>();
+		scenes = new HashMap<Class<? extends Scene>, Scene>();
 	}
 	
 	/**
@@ -26,8 +30,27 @@ public class SceneManager {
 	 * @param name
 	 * @param scene
 	 */
-	public void addScene(String name, Scene scene) {
-		scenes.put(name, scene);
+	public <T extends Scene> void addScene(Class<T> sceneClass, Object... args) {
+		if(scenes.containsKey(sceneClass)) {
+			Gdx.app.log(ProjectRPG.TITLE, "Already add this scene");
+			return;
+		}
+		try {
+			T o = sceneClass.getDeclaredConstructor().newInstance(args);
+			scenes.put(sceneClass, o);
+		} catch (InstantiationException e) {
+			throw new GdxRuntimeException(e);
+		} catch (IllegalAccessException e) {
+			throw new GdxRuntimeException(e);
+		} catch (IllegalArgumentException e) {
+			throw new GdxRuntimeException(e);
+		} catch (InvocationTargetException e) {
+			throw new GdxRuntimeException(e);
+		} catch (NoSuchMethodException e) {
+			throw new GdxRuntimeException(e);
+		} catch (SecurityException e) {
+			throw new GdxRuntimeException(e);
+		}
 	}
 	
 	/**
@@ -37,8 +60,8 @@ public class SceneManager {
 	 * @return Given extend scene class.
 	 */
 	@SuppressWarnings("unchecked")
-	public <T> T getScene(String name, Class<T> type) {
-		T scene = (T)scenes.get(name);
+	public <T extends Scene> T getScene(Class<T> sceneClass) {
+		T scene = (T)scenes.get(sceneClass);
 		if(scene == null) throw new GdxRuntimeException("No given scene added.");
 		return scene;
 	}
@@ -49,27 +72,33 @@ public class SceneManager {
 	 * @param type
 	 * @return Given extend scene class.
 	 */
-	@SuppressWarnings("unchecked")
-	public <T> T getCurrentScene(Class<T> type) {
-		return (T)currentscene;
+	public Scene getCurrentScene() {
+		if(currentscene == null) throw new GdxRuntimeException("No current scene set.");
+		return scenes.get(currentscene);
 	}
 	
 	/**
 	 * Delete scene.
 	 * @param name
 	 */
-	public void deleteScene(String name) {
-		scenes.remove(name);
+	public <T extends Scene> void deleteScene(Class<T> sceneClass) {
+		if(scenes.get(sceneClass) == null) {
+			Gdx.app.error(ProjectRPG.TITLE, "Cannot delete : no given scene added");
+			return;
+		}
+		scenes.remove(sceneClass);
 	}
 	
 	/**
 	 * Set current scene.
 	 * @param name
 	 */
-	public void setUseScene(String name) {
-		currentscene = scenes.get(name);
-		if(currentscene == null) throw new GdxRuntimeException("No given scene added.");
-		currentscene.start();
+	@SuppressWarnings("unchecked")
+	public <T extends Scene> void setUseScene(Class<T> sceneClass) {
+		currentscene = sceneClass;
+		T o = (T)scenes.get(sceneClass);
+		if(o == null) throw new GdxRuntimeException("No given scene added.");
+		isChanged = true;
 	}
 	
 	/**
@@ -78,7 +107,7 @@ public class SceneManager {
 	 */
 	public void resize(int screenwidth, int screenheight) {
 		if(currentscene == null) throw new GdxRuntimeException("Set scene before call this.");
-		currentscene.updateViewport(screenwidth, screenheight);
+		scenes.get(currentscene).updateViewport(screenwidth, screenheight);
 	}
 	
 	/**
@@ -87,7 +116,8 @@ public class SceneManager {
 	 */
 	public void update(float deltatime) {
 		if(currentscene == null) throw new GdxRuntimeException("Set scene before call this.");
-		currentscene.update(deltatime);
+		if(isChanged) scenes.get(currentscene).change();
+		scenes.get(currentscene).update(deltatime);
 	}
 	
 	/**
@@ -96,7 +126,7 @@ public class SceneManager {
 	 */
 	public void draw(float deltatime) {
 		if(currentscene == null) throw new GdxRuntimeException("Set scene before call this.");
-		currentscene.draw(deltatime);
+		scenes.get(currentscene).draw(deltatime);
 	}
 	
 	/**
@@ -105,7 +135,11 @@ public class SceneManager {
 	 */
 	public void updateAndDraw(float deltatime) {
 		if(currentscene == null) throw new GdxRuntimeException("Set scene before call this.");
-		currentscene.updateAndDraw(deltatime);
+		if(isChanged) {
+			scenes.get(currentscene).change();
+			scenes.get(currentscene).updateViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		}
+		scenes.get(currentscene).updateAndDraw(deltatime);
 	}
 
 }

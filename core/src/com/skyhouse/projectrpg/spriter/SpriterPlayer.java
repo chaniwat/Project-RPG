@@ -50,7 +50,7 @@ public class SpriterPlayer extends PlayerTweener {
 	}
 	
 	/**
-	 * Update the tweener animation with default speed (4).
+	 * Update the tweener animation with default speed (3.5f).
 	 * @param deltaTime deltatime
 	 */
 	public void update(float deltaTime) {

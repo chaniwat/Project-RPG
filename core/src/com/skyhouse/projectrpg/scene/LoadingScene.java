@@ -9,7 +9,7 @@ public class LoadingScene extends Scene {
 	}
 	
 	@Override
-	public void start() {
+	public void change() {
 		// TODO Auto-generated method stub
 		
 	}

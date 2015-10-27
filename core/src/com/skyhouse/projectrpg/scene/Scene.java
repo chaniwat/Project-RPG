@@ -1,14 +1,14 @@
 package com.skyhouse.projectrpg.scene;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
-import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.skyhouse.projectrpg.ProjectRPG;
-import com.skyhouse.projectrpg.scene.input.SceneInput;
-import com.skyhouse.projectrpg.utils.scene.SceneManager;
 
 /**
  * Scene.
@@ -16,12 +16,9 @@ import com.skyhouse.projectrpg.utils.scene.SceneManager;
  */
 public abstract class Scene {
 	
-	protected AssetManager assetmanager;
-	protected SceneManager scenemanager;
 	protected SpriteBatch batch;
 	protected ShapeRenderer renderer;
-	protected SceneInput input;
-	private HashMap<String, Viewport> viewport;
+	private HashMap<Class<? extends Viewport>, Viewport> viewports = new HashMap<Class<? extends Viewport>, Viewport>();
 		
 	/**
 	 * Construct a new {@link Scene}.
@@ -29,21 +26,22 @@ public abstract class Scene {
 	 * @param assetmanager
 	 */
 	public Scene() {
-		this.assetmanager = ProjectRPG.Client.assetmanager;
-		this.scenemanager = ProjectRPG.Client.scenemanager;
 		this.batch = ProjectRPG.Client.graphic.batch;
 		this.renderer = ProjectRPG.Client.graphic.renderer;
-		viewport = new HashMap<String, Viewport>();
-		input = new SceneInput();
 	}
 	
 	/**
 	 * Add a {@link Viewport} to use in render.
 	 * @param name
 	 * @param viewport
+	 * @return 
 	 */
-	public final void addViewport(String name, Viewport viewport) {
-		this.viewport.put(name, viewport);
+	public final void addViewport(Viewport viewport) {
+		if(viewports.containsKey(viewport.getClass())) {
+			Gdx.app.log(ProjectRPG.TITLE, "Already add this viewport");
+			return;
+		}
+		viewports.put(viewport.getClass(), viewport);
 	}
 	
 	/**
@@ -52,25 +50,31 @@ public abstract class Scene {
 	 * @return {@link Viewport}
 	 */
 	@SuppressWarnings("unchecked")
-	public final <T extends Viewport> T getViewport(String name, Class<T> viewportClass) {
-		return (T)(viewport.get(name));
+	public final <T extends Viewport> T getViewport(Class<T> viewportClass) {
+		T o = (T)viewports.get(viewportClass);
+		if(o == null) throw new GdxRuntimeException("no given viewport added.");
+		return o;
 	}
 	
 	/** Use the given viewport.  */
-	public final void useViewport(String name) {
-		viewport.get(name).apply();
-		batch.setProjectionMatrix(viewport.get(name).getCamera().combined);
+	@SuppressWarnings("unchecked")
+	public final <T extends Viewport> void useViewport(Class<T> viewportClass) {
+		T o = (T)viewports.get(viewportClass); 
+		if(o == null) throw new GdxRuntimeException("no given viewport added.");
+		o.apply();
+		batch.setProjectionMatrix(o.getCamera().combined);
+		renderer.setProjectionMatrix(o.getCamera().combined);
 	}
 
 	/** Update viewport. */
 	public final void updateViewport(int screenwidth, int screenheight) {
-		for(Viewport viewport : this.viewport.values()) {
+		for(Viewport viewport : this.viewports.values()) {
 			viewport.update(screenwidth, screenheight);
 		}
 	}
 	
-	/** First call before use this scene. */
-	public abstract void start();
+	/** Call everytime when scene is changed to. Call before {@link #update(float)} and {@link #draw(float)}. */
+	public abstract void change();
 	/** Update scene. */
 	public abstract void update(float deltatime);
 	/** Draw scene. */
