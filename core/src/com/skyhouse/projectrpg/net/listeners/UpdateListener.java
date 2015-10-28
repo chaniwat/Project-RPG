@@ -8,35 +8,46 @@ import com.skyhouse.projectrpg.ProjectRPGServer;
 import com.skyhouse.projectrpg.manager.GameManager;
 import com.skyhouse.projectrpg.net.packets.UpdateRequest;
 import com.skyhouse.projectrpg.net.packets.UpdateResponse;
-import com.skyhouse.projectrpg.scene.GameScene;
 
+/**
+ * Update listener.
+ * @author Meranote
+ *
+ */
 public class UpdateListener {
 	
-	public static class ClientSide extends Listener {
-				
-		private GameManager gamemanager;
-		
-		public ClientSide() {
-			gamemanager = ProjectRPG.Client.gamemanager;
-		}
-		
+	private UpdateListener() {}
+	
+	/**
+	 * Update listener for client-side.
+	 * @author Meranote
+	 */
+	public static class Client extends Listener {
+						
 		@Override
 		public void received(Connection connection, Object object) {
 			if(object instanceof UpdateResponse) {
+				final GameManager gamemanager = ProjectRPG.Client.gamemanager;
 				final UpdateResponse response = (UpdateResponse)object;
 				gamemanager.setCurrentInstance(response.currentInstance);
 				Gdx.app.postRunnable(new Runnable() {
+					
 					@Override
 					public void run() {
 						gamemanager.updateAllCharacter(response.data);
 					}
+					
 				});
 			}
 		}
 	
 	}
 	
-	public static class ServerSide extends Listener {
+	/**
+	 * Update listener for server-side.
+	 * @author Meranote
+	 */
+	public static class Server extends Listener {
 		
 		@Override
 		public void received(Connection connection, Object object) {

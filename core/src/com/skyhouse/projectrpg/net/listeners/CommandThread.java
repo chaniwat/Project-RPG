@@ -5,13 +5,20 @@ import java.util.Scanner;
 import com.badlogic.gdx.Gdx;
 import com.skyhouse.projectrpg.ProjectRPG;
 
-public class CommandListener extends Thread {
+/**
+ * Command listener that watch command from console.
+ * @author Meranote
+ */
+public class CommandThread extends Thread {
 
 	private Scanner input;
 	private String command;
 	private boolean running = true;
 	
-	public CommandListener() {
+	/**
+	 * Construct a new command listener.
+	 */
+	public CommandThread() {
 		super("CommandListener");
 	}
 	

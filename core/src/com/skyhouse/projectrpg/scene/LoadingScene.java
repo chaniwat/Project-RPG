@@ -1,9 +1,15 @@
 package com.skyhouse.projectrpg.scene;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
+/**
+ * Loading scene. <br>
+ * <b>Appear when change scene or change map and while assetmanager do some magic with the assets.</b>
+ * @author Meranote
+ */
 public class LoadingScene extends Scene {
 
+	/**
+	 * Construct a new loading scene.
+	 */
 	public LoadingScene() {
 		// TODO Auto-generated constructor stub
 	}

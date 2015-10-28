@@ -7,11 +7,18 @@ import com.brashmonkey.spriter.Drawer;
 import com.brashmonkey.spriter.Loader;
 import com.brashmonkey.spriter.Timeline.Key.Object;
 
+/**
+ * Spriter drawer.
+ * @author Trixt0r
+ */
 public class SpriterDrawer extends Drawer<Sprite>{
 	
 	SpriteBatch batch;
 	ShapeRenderer renderer;
 	
+	/**
+	 * Construct a new {@link SpriterDrawer}. 
+	 */
 	public SpriterDrawer(Loader<Sprite> loader, SpriteBatch batch, ShapeRenderer renderer){
 		super(loader);
 		this.batch = batch;

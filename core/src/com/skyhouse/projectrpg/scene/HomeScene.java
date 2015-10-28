@@ -1,9 +1,15 @@
 package com.skyhouse.projectrpg.scene;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
+/**
+ * Home scene. <br>
+ * <b>First scene that need user to login.</b>
+ * @author Meranote
+ */
 public class HomeScene extends Scene {
 
+	/**
+	 * Construct a new home scene.
+	 */
 	public HomeScene() {
 		// TODO Auto-generated constructor stub
 	}

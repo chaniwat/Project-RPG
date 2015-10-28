@@ -1,16 +1,23 @@
 package com.skyhouse.projectrpg.scene;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.graphics.viewports.ScreenViewport;
 
+/**
+ * Start scene. <br>
+ * <b>First scene when application start.</b>
+ * @author Meranote
+ */
 public class StartScene extends Scene {
 
 	private ShapeRenderer renderer = ProjectRPG.Client.graphic.renderer;
 	
+	/**
+	 * Construct a new start scene.
+	 */
 	public StartScene() {
 		addViewport(new ScreenViewport());
 	}

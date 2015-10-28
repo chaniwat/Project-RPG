@@ -1,6 +1,5 @@
 package com.skyhouse.projectrpg.scene;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;

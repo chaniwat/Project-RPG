@@ -13,10 +13,14 @@ import com.skyhouse.projectrpg.net.packets.DisconnectResponse;
 import com.skyhouse.projectrpg.net.packets.InitialRequest;
 import com.skyhouse.projectrpg.net.packets.InitialResponse;
 
+/**
+ * Utility class of network.
+ * @author Meranote
+ */
 public class NetworkUtils {
 
 	/**
-	 * Registering the class before start the client or server
+	 * Registering the class before start the client or server.
 	 * @param kryo {@link Kryo} object
 	 */
 	public static void registerKryoClass(Kryo kryo) {

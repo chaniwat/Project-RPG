@@ -20,6 +20,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.skyhouse.projectrpg.manager.GameManager;
 import com.skyhouse.projectrpg.manager.InputManager;
+import com.skyhouse.projectrpg.manager.SceneManager;
 import com.skyhouse.projectrpg.map.Map;
 import com.skyhouse.projectrpg.net.listeners.DisconnectListener;
 import com.skyhouse.projectrpg.net.listeners.LoginListener;
@@ -35,8 +36,7 @@ import com.skyhouse.projectrpg.scene.MenuScene;
 import com.skyhouse.projectrpg.scene.StartScene;
 import com.skyhouse.projectrpg.spriter.SpriterPlayer;
 import com.skyhouse.projectrpg.utils.asset.loader.MapLoader;
-import com.skyhouse.projectrpg.utils.font.ThaiCharacter;
-import com.skyhouse.projectrpg.utils.scene.SceneManager;
+import com.skyhouse.projectrpg.utils.font.ThaiLanguage;
 
 /**
  * Client class of ProjectRPG.
@@ -91,7 +91,7 @@ public class ProjectRPGClient extends ApplicationAdapter {
 		
 		FreeTypeFontLoaderParameter fontparams = new FreeTypeFontLoaderParameter();
 		fontparams.fontFileName = "font/Roboto-Regular.ttf";
-		fontparams.fontParameters.characters = FreeTypeFontGenerator.DEFAULT_CHARS + ThaiCharacter.THAI_CHARS;
+		fontparams.fontParameters.characters = FreeTypeFontGenerator.DEFAULT_CHARS + ThaiLanguage.THAI_CHARS;
 		assetmanager.load("font/Roboto-Regular.ttf", BitmapFont.class, fontparams);
 		assetmanager.finishLoading();
 		
@@ -119,9 +119,9 @@ public class ProjectRPGClient extends ApplicationAdapter {
 			Gdx.app.exit();
 		}
 		
-		net.addListener(new LoginListener.ClientSide());
-		net.addListener(new DisconnectListener.ClientSide());
-		net.addListener(new UpdateListener.ClientSide());
+		net.addListener(new LoginListener.Client());
+		net.addListener(new DisconnectListener.Client());
+		net.addListener(new UpdateListener.Client());
 		net.sendTCP(new InitialRequest());
 	}
 	

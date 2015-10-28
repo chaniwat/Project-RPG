@@ -11,7 +11,7 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Server;
 import com.skyhouse.projectrpg.data.MapData;
 import com.skyhouse.projectrpg.net.instance.Instance;
-import com.skyhouse.projectrpg.net.listeners.CommandListener;
+import com.skyhouse.projectrpg.net.listeners.CommandThread;
 import com.skyhouse.projectrpg.net.listeners.DisconnectListener;
 import com.skyhouse.projectrpg.net.listeners.LoginListener;
 import com.skyhouse.projectrpg.net.listeners.UpdateListener;
@@ -27,7 +27,7 @@ public class ProjectRPGServer extends ApplicationAdapter {
 	private boolean serverRunning;
 	public static HashMap<String, Instance> instances;
 	private ArrayList<String> finishInstances;
-	private CommandListener commandListener;
+	private CommandThread commandListener;
 		
 	@Override
 	public void create() {
@@ -50,9 +50,9 @@ public class ProjectRPGServer extends ApplicationAdapter {
 		ProjectRPG.Server.net = server;
 		ProjectRPG.Server.instances = instances;
 		
-		server.addListener(new LoginListener.ServerSide());
-		server.addListener(new DisconnectListener.ServerSide());
-		server.addListener(new UpdateListener.ServerSide());
+		server.addListener(new LoginListener.Server());
+		server.addListener(new DisconnectListener.Server());
+		server.addListener(new UpdateListener.Server());
 		
 		// New Instance
 		MapData data = new MapData(Gdx.files.internal("mapdata/L01.map"));
@@ -60,7 +60,7 @@ public class ProjectRPGServer extends ApplicationAdapter {
 		instances.put(data.name, new Instance(data.name, data));
 		instances.get(data.name).start();
 		
-		commandListener = new CommandListener();
+		commandListener = new CommandThread();
 		commandListener.start();
 	}
 

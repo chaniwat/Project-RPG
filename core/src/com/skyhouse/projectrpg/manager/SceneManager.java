@@ -1,4 +1,4 @@
-package com.skyhouse.projectrpg.utils.scene;
+package com.skyhouse.projectrpg.manager;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;

@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
- * UI viewport. or the screen viewport. <br>
+ * GUI viewport. or the screen viewport. <br>
  * This viewport have the view same size to the screen. 
  * @author Meranote
  */

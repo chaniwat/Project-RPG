@@ -16,6 +16,11 @@ import com.skyhouse.projectrpg.input.listener.GameplayInputListener;
 import com.skyhouse.projectrpg.manager.GameManager;
 import com.skyhouse.projectrpg.map.Map;
 
+/**
+ * Game scene. <br>
+ * <b>Gameplay happen here.</b>
+ * @author Meranote
+ */
 public class GameScene extends Scene {
 	
 	private GameManager manager = ProjectRPG.Client.gamemanager;
@@ -24,6 +29,9 @@ public class GameScene extends Scene {
 	
 	private Box2DDebugRenderer b2ddebug = new Box2DDebugRenderer();
 	
+	/**
+	 * Construct a new game scene.
+	 */
 	public GameScene() {
 		font = ProjectRPG.Client.assetmanager.get("font/Roboto-Regular.ttf", BitmapFont.class);
 		font.getData().markupEnabled = true;
@@ -50,6 +58,9 @@ public class GameScene extends Scene {
 		}
 	}
 	
+	/**
+	 * Update background to current background map.
+	 */
 	private void updateBackground() {
 		if((background.getTexture() == null || !background.getTexture().equals(manager.getCurrentMap().getBackground())) && manager.getCurrentMap() != null) {
 			float baseHeight = 17f;
@@ -64,11 +75,24 @@ public class GameScene extends Scene {
 	public void draw(float deltatime) {
 		if(manager.getEntityManager().getAllCharacter().isEmpty() || manager.getMapManager().getAllMap().isEmpty()) return;
 		drawEntities();
-		drawUI();
+		drawGUI();
 		b2ddebug.render(manager.getWorld(), getViewport(GameplayViewport.class).getCamera().combined);
 	}
 	
+	/**
+	 * Draw all entities : Characters, monsters, structures, etc.
+	 */
 	private void drawEntities() {
+		/**
+		 * Draw order (back -> front).
+		 * 1. Parallax background
+		 * 2. Map (structures)
+		 * 3. Character (except player character)
+		 * 4.1. NPC
+		 * 4.2. Monster
+		 * 5. player character
+		 * 6. effects
+		 */
 		useViewport(GameplayViewport.class);
 		batch.begin();
 			background.draw(batch);
@@ -83,7 +107,10 @@ public class GameScene extends Scene {
 		batch.end();
 	}
 	
-	private void drawUI() {
+	/**
+	 * Draw the graphic user interface.
+	 */
+	private void drawGUI() {
 		useViewport(ScreenViewport.class);
 		
 		batch.begin();

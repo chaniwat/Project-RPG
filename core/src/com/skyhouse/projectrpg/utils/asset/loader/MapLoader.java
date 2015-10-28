@@ -13,10 +13,19 @@ import com.badlogic.gdx.utils.Array;
 import com.skyhouse.projectrpg.data.MapData;
 import com.skyhouse.projectrpg.map.Map;
 
+/**
+ * Map loader class. <br>
+ * <b>Load .map</b>
+ * @author Meranote
+ */
 public class MapLoader extends AsynchronousAssetLoader<Map, MapLoader.MapLoaderParameter> {
 
 	MapData data;
 	
+	/**
+	 * Construct a new map loader.
+	 * @param resolver
+	 */
 	public MapLoader(FileHandleResolver resolver) {
 		super(resolver);
 	}
@@ -43,6 +52,10 @@ public class MapLoader extends AsynchronousAssetLoader<Map, MapLoader.MapLoaderP
 		return dependecy;
 	}
 	
+	/**
+	 * Map parameter use with loader.
+	 * @author Meranote
+	 */
 	public static class MapLoaderParameter extends AssetLoaderParameters<Map> {
 		public World world = null;
 	}

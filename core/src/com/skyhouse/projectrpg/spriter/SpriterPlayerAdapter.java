@@ -5,6 +5,10 @@ import com.brashmonkey.spriter.Mainline.Key;
 import com.brashmonkey.spriter.Player;
 import com.brashmonkey.spriter.Player.PlayerListener;
 
+/**
+ * A adapter class of {@link PlayerListener}.
+ * @author Meranote
+ */
 public abstract class SpriterPlayerAdapter implements PlayerListener {
 
 	@Override

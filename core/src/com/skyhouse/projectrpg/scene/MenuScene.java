@@ -1,9 +1,15 @@
 package com.skyhouse.projectrpg.scene;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
+/**
+ * Menu scene of gameplay.<br>
+ * <b>Collection of view such as Inventory, Skill, option, etc.</b>
+ * @author Meranote
+ */
 public class MenuScene extends Scene {
 
+	/**
+	 * Construct a new menu scene.
+	 */
 	public MenuScene() {
 		super();
 		// TODO Auto-generated constructor stub

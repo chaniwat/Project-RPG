@@ -1,9 +1,15 @@
 package com.skyhouse.projectrpg.scene;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
+/**
+ * Character creator scene. <br>
+ * <b>Create new character.</b>
+ * @author Meranote
+ */
 public class CharacterCreatorScene extends Scene {
 
+	/**
+	 * Construct a new character creator scene.
+	 */
 	public CharacterCreatorScene() {
 		// TODO Auto-generated constructor stub
 	}

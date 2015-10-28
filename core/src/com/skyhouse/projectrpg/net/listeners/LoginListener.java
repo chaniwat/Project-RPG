@@ -8,12 +8,21 @@ import com.skyhouse.projectrpg.data.CharacterData;
 import com.skyhouse.projectrpg.manager.GameManager;
 import com.skyhouse.projectrpg.net.packets.InitialRequest;
 import com.skyhouse.projectrpg.net.packets.InitialResponse;
-import com.skyhouse.projectrpg.scene.GameScene;
 import com.skyhouse.projectrpg.spriter.SpriterPlayer;
 
+/**
+ * Login listener.
+ * @author Meranote
+ */
 public class LoginListener {
 	
-	public static class ClientSide extends Listener {
+	private LoginListener() {}
+	
+	/**
+	 * Login listener for client-side.
+	 * @author Meranote
+	 */
+	public static class Client extends Listener {
 		
 		@Override
 		public void received(final Connection connection, Object object) {
@@ -29,14 +38,18 @@ public class LoginListener {
 						manager.getEntityManager().addCharacter(connection.getID(), data, new SpriterPlayer("entity/GreyGuy/player.scml"), manager.getWorld());
 						manager.setCurrentInstance(response.instance);
 					}
+					
 				});
-				
 			}
 		}
 		
 	}
 	
-	public static class ServerSide extends Listener {
+	/**
+	 * Login listener for server-side.
+	 * @author Meranote
+	 */
+	public static class Server extends Listener {
 		
 		@Override
 		public void received(Connection connection, Object object) {

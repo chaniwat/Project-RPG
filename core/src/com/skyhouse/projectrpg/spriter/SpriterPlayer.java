@@ -8,12 +8,10 @@ import com.brashmonkey.spriter.Data;
 import com.brashmonkey.spriter.Player;
 import com.brashmonkey.spriter.PlayerTweener;
 import com.brashmonkey.spriter.SCMLReader;
-import com.brashmonkey.spriter.Spriter;
 
 /**
  * SpriterActor for Spriter.
  * @author Meranote
- *
  */
 public class SpriterPlayer extends PlayerTweener {
 
@@ -25,7 +23,7 @@ public class SpriterPlayer extends PlayerTweener {
 	
 	/**
 	 * Create a new SpriterActor for character, monster, etc. 
-	 * @param pathtoscml path to .scml file
+	 * @param pathToScml path to .scml file
 	 */
 	public SpriterPlayer(String pathToScml) {
 		super();
@@ -77,10 +75,16 @@ public class SpriterPlayer extends PlayerTweener {
 		update();
 	}
 	
+	/**
+	 * Draw spriter.
+	 */
 	public void draw() {
 		drawer.draw(this);
 	}
 	
+	/**
+	 * Initial {@link SpriteBatch} and {@link ShapeRenderer} globally before call any {@link SpriterPlayer#draw()} objects.
+	 */
 	public static void init(SpriteBatch batch, ShapeRenderer renderer) {
 		 SpriterPlayer.batch = batch;
 		 SpriterPlayer.renderer = renderer;

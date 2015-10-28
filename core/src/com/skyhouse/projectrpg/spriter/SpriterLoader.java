@@ -19,6 +19,10 @@ import com.brashmonkey.spriter.Data;
 import com.brashmonkey.spriter.FileReference;
 import com.brashmonkey.spriter.Loader;
 
+/**
+ * Spriter loader.
+ * @author Trixt0r
+ */
 public class SpriterLoader extends Loader<Sprite> implements Disposable {
 
 public static int standardAtlasWidth = 2048, standardAtlasHeight = 2048;
@@ -28,16 +32,28 @@ public static int standardAtlasWidth = 2048, standardAtlasHeight = 2048;
 	private HashMap<Pixmap, Boolean> pixmapsToDispose;
 	private boolean pack;
 	private int atlasWidth, atlasHeight;
-	
+
+	/**
+	 * Construct a new {@link SpriterLoader}. 
+	 * @param data
+	 */
 	public SpriterLoader(Data data){
 		this(data, true);
 	}
 	
+	/**
+	 * Construct a new {@link SpriterLoader}. 
+	 * @param data
+	 */
 	public SpriterLoader(Data data, boolean pack){
 		this(data, standardAtlasWidth, standardAtlasHeight);
 		this.pack = pack;
 	}
 
+	/**
+	 * Construct a new {@link SpriterLoader}. 
+	 * @param data
+	 */
 	public SpriterLoader(Data data, int atlasWidth, int atlasHeight) {
 		super(data);
 		this.pack = true;
