@@ -30,8 +30,8 @@ public class Map {
 	 */
 	public Map(World world, MapData data) {	
 		this(world, data, 
-				new TextureAtlas(Gdx.files.internal("texture/structure/" + data.mapTexturePackPath + ".pack")), 
-				new Texture(Gdx.files.internal("texture/background" + data.mapBackgroundPath + ".png")));
+				new TextureAtlas(Gdx.files.internal(data.mapTexturePackPath)), 
+				new Texture(Gdx.files.internal(data.mapBackgroundPath)));
 	}
 	
 	/**

@@ -4,7 +4,7 @@
 	<mapdata>
 		<name>TestLevel</name>
 		<type>World</type>
-		<texture>GreenLand</texture>
+		<texture>greenland</texture>
 		<background>background</background>
 	</mapdata>
 	
