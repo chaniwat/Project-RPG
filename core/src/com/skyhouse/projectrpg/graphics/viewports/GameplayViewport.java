@@ -67,4 +67,12 @@ public class GameplayViewport extends Viewport {
 		}
 	}
 	
+	/**
+	 * Return the current view scale.
+	 * @return
+	 */
+	public float getViewScale() {
+		return viewWorldScale;
+	}
+	
 }

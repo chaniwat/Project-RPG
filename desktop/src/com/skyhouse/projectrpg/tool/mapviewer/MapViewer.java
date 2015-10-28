@@ -50,6 +50,7 @@ public class MapViewer extends ApplicationAdapter {
 					cx = view.getCamera().position.x;
 					cy = view.getCamera().position.y;
 					isMoveCameraDown = true;
+					MapViewerLauncher.mapView.setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
 				}
 				return true;
 			}
@@ -59,7 +60,7 @@ public class MapViewer extends ApplicationAdapter {
 				if(isMoveCameraDown) {
 					view.getCamera().position.x = cx + (16f * (position.x - screenX) / Gdx.graphics.getWidth());
 					view.getCamera().position.y = cy - (16f * (position.y - screenY) / Gdx.graphics.getHeight());
-					view.getCamera().update();			
+					view.getCamera().update();
 				}
 				return true;
 			}
@@ -68,7 +69,14 @@ public class MapViewer extends ApplicationAdapter {
 			public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 				if(button == Input.Buttons.RIGHT) {
 					isMoveCameraDown = false;
+					MapViewerLauncher.mapView.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 				}
+				return true;
+			}
+			
+			@Override 
+			public boolean scrolled(int amount) {
+				view.setViewScale(view.getViewScale() + (0.05f * amount));
 				return true;
 			}
 			
