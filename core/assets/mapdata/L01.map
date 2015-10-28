@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map>
+	
+	<mapdata>
+		<name>TestLevel</name>
+		<type>World</type>
+		<texture>GreenLand</texture>
+		<background>background</background>
+	</mapdata>
+	
+	<structures>
+		<structure>
+			<name>ground</name>
+			<positionx>-20</positionx>
+			<positiony>0</positiony>
+			<width>60</width>
+			<height>5</height>
+			<textureregions>
+				<region position="Top">grassMid</region>
+				<region position="MiddleHorizontal">grassCenter</region>
+				<region position="Bottom">grassCenter</region>
+			</textureregions>
+			<behavior>solid</behavior>
+		</structure>
+		<structure>
+			<name>box1</name>
+			<positionx>1</positionx>
+			<positiony>1</positiony>
+			<width>1</width>
+			<height>1</height>
+			<textureregions>
+				<region position="ALL">boxAlt</region>
+			</textureregions>
+			<behavior>solid</behavior>
+		</structure>
+		<structure>
+			<name>box2</name>
+			<positionx>2</positionx>
+			<positiony>2</positiony>
+			<width>1</width>
+			<height>2</height>
+			<textureregions>
+				<region position="ALL">boxAlt</region>
+			</textureregions>
+			<behavior>solid</behavior>
+		</structure>
+		<structure>
+			<name>box3</name>
+			<positionx>3</positionx>
+			<positiony>3</positiony>
+			<width>3</width>
+			<height>3</height>
+			<textureregions>
+				<region position="ALL">boxAlt</region>
+			</textureregions>
+			<behavior>solid</behavior>
+		</structure>
+		<structure>
+			<name>box4</name>
+			<positionx>6</positionx>
+			<positiony>2</positiony>
+			<width>1</width>
+			<height>2</height>
+			<textureregions>
+				<region position="ALL">boxAlt</region>
+			</textureregions>
+			<behavior>solid</behavior>
+		</structure>
+		<structure>
+			<name>box5</name>
+			<positionx>7</positionx>
+			<positiony>1</positiony>
+			<width>1</width>
+			<height>1</height>
+			<textureregions>
+				<region position="ALL">boxAlt</region>
+			</textureregions>
+			<behavior>solid</behavior>
+		</structure>
+	</structures>
+	
+	<objects>
+		
+	</objects>
+	
+	<npcs>
+		
+	</npcs>
+	
+	<connections>
+		
+	</connections>
+	
+</map>

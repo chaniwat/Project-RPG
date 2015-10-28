@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map>
+	
+	<mapdata>
+		<name>TemplateLevel</name>
+		<type>World</type>
+		<texture>TextureFileName</texture> <!-- store in "assets/texture/structure/" -->
+		<background>BackgroudFileName</background> <!-- store in "assets/texture/background/" -->
+	</mapdata>
+	
+	<structures>
+		<structure>
+			<name>StructureName</name>
+			<positionx>0</positionx> <!-- Integer or float number -->
+			<positiony>0</positiony> <!-- Integer or float number -->
+			<width>0</width> <!-- Integer or float number -->
+			<height>0</height> <!-- Integer or float number -->
+			<textureregions>
+				<!-- position list : 
+					TopLeft, TopMiddle, TopRight, 
+					MiddleLeft, MiddleMiddle, MiddleRight,
+					BottomLeft, BottomMiddle, BottomRight,
+					Top, MiddleHorizontal, Bottom,
+					Left, MiddleVertical, Right,
+					ALL 
+				-->
+				<region position="Top">grassMid</region> <!-- Region name of TextureAtlas -->
+				<region position="MiddleHorizontal">grassCenter</region> <!-- Region name of TextureAtlas -->
+				<region position="Bottom">grassCenter</region> <!-- Region name of TextureAtlas -->
+			</textureregions>
+			<!-- behavior list :
+				none, solid, clumbable
+			-->
+			<behavior>clumbable solid</behavior>
+		</structure>
+	</structures>
+		
+	<objects>
+		<object>
+			 <!-- type : door, lever, warp, monstergenerator -->
+			<name>ObjectName</name>
+			<type>door</type>
+			<positionx>0</positionx>
+			<positiony>0</positiony>
+			<width>0</width>
+			<height>0</height>
+			<texture>PathToTexture</texture> <!-- store in "assets/texture/mapobject/door" -->
+			<trigger default="close" controlby="leverObjectName or null">open</trigger>
+		</object>
+		<object>
+			<name>ObjectName</name>
+			<type>lever</type>
+			<positionx>0</positionx>
+			<positiony>0</positiony>
+			<width>0</width>
+			<height>0</height>
+			<texture>PathToTexture</texture> <!-- store in "assets/texture/mapobject/lever" -->
+			<trigger default="off" controlto="leverObjectName or warpObjectName or null">on</trigger>
+		</object>
+		<object>
+			<name>ObjectName</name>
+			<type>warp</type>
+			<positionx>0</positionx>
+			<positiony>0</positiony>
+			<width>0</width>
+			<height>0</height>
+			<texture>PathToTexture</texture> <!-- store in "assets/texture/mapobject/warp" -->
+			<trigger needfullpartyinarea="true" controlby="leverObjectName or null">PathToMap</trigger> <!-- store in "assets/mapdata/" -->
+		</object>
+		<object>
+			<name>ObjectName</name>
+			<type>monstergenerator</type>
+			<positionx>0</positionx>
+			<positiony>0</positiony>
+			<width>0</width>
+			<height>0</height>
+			<monsterlist>
+				<monster pathtomonsterdata="pathToMonsterData" count="2"> <!-- store in "assets/entity/monster/" -->
+			</monsterlist>
+		</object>
+	</objects>
+	
+	<npcs>
+		<npc>
+			<pathtonpcdata>PathToNPCData</pathtonpcdata> <!-- store in "assets/entity/npc/" -->
+			<positionx>0</positionx>
+			<positiony>0</positiony>
+		</npc>
+	</npcs>
+	
+	<connections>
+		<connection>
+			<pathtomap>L02</pathtomap> <!-- store in "assets/mapdata/" -->
+			<offsetx></offsetx>
+			<offsety></offsety>
+		</connection>
+	</connections>
+	
+</map>
