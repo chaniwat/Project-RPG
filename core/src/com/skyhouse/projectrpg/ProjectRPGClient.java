@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.GL30;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
@@ -93,6 +94,7 @@ public class ProjectRPGClient extends ApplicationAdapter {
 		fontparams.fontFileName = "font/Roboto-Regular.ttf";
 		fontparams.fontParameters.characters = FreeTypeFontGenerator.DEFAULT_CHARS + ThaiLanguage.THAI_CHARS;
 		assetmanager.load("font/Roboto-Regular.ttf", BitmapFont.class, fontparams);
+		assetmanager.load("texture/background/startscreenvillage.png", Texture.class);
 		assetmanager.finishLoading();
 		
 		gamemanager = new GameManager();

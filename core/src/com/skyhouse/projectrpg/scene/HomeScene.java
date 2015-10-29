@@ -1,5 +1,8 @@
 package com.skyhouse.projectrpg.scene;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
 /**
  * Home scene. <br>
  * <b>First scene that need user to login.</b>
@@ -7,11 +10,13 @@ package com.skyhouse.projectrpg.scene;
  */
 public class HomeScene extends Scene {
 
+	private Stage guicontainer;
+	
 	/**
 	 * Construct a new home scene.
 	 */
 	public HomeScene() {
-		// TODO Auto-generated constructor stub
+		guicontainer = new Stage(new ScreenViewport());
 	}
 	
 	@Override

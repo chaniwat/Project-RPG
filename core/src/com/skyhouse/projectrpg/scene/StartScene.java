@@ -1,10 +1,9 @@
 package com.skyhouse.projectrpg.scene;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.skyhouse.projectrpg.ProjectRPG;
-import com.skyhouse.projectrpg.graphics.viewports.ScreenViewport;
 
 /**
  * Start scene. <br>
@@ -12,14 +11,17 @@ import com.skyhouse.projectrpg.graphics.viewports.ScreenViewport;
  * @author Meranote
  */
 public class StartScene extends Scene {
-
-	private ShapeRenderer renderer = ProjectRPG.Client.graphic.renderer;
+	
+	private Texture loadingImage;
+	private SpriteBatch batch;
 	
 	/**
 	 * Construct a new start scene.
 	 */
 	public StartScene() {
 		addViewport(new ScreenViewport());
+		loadingImage = ProjectRPG.Client.assetmanager.get("texture/background/startscreenvillage.png", Texture.class);
+		batch = ProjectRPG.Client.graphic.batch;
 	}
 	
 	@Override
@@ -38,10 +40,9 @@ public class StartScene extends Scene {
 	public void draw(float deltatime) {
 		useViewport(ScreenViewport.class);
 		
-		renderer.begin(ShapeType.Filled);
-			renderer.setColor(Color.WHITE);
-			renderer.rect(0, 0, getViewport(ScreenViewport.class).getWorldWidth(), getViewport(ScreenViewport.class).getWorldHeight());
-		renderer.end();
+		batch.begin();
+			batch.draw(loadingImage, 0, 0);
+		batch.end();
 	}
 
 	@Override
