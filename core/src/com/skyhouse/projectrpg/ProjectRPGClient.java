@@ -19,6 +19,8 @@ import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.utils.Logger;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
+import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.VisUI.SkinScale;
 import com.skyhouse.projectrpg.manager.GameManager;
 import com.skyhouse.projectrpg.manager.InputManager;
 import com.skyhouse.projectrpg.manager.SceneManager;
@@ -59,10 +61,10 @@ public class ProjectRPGClient extends ApplicationAdapter {
 		inputmanager = new InputManager();
 		ProjectRPG.Client.inputmanager = inputmanager;
 		
-		initialNetwork();
+//		initialNetwork();
 		initialGraphics();
 		initialAssets();		
-		startGame();
+//		startGame();
 		
 		Gdx.app.debug(ProjectRPG.TITLE, "Version = " + ProjectRPG.VERSION);
 	}
@@ -82,7 +84,7 @@ public class ProjectRPGClient extends ApplicationAdapter {
 		SpriterPlayer.init(batch, renderer);
 	}
 	
-	private void initialAssets() {
+	private void initialAssets() {		
 		InternalFileHandleResolver resolver = new InternalFileHandleResolver();
 		assetmanager = new AssetManager();
 		ProjectRPG.Client.assetmanager = assetmanager;
@@ -97,6 +99,8 @@ public class ProjectRPGClient extends ApplicationAdapter {
 		assetmanager.load("texture/background/startscreenvillage.png", Texture.class);
 		assetmanager.finishLoading();
 		
+		VisUI.load(SkinScale.X1);
+		
 		gamemanager = new GameManager();
 		ProjectRPG.Client.gamemanager = gamemanager;
 		
@@ -109,7 +113,7 @@ public class ProjectRPGClient extends ApplicationAdapter {
 		scenemanager.addScene(GameScene.class);
 		scenemanager.addScene(MenuScene.class);
 		
-		scenemanager.setUseScene(StartScene.class);
+		scenemanager.setUseScene(HomeScene.class);
 	}
 	
 	private void startGame() {
@@ -142,7 +146,7 @@ public class ProjectRPGClient extends ApplicationAdapter {
 		float deltaTime = Gdx.graphics.getDeltaTime();
 		assetmanager.update();
 		scenemanager.update(deltaTime);
-		gamemanager.update(deltaTime);
+//		gamemanager.update(deltaTime);
 		inputmanager.update(deltaTime);
 		
 		// Render
@@ -153,15 +157,16 @@ public class ProjectRPGClient extends ApplicationAdapter {
 	
 	@Override
 	public void dispose () {
-		DisconnectRequest request = new DisconnectRequest();
-		request.instance = ProjectRPG.Client.gamemanager.getCurrentInstance();
-		net.sendTCP(request);
-		net.close();
-		net.stop();
-		try {
-			net.dispose();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+//		DisconnectRequest request = new DisconnectRequest();
+//		request.instance = ProjectRPG.Client.gamemanager.getCurrentInstance();
+//		net.sendTCP(request);
+//		net.close();
+//		net.stop();
+//		try {
+//			net.dispose();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+		VisUI.dispose();
 	}
 }

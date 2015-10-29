@@ -13,7 +13,6 @@ import com.skyhouse.projectrpg.ProjectRPG;
 public class StartScene extends Scene {
 	
 	private Texture loadingImage;
-	private SpriteBatch batch;
 	
 	/**
 	 * Construct a new start scene.
@@ -21,7 +20,6 @@ public class StartScene extends Scene {
 	public StartScene() {
 		addViewport(new ScreenViewport());
 		loadingImage = ProjectRPG.Client.assetmanager.get("texture/background/startscreenvillage.png", Texture.class);
-		batch = ProjectRPG.Client.graphic.batch;
 	}
 	
 	@Override

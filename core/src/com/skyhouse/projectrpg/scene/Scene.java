@@ -68,7 +68,7 @@ public abstract class Scene {
 	/** Update viewport. */
 	public final void updateViewport(int screenwidth, int screenheight) {
 		for(Viewport viewport : this.viewports.values()) {
-			viewport.update(screenwidth, screenheight);
+			viewport.update(screenwidth, screenheight, true);
 		}
 	}
 	
