@@ -11,9 +11,9 @@ import com.skyhouse.projectrpg.ProjectRPG;
  */
 public class CommandThread extends Thread {
 
+	private boolean running = true;
 	private Scanner input;
 	private String command;
-	private boolean running = true;
 	
 	/**
 	 * Construct a new command listener.

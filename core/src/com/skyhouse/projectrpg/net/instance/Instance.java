@@ -104,7 +104,7 @@ public class Instance extends Thread {
 	}
 	
 	/**
-	 * Set this instance to finish its job, if it end or not.
+	 * Set this instance to finish its job, if it ended or not.
 	 */
 	public void finish() {
 		postRunnableList.add(new Runnable() {

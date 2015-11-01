@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.skyhouse.projectrpg.manager.GameManager;
 import com.skyhouse.projectrpg.manager.InputManager;
 import com.skyhouse.projectrpg.manager.SceneManager;
+import com.skyhouse.projectrpg.net.database.Database;
 import com.skyhouse.projectrpg.net.instance.Instance;
 
 /**
@@ -60,6 +61,7 @@ public class ProjectRPG {
 		private Server() { }
 		public static com.esotericsoftware.kryonet.Server net;
 		public static HashMap<String, Instance> instances;
+		public static Database database;
 		
 	}
 	

@@ -8,8 +8,10 @@ import com.skyhouse.projectrpg.data.CharacterData;
  */
 public class InitialResponse {
 	
-	public CharacterData data;
-	public String instance;
-	public String pathToMap;
+//	public CharacterData data;
+//	public String instance;
+//	public String pathToMap;
+	
+	public int state;
 	
 }

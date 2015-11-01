@@ -4,13 +4,14 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
@@ -18,6 +19,7 @@ import com.kotcrab.vis.ui.widget.VisTextButton.VisTextButtonStyle;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import com.kotcrab.vis.ui.widget.VisTextField.VisTextFieldStyle;
 import com.skyhouse.projectrpg.ProjectRPG;
+import com.skyhouse.projectrpg.net.packets.InitialRequest;
 
 /**
  * Home scene. <br>
@@ -51,9 +53,6 @@ public class HomeScene extends Scene {
 		root = new VisTable(true);
 		
 		LabelStyle labelstyle = new LabelStyle(assetmanager.get("font/Roboto-Regular.ttf", BitmapFont.class), Color.WHITE);		
-		VisLabel testLabel = new VisLabel("พิมพ์ไทยกับ VisUI หรือ Scene2d.ui ไงหล่ะ อิอิ", labelstyle);
-		root.add(testLabel).colspan(2).padBottom(10f);
-		root.row();
 		VisLabel loginLabel = new VisLabel("ล๊อกอินอะ รู้จักไหม - -)\"", labelstyle);
 		root.add(loginLabel).colspan(2).padBottom(10f);
 		root.row();
@@ -61,23 +60,33 @@ public class HomeScene extends Scene {
 		TextFieldStyle templatetextfieldstyle = new VisTextField().getStyle();
 		VisTextFieldStyle textfieldstyle = new VisTextFieldStyle(assetmanager.get("font/Roboto-Regular.ttf", BitmapFont.class), templatetextfieldstyle.fontColor, templatetextfieldstyle.cursor, templatetextfieldstyle.selection, templatetextfieldstyle.background);
 		
-		VisTextField userTextInput = new VisTextField("", textfieldstyle);
+		final VisTextField userTextInput = new VisTextField("", textfieldstyle);
 		root.add(new VisLabel("ID : "));
 		root.add(userTextInput);
 		root.row();
 		
-		VisTextField passTextInput = new VisTextField("", textfieldstyle);
+		final VisTextField passTextInput = new VisTextField("", textfieldstyle);
 		passTextInput.setPasswordMode(true);
 		passTextInput.setPasswordCharacter('*');
 		root.add(new VisLabel("Pass : "));
 		root.add(passTextInput);
 		root.row();
 		
-		VisTextButton templatebutton = new VisTextButton("");
-		TextButtonStyle templatebuttonstyle = templatebutton.getStyle();
+		TextButtonStyle templatebuttonstyle = new VisTextButton("").getStyle();
 		VisTextButtonStyle buttonstyle = new VisTextButtonStyle(templatebuttonstyle.up, templatebuttonstyle.down, templatebuttonstyle.checked, assetmanager.get("font/Roboto-Regular.ttf", BitmapFont.class));
 		
 		VisTextButton loginButton = new VisTextButton("เข้าสู่ระบบ", buttonstyle);
+		loginButton.addListener(new ClickListener() {
+			
+			@Override
+			public void clicked(InputEvent event, float x, float y) {
+				InitialRequest request = new InitialRequest();
+				request.username = userTextInput.getText();
+				request.password = passTextInput.getText();
+				ProjectRPG.Client.network.net.sendTCP(request);
+			}
+			
+		});
 		root.add(loginButton).colspan(2).padTop(10f);
 		
 		root.pack();

@@ -10,6 +10,7 @@ import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Server;
 import com.skyhouse.projectrpg.data.MapData;
+import com.skyhouse.projectrpg.net.database.Database;
 import com.skyhouse.projectrpg.net.instance.Instance;
 import com.skyhouse.projectrpg.net.listeners.CommandThread;
 import com.skyhouse.projectrpg.net.listeners.DisconnectListener;
@@ -27,6 +28,8 @@ public class ProjectRPGServer extends ApplicationAdapter {
 	private boolean serverRunning;
 	public static HashMap<String, Instance> instances;
 	private ArrayList<String> finishInstances;
+	
+	private Database database;
 	private CommandThread commandListener;
 		
 	@Override
@@ -50,18 +53,21 @@ public class ProjectRPGServer extends ApplicationAdapter {
 		ProjectRPG.Server.net = server;
 		ProjectRPG.Server.instances = instances;
 		
+		database = new Database();
+		ProjectRPG.Server.database = database;
+		
 		server.addListener(new LoginListener.Server());
 		server.addListener(new DisconnectListener.Server());
 		server.addListener(new UpdateListener.Server());
+		
+		commandListener = new CommandThread();
+		commandListener.start();
 		
 		// New Instance
 		MapData data = new MapData(Gdx.files.internal("mapdata/L01.map"));
 		
 		instances.put(data.name, new Instance(data.name, data));
 		instances.get(data.name).start();
-		
-		commandListener = new CommandThread();
-		commandListener.start();
 	}
 
 	@Override
@@ -84,6 +90,7 @@ public class ProjectRPGServer extends ApplicationAdapter {
 			while(!finishInstances.isEmpty()) instances.remove(finishInstances.remove(0));
 			
 			if(instances.isEmpty()) {
+				database.close();
 				server.stop();
 				serverRunning = false;
 				try {
@@ -93,6 +100,5 @@ public class ProjectRPGServer extends ApplicationAdapter {
 				}
 			}
 		}
-		
 	}
 }

@@ -61,10 +61,10 @@ public class ProjectRPGClient extends ApplicationAdapter {
 		inputmanager = new InputManager();
 		ProjectRPG.Client.inputmanager = inputmanager;
 		
-//		initialNetwork();
+		initialNetwork();
 		initialGraphics();
 		initialAssets();		
-//		startGame();
+		startGame();
 		
 		Gdx.app.debug(ProjectRPG.TITLE, "Version = " + ProjectRPG.VERSION);
 	}
@@ -126,9 +126,9 @@ public class ProjectRPGClient extends ApplicationAdapter {
 		}
 		
 		net.addListener(new LoginListener.Client());
-		net.addListener(new DisconnectListener.Client());
-		net.addListener(new UpdateListener.Client());
-		net.sendTCP(new InitialRequest());
+//		net.addListener(new DisconnectListener.Client());
+//		net.addListener(new UpdateListener.Client());
+//		net.sendTCP(new InitialRequest());
 	}
 	
 	@Override
@@ -160,13 +160,13 @@ public class ProjectRPGClient extends ApplicationAdapter {
 //		DisconnectRequest request = new DisconnectRequest();
 //		request.instance = ProjectRPG.Client.gamemanager.getCurrentInstance();
 //		net.sendTCP(request);
-//		net.close();
-//		net.stop();
-//		try {
-//			net.dispose();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+		net.close();
+		net.stop();
+		try {
+			net.dispose();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		VisUI.dispose();
 	}
 }

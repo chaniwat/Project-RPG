@@ -6,4 +6,7 @@ package com.skyhouse.projectrpg.net.packets;
  */
 public class InitialRequest {
 	
+	public String username;
+	public String password;
+	
 }

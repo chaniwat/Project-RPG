@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.skyhouse.projectrpg.ProjectRPG;
+import com.skyhouse.projectrpg.ProjectRPGServer;
 import com.skyhouse.projectrpg.data.CharacterData;
 import com.skyhouse.projectrpg.manager.GameManager;
 import com.skyhouse.projectrpg.net.packets.InitialRequest;
@@ -24,6 +25,7 @@ public class LoginListener {
 	 */
 	public static class Client extends Listener {
 		
+		/*
 		@Override
 		public void received(final Connection connection, Object object) {
 			if(object instanceof InitialResponse) {
@@ -42,6 +44,22 @@ public class LoginListener {
 				});
 			}
 		}
+		*/
+		
+		@Override
+		public void received(Connection connection, Object object) {
+			if(object instanceof InitialResponse) {
+				InitialResponse response = (InitialResponse)object;
+				switch(response.state) {
+					case 1:
+						Gdx.app.log("LOGIN", "Success");
+						break;
+					case -1:
+						Gdx.app.log("LOGIN", "Failed");
+						break;
+				}
+			}
+		}
 		
 	}
 	
@@ -51,6 +69,7 @@ public class LoginListener {
 	 */
 	public static class Server extends Listener {
 		
+		/*
 		@Override
 		public void received(Connection connection, Object object) {
 			if(object instanceof InitialRequest) {
@@ -65,6 +84,16 @@ public class LoginListener {
 				connection.sendTCP(response);
 			}
 		}
+		*/
+		
+		@Override
+		public void received(Connection connection, Object object) {
+			if(object instanceof InitialRequest) {
+				InitialRequest request = (InitialRequest)object;
+				ProjectRPG.Server.database.member.login(connection.getID(), request.username, request.password);
+			}
+		}
+		
 	}
 	
 }

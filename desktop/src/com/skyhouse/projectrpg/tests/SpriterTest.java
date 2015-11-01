@@ -32,13 +32,15 @@ public class SpriterTest extends ApplicationAdapter {
 		camera = new OrthographicCamera();
 		
 		// สร้างตัวจัดการอ่านไฟล์ก่อน
-		FileHandle handle = Gdx.files.internal("entities/GreyGuy/player.scml");
+		FileHandle handle = Gdx.files.internal("entity/Poji/newpoji.scml");
 		// สร้างตัวอ่านไฟล์ scml
 		SCMLReader reader = new SCMLReader(handle.read());
 		// อ่านข้อมูลไฟล์ scml
 		Data data = reader.getData();
 		// สร้างตัวเล่น spriter
 		player = new Player(data.getEntity(0));
+		player.setPosition(0, 80);
+		player.setAnimation("NewAnimation_000");
 		// โหลดข้อมูลที่เหลือจากการอ่านไฟล์ (พวกภาพต่างๆ)
 		SpriterLoader loader = new SpriterLoader(data);
 		loader.load(handle.file());
