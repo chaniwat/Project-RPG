@@ -31,6 +31,10 @@ public class Database {
 		
 		member = new MemberDatabaseUtils(connection);
 	}
+	
+	public Connection getConnection() {
+		return connection;
+	}
 
 	public void close() {
 		try {
