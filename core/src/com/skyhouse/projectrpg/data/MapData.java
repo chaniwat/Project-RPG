@@ -1,8 +1,14 @@
 package com.skyhouse.projectrpg.data;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
+import net.dermetfan.utils.ArrayUtils;
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -38,6 +44,7 @@ public class MapData extends Data {
 	
 	public String path;
 	public String name;
+	public int mapWidth, mapHeight;
 	public MapType type;
 	public String mapTexturePackPath, mapBackgroundPath;
 	public HashMap<String, StructureData> structures;
@@ -69,6 +76,8 @@ public class MapData extends Data {
 		getMapObjectData(root);
 		getNPCData(root);
 		
+		calculateMapSize();
+		
 		if(type.equals(MapType.WORLD)) getConnection(root);
 	}
 	
@@ -86,7 +95,7 @@ public class MapData extends Data {
 	/**
 	 * Create a collection of {@link StructureData} and {@link MapStructureTexture} both pair with structure name.
 	 */
-	private void getStructureData(Element root) {
+	private void getStructureData(Element root) {		
 		for(Element structure : root.getChildByName("structures").getChildrenByName("structure")) {
 			String sName = structure.getChildByName("name").getText();
 			StructureData sData = new StructureData();
@@ -122,6 +131,29 @@ public class MapData extends Data {
 	 */
 	private void getConnection(Element root) {
 		
+	}
+	
+	private void calculateMapSize() {
+		ArrayList<Integer> x1, y1, x2, y2;
+		x1 = new ArrayList<Integer>();
+		y1 = new ArrayList<Integer>();
+		x2 = new ArrayList<Integer>();
+		y2 = new ArrayList<Integer>();
+		
+		for(StructureData s : structures.values()) {
+			x1.add((int)(s.x));
+			y1.add((int)(s.y - s.height));
+			x2.add((int)(s.x + s.width));
+			y2.add((int)(s.y));
+		}
+		
+		Collections.sort(x1);
+		Collections.sort(y1);
+		Collections.sort(x2);
+		Collections.sort(y2);
+		
+		mapWidth = Math.abs(x1.get(0) - x2.get(x2.size() - 1));
+		mapHeight = Math.abs(y1.get(0) - y2.get(y2.size() - 1));
 	}
 	
 }

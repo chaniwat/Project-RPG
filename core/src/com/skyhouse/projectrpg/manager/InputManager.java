@@ -133,6 +133,7 @@ public class InputManager extends Manager {
 			}
 			Controllers.clearListeners();
 			if(currentController != null) Controllers.addListener(this.currentController);
+			isChanged = false;
 		}
 	}
 	@Override

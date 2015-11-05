@@ -29,7 +29,7 @@ public class DisconnectListener {
 					
 					@Override
 					public void run() {
-						ProjectRPG.Client.gamemanager.getEntityManager().removeCharacter(response.connectionid);
+						ProjectRPG.client.gamemanager.getEntityManager().removeCharacter(response.connectionid);
 					}
 					
 				});
@@ -47,11 +47,11 @@ public class DisconnectListener {
 		public void received(Connection connection, Object object) {
 			if(object instanceof DisconnectRequest) {
 				DisconnectRequest request =(DisconnectRequest)object;
-				ProjectRPG.Server.instances.get(request.instance).removeCharacter(connection.getID());
+				ProjectRPG.server.instances.get(request.instance).removeCharacter(connection.getID());
 				
 				DisconnectResponse response = new DisconnectResponse();
 				response.connectionid = connection.getID();
-				ProjectRPG.Server.net.sendToAllExceptTCP(connection.getID(), response);
+				ProjectRPG.server.net.sendToAllExceptTCP(connection.getID(), response);
 			}
 		}
 		

@@ -96,7 +96,7 @@
         <obj_info name="back_thigh" type="bone" w="200" h="10"/>
         <obj_info name="back_shin" type="bone" w="200" h="10"/>
         <obj_info name="back_foot" type="bone" w="200" h="10"/>
-        <animation id="0" name="idle" length="4000" interval="16">
+        <animation id="0" name="idle" length="4000" interval="100">
             <mainline>
                 <key id="0">
                     <bone_ref id="0" timeline="15" key="0"/>
@@ -1788,7 +1788,7 @@
                 </key>
             </timeline>
         </animation>
-        <animation id="1" name="walk" length="1000" interval="17">
+        <animation id="1" name="walk" length="1000" interval="100">
             <mainline>
                 <key id="0">
                     <bone_ref id="0" timeline="15" key="0"/>
@@ -2399,7 +2399,7 @@
                 </key>
             </timeline>
         </animation>
-        <animation id="2" name="fall" length="312" interval="16" looping="false">
+        <animation id="2" name="fall" length="312" interval="100" looping="false">
             <mainline>
                 <key id="0">
                     <bone_ref id="0" timeline="15" key="0"/>
@@ -2829,7 +2829,7 @@
                 </key>
             </timeline>
         </animation>
-        <animation id="3" name="jump" length="588" interval="16">
+        <animation id="3" name="jump" length="588" interval="100">
             <mainline>
                 <key id="0">
                     <bone_ref id="0" timeline="15" key="0"/>

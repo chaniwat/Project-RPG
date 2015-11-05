@@ -1,10 +1,12 @@
 package com.skyhouse.projectrpg.scene;
 
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -12,14 +14,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.kotcrab.vis.ui.widget.VisWindow;
 import com.kotcrab.vis.ui.widget.VisTextButton.VisTextButtonStyle;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import com.kotcrab.vis.ui.widget.VisTextField.VisTextFieldStyle;
 import com.skyhouse.projectrpg.ProjectRPG;
-import com.skyhouse.projectrpg.net.packets.InitialRequest;
+import com.skyhouse.projectrpg.net.packets.LoginRequest;
 
 /**
  * Home scene. <br>
@@ -39,7 +43,7 @@ public class HomeScene extends Scene {
 	}
 	private GUILoginContainer guicontainer;
 	private VisTable root;
-	private AssetManager assetmanager = ProjectRPG.Client.assetmanager;
+	private AssetManager assetmanager = ProjectRPG.client.assetmanager;
 	
 	/**
 	 * Construct a new home scene.
@@ -47,8 +51,7 @@ public class HomeScene extends Scene {
 	public HomeScene() {
 		addViewport(new ScreenViewport());
 		guicontainer = new GUILoginContainer(getViewport(ScreenViewport.class), batch);
-		ProjectRPG.Client.inputmanager.addInputProcessor(guicontainer);
-		ProjectRPG.Client.inputmanager.setInputProcessor(GUILoginContainer.class);
+		ProjectRPG.client.inputmanager.addInputProcessor(guicontainer);
 		
 		root = new VisTable(true);
 		
@@ -76,27 +79,53 @@ public class HomeScene extends Scene {
 		VisTextButtonStyle buttonstyle = new VisTextButtonStyle(templatebuttonstyle.up, templatebuttonstyle.down, templatebuttonstyle.checked, assetmanager.get("font/Roboto-Regular.ttf", BitmapFont.class));
 		
 		VisTextButton loginButton = new VisTextButton("เข้าสู่ระบบ", buttonstyle);
+		root.add(loginButton).colspan(2).padTop(10f);
+		
+		userTextInput.addListener(new InputListener(){
+			@Override
+			public boolean keyDown(InputEvent event, int keycode) {
+				if(keycode == Keys.ENTER) {
+					doLogin(userTextInput.getText(), passTextInput.getText());
+				}
+				return true;
+			}
+		});
+		passTextInput.addListener(new InputListener(){
+			@Override
+			public boolean keyDown(InputEvent event, int keycode) {
+				if(keycode == Keys.ENTER) {
+					doLogin(userTextInput.getText(), passTextInput.getText());
+				}
+				return true;
+			}
+		});
 		loginButton.addListener(new ClickListener() {
 			
 			@Override
 			public void clicked(InputEvent event, float x, float y) {
-				InitialRequest request = new InitialRequest();
-				request.username = userTextInput.getText();
-				request.password = passTextInput.getText();
-				ProjectRPG.Client.network.net.sendTCP(request);
+				doLogin(userTextInput.getText(), passTextInput.getText());
 			}
 			
 		});
-		root.add(loginButton).colspan(2).padTop(10f);
 		
 		root.pack();
 		guicontainer.addActor(root);
 	}
 	
+	private void doLogin(String username, String password) {
+		LoginRequest request = new LoginRequest();
+		request.username = username;
+		request.password = password;
+		ProjectRPG.client.network.net.sendTCP(request);
+	}
+	
+	public void showErrorDialog(String message) {
+		DialogUtils.showErrorDialog(guicontainer, message);
+	}
+	
 	@Override
 	public void change() {
-		// TODO Auto-generated method stub
-		
+		ProjectRPG.client.inputmanager.setInputProcessor(GUILoginContainer.class);
 	}
 
 	@Override

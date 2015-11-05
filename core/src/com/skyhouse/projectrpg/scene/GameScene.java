@@ -23,7 +23,7 @@ import com.skyhouse.projectrpg.map.Map;
  */
 public class GameScene extends Scene {
 	
-	private GameManager manager = ProjectRPG.Client.gamemanager;
+	private GameManager manager = ProjectRPG.client.gamemanager;
 	private Sprite background = new Sprite();
 	private BitmapFont font;
 	
@@ -33,7 +33,7 @@ public class GameScene extends Scene {
 	 * Construct a new game scene.
 	 */
 	public GameScene() {
-		font = ProjectRPG.Client.assetmanager.get("font/Roboto-Regular.ttf", BitmapFont.class);
+		font = ProjectRPG.client.assetmanager.get("font/Roboto-Regular.ttf", BitmapFont.class);
 		font.getData().markupEnabled = true;
 		font.setColor(Color.BLACK);
 		addViewport(new GameplayViewport(16f));
@@ -42,8 +42,8 @@ public class GameScene extends Scene {
 	
 	@Override
 	public void change() {
-		ProjectRPG.Client.inputmanager.setInputProcessor(GameplayInputListener.class);
-		ProjectRPG.Client.inputmanager.setControllerProcessor(GameplayControllerListener.class);
+		ProjectRPG.client.inputmanager.setInputProcessor(GameplayInputListener.class);
+		ProjectRPG.client.inputmanager.setControllerProcessor(GameplayControllerListener.class);
 	}
 
 	@Override
@@ -115,7 +115,7 @@ public class GameScene extends Scene {
 		
 		batch.begin();
 			font.draw(batch, "FPS : "+Gdx.graphics.getFramesPerSecond(), 20, getViewport(ScreenViewport.class).getScreenHeight() - 20);
-			font.draw(batch, "Lantacy : "+ProjectRPG.Client.network.net.getReturnTripTime()+" ms", 20, getViewport(ScreenViewport.class).getScreenHeight() - 40);
+			font.draw(batch, "Lantacy : "+ProjectRPG.client.network.net.getReturnTripTime()+" ms", 20, getViewport(ScreenViewport.class).getScreenHeight() - 40);
 		batch.end();
 	}
 	

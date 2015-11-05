@@ -6,12 +6,14 @@ import com.esotericsoftware.kryo.Kryo;
 import com.skyhouse.projectrpg.data.CharacterData;
 import com.skyhouse.projectrpg.data.Data;
 import com.skyhouse.projectrpg.data.InputData;
+import com.skyhouse.projectrpg.net.packets.CharacterRequest;
+import com.skyhouse.projectrpg.net.packets.CharacterResponse;
 import com.skyhouse.projectrpg.net.packets.UpdateRequest;
 import com.skyhouse.projectrpg.net.packets.UpdateResponse;
 import com.skyhouse.projectrpg.net.packets.DisconnectRequest;
 import com.skyhouse.projectrpg.net.packets.DisconnectResponse;
-import com.skyhouse.projectrpg.net.packets.InitialRequest;
-import com.skyhouse.projectrpg.net.packets.InitialResponse;
+import com.skyhouse.projectrpg.net.packets.LoginRequest;
+import com.skyhouse.projectrpg.net.packets.LoginResponse;
 
 /**
  * Utility class of network.
@@ -28,8 +30,10 @@ public class NetworkUtils {
 		kryo.register(CharacterData.class);
 		kryo.register(Data.ActionState.class);
 		kryo.register(InputData.class);
-		kryo.register(InitialRequest.class);
-		kryo.register(InitialResponse.class);
+		kryo.register(LoginRequest.class);
+		kryo.register(LoginResponse.class);
+		kryo.register(CharacterRequest.class);
+		kryo.register(CharacterResponse.class);
 		kryo.register(DisconnectRequest.class);
 		kryo.register(DisconnectResponse.class);
 		kryo.register(UpdateResponse.class);

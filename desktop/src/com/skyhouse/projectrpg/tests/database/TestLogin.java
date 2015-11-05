@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.skyhouse.projectrpg.ProjectRPG;
-import com.skyhouse.projectrpg.net.packets.InitialResponse;
+import com.skyhouse.projectrpg.net.packets.LoginResponse;
 import com.skyhouse.projectrpg.tests.database.backend.TestBackendDatabase;
 
 public class TestLogin {

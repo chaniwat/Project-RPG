@@ -27,7 +27,7 @@ public class UpdateListener {
 		@Override
 		public void received(Connection connection, Object object) {
 			if(object instanceof UpdateResponse) {
-				final GameManager gamemanager = ProjectRPG.Client.gamemanager;
+				final GameManager gamemanager = ProjectRPG.client.gamemanager;
 				final UpdateResponse response = (UpdateResponse)object;
 				gamemanager.setCurrentInstance(response.currentInstance);
 				Gdx.app.postRunnable(new Runnable() {

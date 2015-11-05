@@ -17,7 +17,7 @@ import com.skyhouse.projectrpg.utils.asset.loader.MapLoader.MapLoaderParameter;
  */
 public class MapManager extends Manager {
 
-	private AssetManager assetmanager = ProjectRPG.Client.assetmanager;
+	private AssetManager assetmanager = ProjectRPG.client.assetmanager;
 	private ArrayList<String> loadingMapPath = new ArrayList<String>();
 	private ArrayList<String> finishLoadMapPath = new ArrayList<String>();
 	private HashMap<String, Map> maps = new HashMap<String, Map>();

@@ -116,8 +116,23 @@ public class SceneManager {
 	 */
 	public void update(float deltatime) {
 		if(currentscene == null) throw new GdxRuntimeException("Set scene before call this.");
-		if(isChanged) scenes.get(currentscene).change();
+		if(isChanged) {
+			scenes.get(currentscene).change();
+			isChanged = false;
+		}
 		scenes.get(currentscene).update(deltatime);
+	}
+	
+	/**
+	 * Update the current scene with fixed time step.
+	 */
+	public void updateFixed(float fixedtime) {
+		if(currentscene == null) throw new GdxRuntimeException("Set scene before call this.");
+		if(isChanged) {
+			scenes.get(currentscene).change();
+			isChanged = false;
+		}
+		scenes.get(currentscene).updateFixed(fixedtime);
 	}
 	
 	/**
@@ -142,4 +157,14 @@ public class SceneManager {
 		scenes.get(currentscene).updateAndDraw(deltatime);
 	}
 
+	/**
+	 * Release all allocated resource.
+	 */
+	public void dispose() {
+		for(Scene scene : scenes.values()) {
+			scene.dispose();
+		}
+		scenes.clear();
+	}
+	
 }

@@ -3,22 +3,28 @@ package com.skyhouse.projectrpg.net.database;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Connection;
-import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.mysql.jdbc.Driver;
-import com.skyhouse.projectrpg.net.database.utils.MemberDatabaseUtils;
+import com.skyhouse.projectrpg.net.database.utils.GameDatabaseUtils;
 
+/**
+ * Database.
+ * @author Meranote
+ */
 public class Database {
 	
 	private Connection connection;
 	
-	public MemberDatabaseUtils member;
+	public GameDatabaseUtils game;
 	
+	/**
+	 * Construct connection to database.
+	 */
 	public Database() {
-		String url = "jdbc:mysql://localhost/projectrpg";
+		String url = "jdbc:mysql://188.166.232.27/projectrpg";
 		String username = "root";
-		String password = "mezote00";
+		String password = "projectrpg00";
 		
 		try {
 			Driver myDriver = new Driver();
@@ -29,13 +35,20 @@ public class Database {
 			e.printStackTrace();
 		}
 		
-		member = new MemberDatabaseUtils(connection);
+		game = new GameDatabaseUtils(connection);
 	}
 	
+	/**
+	 * Get database connection.
+	 * @return {@link Connection}
+	 */
 	public Connection getConnection() {
 		return connection;
 	}
 
+	/**
+	 * Close connection to database.
+	 */
 	public void close() {
 		try {
 			connection.close();

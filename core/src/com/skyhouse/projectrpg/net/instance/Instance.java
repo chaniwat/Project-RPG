@@ -90,7 +90,7 @@ public class Instance extends Thread {
 				update.data.put(character.getKey(), character.getValue().getData());
 			}
 			for(Integer id : characters.keySet()) {
-				ProjectRPG.Server.net.sendToUDP(id, update);
+				ProjectRPG.server.net.sendToUDP(id, update);
 			}
 	        
 	        while(!postRunnableList.isEmpty()) {

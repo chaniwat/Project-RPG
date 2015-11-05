@@ -1,7 +1,8 @@
 package com.skyhouse.projectrpg.scene;
 
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.skyhouse.projectrpg.ProjectRPG;
 
@@ -12,14 +13,15 @@ import com.skyhouse.projectrpg.ProjectRPG;
  */
 public class StartScene extends Scene {
 	
-	private Texture loadingImage;
+	private float screenwidth, screenheight;
+	private float currentProgress;
 	
 	/**
 	 * Construct a new start scene.
 	 */
 	public StartScene() {
 		addViewport(new ScreenViewport());
-		loadingImage = ProjectRPG.Client.assetmanager.get("texture/background/startscreenvillage.png", Texture.class);
+		currentProgress = 0f;
 	}
 	
 	@Override
@@ -29,8 +31,13 @@ public class StartScene extends Scene {
 
 	@Override
 	public void update(float deltatime) {
-		if(ProjectRPG.Client.assetmanager.isLoaded("mapdata/L01.map")) {
-			ProjectRPG.Client.scenemanager.setUseScene(GameScene.class);
+		screenwidth = getViewport(ScreenViewport.class).getWorldWidth();
+		screenheight = getViewport(ScreenViewport.class).getWorldHeight();
+		
+		currentProgress = ProjectRPG.client.assetmanager.getProgress();
+		if(currentProgress >= 1f && ProjectRPG.client.network.net.isConnected()) {
+			Gdx.app.log("DEBUG", "load complete!");
+			ProjectRPG.client.scenemanager.setUseScene(HomeScene.class);
 		}
 	}
 
@@ -38,9 +45,10 @@ public class StartScene extends Scene {
 	public void draw(float deltatime) {
 		useViewport(ScreenViewport.class);
 		
-		batch.begin();
-			batch.draw(loadingImage, 0, 0);
-		batch.end();
+		renderer.begin(ShapeType.Filled);
+			renderer.setColor(Color.WHITE);
+			renderer.rect(screenwidth * 0.05f, screenheight * 0.08f, (screenwidth * 0.90f) * currentProgress, 50);
+		renderer.end();
 	}
 
 	@Override

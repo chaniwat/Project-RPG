@@ -34,7 +34,7 @@ public class GameplayViewport extends Viewport {
 	}
 	
 	/**
-	 * Set the view to the center of character and calculate the corrent view with offset value.
+	 * Set the view to the center of character and calculate the correct view with offset value.
 	 */
 	public void setViewCenterToCharacter(Character character, float offsetX, float offsetY) {
 		if(!character.equals(null)) {

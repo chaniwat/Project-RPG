@@ -29,7 +29,7 @@
 				<region position="Bottom">grassCenter</region> <!-- Region name of TextureAtlas -->
 			</textureregions>
 			<!-- behavior list :
-				none, solid, clumbable
+				none, solid, clumbable, passthough, overlay
 			-->
 			<behavior>clumbable solid</behavior>
 		</structure>

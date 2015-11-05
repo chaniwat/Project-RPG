@@ -14,6 +14,7 @@ import com.skyhouse.projectrpg.net.database.Database;
 import com.skyhouse.projectrpg.net.instance.Instance;
 import com.skyhouse.projectrpg.net.listeners.CommandThread;
 import com.skyhouse.projectrpg.net.listeners.DisconnectListener;
+import com.skyhouse.projectrpg.net.listeners.GameDataListener;
 import com.skyhouse.projectrpg.net.listeners.LoginListener;
 import com.skyhouse.projectrpg.net.listeners.UpdateListener;
 import com.skyhouse.projectrpg.net.utils.NetworkUtils;
@@ -50,13 +51,14 @@ public class ProjectRPGServer extends ApplicationAdapter {
 			return;
 		}
 		
-		ProjectRPG.Server.net = server;
-		ProjectRPG.Server.instances = instances;
+		ProjectRPG.server.net = server;
+		ProjectRPG.server.instances = instances;
 		
 		database = new Database();
-		ProjectRPG.Server.database = database;
+		ProjectRPG.server.database = database;
 		
 		server.addListener(new LoginListener.Server());
+		server.addListener(new GameDataListener.Server());
 		server.addListener(new DisconnectListener.Server());
 		server.addListener(new UpdateListener.Server());
 		

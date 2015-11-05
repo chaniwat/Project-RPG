@@ -15,9 +15,9 @@ import com.skyhouse.projectrpg.ProjectRPG;
  */
 public abstract class Scene {
 	
-	protected SpriteBatch batch;
-	protected ShapeRenderer renderer;
-	private HashMap<Class<? extends Viewport>, Viewport> viewports = new HashMap<Class<? extends Viewport>, Viewport>();
+	protected static SpriteBatch batch;
+	protected static ShapeRenderer renderer;
+	private HashMap<Class<? extends Viewport>, Viewport> viewports;
 		
 	/**
 	 * Construct a new {@link Scene}.
@@ -25,8 +25,12 @@ public abstract class Scene {
 	 * @param assetmanager
 	 */
 	public Scene() {
-		this.batch = ProjectRPG.Client.graphic.batch;
-		this.renderer = ProjectRPG.Client.graphic.renderer;
+		viewports = new HashMap<Class<? extends Viewport>, Viewport>();
+	}
+	
+	public static void initScene(SpriteBatch batch, ShapeRenderer renderer) {
+		Scene.batch = batch;
+		Scene.renderer = renderer;
 	}
 	
 	/**
@@ -72,10 +76,12 @@ public abstract class Scene {
 		}
 	}
 	
-	/** Call everytime when scene is changed to. Call before {@link #update(float)} and {@link #draw(float)}. */
+	/** Call every time when scene is changed to. Call before {@link #update(float)} and {@link #draw(float)}. */
 	public abstract void change();
 	/** Update scene. */
 	public abstract void update(float deltatime);
+	/** Update scene with fixed time. */
+	public void updateFixed(float fixedtime) { }
 	/** Draw scene. */
 	public abstract void draw(float deltatime);
 	/** Destroy scene. */

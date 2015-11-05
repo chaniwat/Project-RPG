@@ -8,14 +8,11 @@ import com.badlogic.gdx.utils.Disposable;
  */
 public abstract class Manager implements Disposable{
 
-	/**
-	 * Update the manager.
-	 */
+	/** Update the manager. */
 	public abstract void update(float deltaTime);
-	
-	/**
-	 * Release the resource.
-	 */
+	/** Update the manager with fixed time step. */
+	public void updateFixed(float fixedTime) { }
+	/** Release the resource. */
 	public abstract void dispose();
 	
 }

@@ -31,68 +31,30 @@
 			<textureregions>
 				<region position="ALL">boxEmpty</region>
 			</textureregions>
-			<behavior>solid</behavior>
-		</structure>
-		<structure>
-			<name>debug_box2</name>
-			<positionx>5</positionx>
-			<positiony>2</positiony>
-			<width>1</width>
-			<height>1</height>
-			<textureregions>
-				<region position="ALL">boxEmpty</region>
-			</textureregions>
-			<behavior>solid</behavior>
-		</structure>
-		<structure>
-			<name>platform1</name>
-			<positionx>6</positionx>
-			<positiony>3</positiony>
-			<width>5</width>
-			<height>1</height>
-			<textureregions>
-				<region position="ALL">castleMid</region>
-			</textureregions>
-			<behavior>solid</behavior>
 		</structure>
 		<structure>
 			<name>ladder1</name>
 			<positionx>11</positionx>
-			<positiony>3</positiony>
+			<positiony>1</positiony>
 			<width>1</width>
-			<height>3</height>
+			<height>1</height>
 			<textureregions>
 				<region position="Top">ladder_top</region>
 				<region position="MiddleHorizontal">ladder_mid</region>
 				<region position="Bottom">ladder_mid</region>
 			</textureregions>
-			<behavior>clumbable</behavior>
 		</structure>
 		<structure>
 			<name>highground1</name>
 			<positionx>12</positionx>
-			<positiony>3</positiony>
+			<positiony>1</positiony>
 			<width>12</width>
-			<height>3</height>
+			<height>1</height>
 			<textureregions>
 				<region position="Top">castleMid</region>
 				<region position="MiddleHorizontal">castleCenter</region>
 				<region position="Bottom">castleCenter</region>
 			</textureregions>
-			<behavior>solid</behavior>
-		</structure>
-		<structure>
-			<name>ladder2</name>
-			<positionx>24</positionx>
-			<positiony>3</positiony>
-			<width>1</width>
-			<height>3</height>
-			<textureregions>
-				<region position="Top">ladder_top</region>
-				<region position="MiddleHorizontal">ladder_mid</region>
-				<region position="Bottom">ladder_mid</region>
-			</textureregions>
-			<behavior>clumbable</behavior>
 		</structure>
 		<structure>
 			<name>box1</name>
@@ -103,7 +65,6 @@
 			<textureregions>
 				<region position="ALL">boxAlt</region>
 			</textureregions>
-			<behavior>solid</behavior>
 		</structure>
 		<structure>
 			<name>box2</name>
@@ -115,7 +76,6 @@
 				<region position="Top">boxAlt</region>
 				<region position="Bottom">boxEmpty</region>
 			</textureregions>
-			<behavior>solid</behavior>
 		</structure>
 		<structure>
 			<name>box3</name>
@@ -126,7 +86,6 @@
 			<textureregions>
 				<region position="ALL">boxAlt</region>
 			</textureregions>
-			<behavior>solid</behavior>
 		</structure>
 		<structure>
 			<name>box4</name>
@@ -137,7 +96,6 @@
 			<textureregions>
 				<region position="ALL">boxAlt</region>
 			</textureregions>
-			<behavior>solid</behavior>
 		</structure>
 		<structure>
 			<name>box5</name>
@@ -148,7 +106,6 @@
 			<textureregions>
 				<region position="ALL">boxAlt</region>
 			</textureregions>
-			<behavior>solid</behavior>
 		</structure>
 		<structure>
 			<name>minihighground1</name>
@@ -161,7 +118,6 @@
 				<region position="MiddleVertical">grassMid</region>
 				<region position="Right">grassCliffRightAlt</region>
 			</textureregions>
-			<behavior>solid</behavior>
 		</structure>
 	</structures>
 	

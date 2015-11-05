@@ -19,16 +19,14 @@ import com.skyhouse.projectrpg.spriter.SpriterPlayer;
  * Manage and control the game state and logic.
  * @author Meranote
  */
-public class GameManager extends Manager{
+public class GameManager extends Manager {
 	
 	private MapManager mapmanager;
 	private EntityManager entitymanager;
 	private InputData inputData;
 	private World world;
 	private String currentInstance;
-	private int playerCharacter = 0;
-	private double accumulator;
-    private float step = 1.0f / 60.0f;
+	private int uid = 0;
 	
     /**
      * Construct a new {@link GameManager} class.
@@ -38,32 +36,29 @@ public class GameManager extends Manager{
     	entitymanager = new EntityManager();
     	inputData = new InputData();
     	world = new World(new Vector2(0, -10f), true);
-    	ProjectRPG.Client.inputmanager.addInputProcessor(new GameplayInputListener(inputData));
-    	ProjectRPG.Client.inputmanager.addControllerProcessor(new GameplayControllerListener(inputData));
+    	ProjectRPG.client.inputmanager.addInputProcessor(new GameplayInputListener(inputData));
+    	ProjectRPG.client.inputmanager.addControllerProcessor(new GameplayControllerListener(inputData));
     }
     
 	@Override
 	public void update(float deltaTime) {
-		if(ProjectRPG.Client.network.net.isConnected() && playerCharacter == 0) {
-			playerCharacter = ProjectRPG.Client.network.net.getID();
+		if(uid != 0) {			
+			mapmanager.update(deltaTime);
+			
+			if(getPlayerCharacter() != null) {
+				getPlayerCharacter().updateCharacterByInputData(inputData);
+				UpdateRequest request = new UpdateRequest();
+				request.input = inputData;
+				request.currentInstance = currentInstance;
+				ProjectRPG.client.network.net.sendUDP(request);
+			}
 		}
-		
-		mapmanager.update(deltaTime);
-		
-		if(getPlayerCharacter() != null) {
-			getPlayerCharacter().updateCharacterByInputData(inputData);
-			UpdateRequest request = new UpdateRequest();
-			request.input = inputData;
-			request.currentInstance = currentInstance;
-			ProjectRPG.Client.network.net.sendUDP(request);
-		}
-
-        accumulator += deltaTime;
-        while(accumulator >= step) {
-			world.step(step, 8, 3);
-			entitymanager.update(step);
-			accumulator -= step;
-        }
+	}
+	
+	@Override
+	public void updateFixed(float fixedTime) {
+		world.step(fixedTime, 8, 3);
+		entitymanager.update(fixedTime);
 	}
 	
 	/**
@@ -74,7 +69,7 @@ public class GameManager extends Manager{
 		for(Entry<Integer, CharacterData> entry : data.entrySet()) {
 			if(entitymanager.getAllCharacter().get(entry.getKey()) == null) {
 				entitymanager.addCharacter(entry.getKey(), entry.getValue(), new SpriterPlayer("entity/GreyGuy/player.scml"));
-			} else if(entry.getKey() == playerCharacter) continue;
+			} else if(entry.getKey() == uid) continue;
 			entitymanager.getAllCharacter().get(entry.getKey()).updateCharacterByData(entry.getValue());
 		}
 	}
@@ -132,7 +127,7 @@ public class GameManager extends Manager{
 	 * @return {@link Character}
 	 */
 	public Character getPlayerCharacter() {
-		return entitymanager.getCharacter(playerCharacter);
+		return entitymanager.getCharacter(uid);
 	}
 	
 	@Override

@@ -1,15 +1,12 @@
 package com.skyhouse.projectrpg.net.listeners;
 
-import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.skyhouse.projectrpg.ProjectRPG;
-import com.skyhouse.projectrpg.ProjectRPGServer;
-import com.skyhouse.projectrpg.data.CharacterData;
-import com.skyhouse.projectrpg.manager.GameManager;
-import com.skyhouse.projectrpg.net.packets.InitialRequest;
-import com.skyhouse.projectrpg.net.packets.InitialResponse;
-import com.skyhouse.projectrpg.spriter.SpriterPlayer;
+import com.skyhouse.projectrpg.net.packets.CharacterRequest;
+import com.skyhouse.projectrpg.net.packets.LoginRequest;
+import com.skyhouse.projectrpg.net.packets.LoginResponse;
+import com.skyhouse.projectrpg.scene.HomeScene;
 
 /**
  * Login listener.
@@ -25,43 +22,23 @@ public class LoginListener {
 	 */
 	public static class Client extends Listener {
 		
-		/*
-		@Override
-		public void received(final Connection connection, Object object) {
-			if(object instanceof InitialResponse) {
-				final InitialResponse response = ((InitialResponse)object);
-				final CharacterData data = response.data;
-				Gdx.app.postRunnable(new Runnable() {
-					
-					@Override
-					public void run() {
-						GameManager manager = ProjectRPG.Client.gamemanager;
-						manager.getMapManager().addMap(response.pathToMap, manager.getWorld());
-						manager.getEntityManager().addCharacter(connection.getID(), data, new SpriterPlayer("entity/GreyGuy/player.scml"), manager.getWorld());
-						manager.setCurrentInstance(response.instance);
-					}
-					
-				});
-			}
-		}
-		*/
-		
 		@Override
 		public void received(Connection connection, Object object) {
-			if(object instanceof InitialResponse) {
-				InitialResponse response = (InitialResponse)object;
-				switch(response.state) {
-					case 1:
-						Gdx.app.log("LOGIN", "Success");
-						break;
-					case -1:
-						Gdx.app.log("LOGIN", "Failed");
-						break;
-				}
+			if(object instanceof LoginResponse) {
+				LoginResponse response = (LoginResponse)object;
+				if(response.uid >= 1) requestCharacter(response.uid);
+				else if(response.uid == -1) ProjectRPG.client.scenemanager.getScene(HomeScene.class).showErrorDialog("Incorrect username or password.");
 			}
+		}
+		
+		private void requestCharacter(int uid) {
+			CharacterRequest request = new CharacterRequest();
+			request.uid = uid;
+			ProjectRPG.client.network.net.sendTCP(request);
 		}
 		
 	}
+	
 	
 	/**
 	 * Login listener for server-side.
@@ -69,28 +46,13 @@ public class LoginListener {
 	 */
 	public static class Server extends Listener {
 		
-		/*
 		@Override
 		public void received(Connection connection, Object object) {
-			if(object instanceof InitialRequest) {
-				CharacterData data = new CharacterData();
-				data.x = (float)((Math.random() * 7) + 5);
-				data.y = 8f;
-				ProjectRPG.Server.instances.get("TestLevel").addCharacter(connection.getID(), data);
-				InitialResponse response = new InitialResponse();
-				response.data = data;
-				response.instance = "TestLevel";
-				response.pathToMap = "mapdata/L01.map";
-				connection.sendTCP(response);
-			}
-		}
-		*/
-		
-		@Override
-		public void received(Connection connection, Object object) {
-			if(object instanceof InitialRequest) {
-				InitialRequest request = (InitialRequest)object;
-				ProjectRPG.Server.database.member.login(connection.getID(), request.username, request.password);
+			if(object instanceof LoginRequest) {
+				LoginRequest request = (LoginRequest)object;
+				LoginResponse response = new LoginResponse();
+				response.uid = ProjectRPG.server.database.game.getLogin(request.username, request.password); 
+				ProjectRPG.server.net.sendToTCP(connection.getID(), response);
 			}
 		}
 		
