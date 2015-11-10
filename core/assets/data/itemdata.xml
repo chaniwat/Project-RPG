@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<items>
+  <item>
+    <id>1</id>
+    <type>POTION</type>
+    <name>minor healing potion</name>
+    <maxstack>100</maxstack>
+    <requirelv>0</requirelv>
+    <description>A simple healing potion</description>
+    <icon>potion/potionicon.png</icon>
+    <sprite>potion/potionicon.png</sprite>
+    <properties>
+      <heal>100</heal>
+      <damage>0</damage>
+      <defense>0</defense>
+    </properties>
+  </item>
+  <item>
+    <id>2</id>
+    <type>SWORD</type>
+    <name>Tester sword</name>
+    <maxstack>1</maxstack>
+    <requirelv>0</requirelv>
+    <description>Tester sword for testing xml</description>
+    <icon>sword/test.png</icon>
+    <sprite>sword/test_sprite.png</sprite>
+    <properties>
+      <heal>0</heal>
+      <damage>20</damage>
+      <defense>0</defense>
+    </properties>
+  </item>
+</items>

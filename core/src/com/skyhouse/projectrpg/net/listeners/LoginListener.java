@@ -26,8 +26,12 @@ public class LoginListener {
 		public void received(Connection connection, Object object) {
 			if(object instanceof LoginResponse) {
 				LoginResponse response = (LoginResponse)object;
-				if(response.uid >= 1) requestCharacter(response.uid);
-				else if(response.uid == -1) ProjectRPG.client.scenemanager.getScene(HomeScene.class).showErrorDialog("Incorrect username or password.");
+				if(response.uid >= 1) {
+					ProjectRPG.client.gamemanager.setUID(response.uid);
+					requestCharacter(response.uid);
+				}
+				else if(response.uid == -1) ProjectRPG.client.scenemanager.getScene(HomeScene.class).showErrorDialog("ไอดีหรือรหัสผ่านผิดหลาด");
+				else if(response.uid == -2) ProjectRPG.client.scenemanager.getScene(HomeScene.class).showErrorDialog("มีการลงชื่อเข้าใช้ระบบอยู่");
 			}
 		}
 		
@@ -51,7 +55,8 @@ public class LoginListener {
 			if(object instanceof LoginRequest) {
 				LoginRequest request = (LoginRequest)object;
 				LoginResponse response = new LoginResponse();
-				response.uid = ProjectRPG.server.database.game.getLogin(request.username, request.password); 
+				response.uid = ProjectRPG.server.database.game.getLogin(request.username, request.password);
+				if(ProjectRPG.server.system.playermanagement.isUserLogin(response.uid)) response.uid = -2;
 				ProjectRPG.server.net.sendToTCP(connection.getID(), response);
 			}
 		}

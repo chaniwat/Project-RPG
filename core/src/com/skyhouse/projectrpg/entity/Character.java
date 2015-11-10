@@ -2,9 +2,9 @@ package com.skyhouse.projectrpg.entity;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
+import com.skyhouse.projectrpg.data.ActorData.ActionState;
 import com.skyhouse.projectrpg.data.CharacterData;
 import com.skyhouse.projectrpg.data.InputData;
-import com.skyhouse.projectrpg.data.Data.ActionState;
 import com.skyhouse.projectrpg.physics.B2DCharacter;
 import com.skyhouse.projectrpg.spriter.SpriterPlayer;
 

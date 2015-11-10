@@ -11,6 +11,7 @@ import net.dermetfan.utils.ArrayUtils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
@@ -31,7 +32,7 @@ public class MapData extends Data {
 	 * @author Meranote
 	 */
 	public static enum MapType {
-		WORLD, DUNGEON, PVP
+		TOWN, DUNGEON, PVP
 	}
 	
 	/**
@@ -44,6 +45,7 @@ public class MapData extends Data {
 	
 	public String path;
 	public String name;
+	public Vector2 spawningPoint;
 	public int mapWidth, mapHeight;
 	public MapType type;
 	public String mapTexturePackPath, mapBackgroundPath;
@@ -77,8 +79,6 @@ public class MapData extends Data {
 		getNPCData(root);
 		
 		calculateMapSize();
-		
-		if(type.equals(MapType.WORLD)) getConnection(root);
 	}
 	
 	/**
@@ -90,6 +90,9 @@ public class MapData extends Data {
 		type = MapType.valueOf(data.getChildByName("type").getText().toUpperCase());
 		mapTexturePackPath = "texture/structure/" + data.getChildByName("texture").getText() + ".pack";
 		mapBackgroundPath = "texture/background/" + data.getChildByName("background").getText() + ".png";
+		
+		Element spawnpoint = data.getChildByName("spawnpoint");
+		spawningPoint = new Vector2(Float.parseFloat(spawnpoint.getChildByName("x").getText()), Float.parseFloat(spawnpoint.getChildByName("y").getText()));
 	}
 	
 	/**
@@ -123,13 +126,6 @@ public class MapData extends Data {
 	 * Create a collection of NPC data.
 	 */
 	private void getNPCData(Element root) {
-		
-	}
-	
-	/**
-	 * Create a collection of connection data.
-	 */
-	private void getConnection(Element root) {
 		
 	}
 	

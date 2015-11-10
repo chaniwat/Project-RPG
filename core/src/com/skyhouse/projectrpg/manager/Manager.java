@@ -6,7 +6,7 @@ import com.badlogic.gdx.utils.Disposable;
  * Abstract class manager.
  * @author Meranote
  */
-public abstract class Manager implements Disposable{
+public abstract class Manager implements Disposable {
 
 	/** Update the manager. */
 	public abstract void update(float deltaTime);

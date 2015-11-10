@@ -6,7 +6,7 @@ import java.sql.Connection;
 
 import com.badlogic.gdx.Gdx;
 import com.mysql.jdbc.Driver;
-import com.skyhouse.projectrpg.net.database.utils.GameDatabaseUtils;
+import com.skyhouse.projectrpg.net.database.utils.PlayerDatabaseUtils;
 
 /**
  * Database.
@@ -16,26 +16,29 @@ public class Database {
 	
 	private Connection connection;
 	
-	public GameDatabaseUtils game;
+	public PlayerDatabaseUtils game;
+	
+	private static final String DEFAULTURL = "jdbc:mysql://188.166.232.27/projectrpg";
+	private static final String DEFAULTUSERNAME = "root";
+	private static final String DEFAULTPASSWORD = "projectrpg00";
 	
 	/**
 	 * Construct connection to database.
 	 */
 	public Database() {
-		String url = "jdbc:mysql://188.166.232.27/projectrpg";
-		String username = "root";
-		String password = "projectrpg00";
+		
+		// TODO read config.ini
 		
 		try {
 			Driver myDriver = new Driver();
 			DriverManager.registerDriver(myDriver);
-			connection = DriverManager.getConnection(url, username, password);
+			connection = DriverManager.getConnection(DEFAULTURL, DEFAULTUSERNAME, DEFAULTPASSWORD);
 			Gdx.app.log("DEBUG", "Database connected!");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
-		game = new GameDatabaseUtils(connection);
+		game = new PlayerDatabaseUtils(connection);
 	}
 	
 	/**

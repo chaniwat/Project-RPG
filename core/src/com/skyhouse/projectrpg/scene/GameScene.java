@@ -1,7 +1,6 @@
 package com.skyhouse.projectrpg.scene;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -14,7 +13,6 @@ import com.skyhouse.projectrpg.graphics.viewports.GameplayViewport;
 import com.skyhouse.projectrpg.input.listener.GameplayControllerListener;
 import com.skyhouse.projectrpg.input.listener.GameplayInputListener;
 import com.skyhouse.projectrpg.manager.GameManager;
-import com.skyhouse.projectrpg.map.Map;
 
 /**
  * Game scene. <br>
@@ -33,9 +31,7 @@ public class GameScene extends Scene {
 	 * Construct a new game scene.
 	 */
 	public GameScene() {
-		font = ProjectRPG.client.assetmanager.get("font/Roboto-Regular.ttf", BitmapFont.class);
-		font.getData().markupEnabled = true;
-		font.setColor(Color.BLACK);
+		font = ProjectRPG.client.graphic.font.regular;
 		addViewport(new GameplayViewport(16f));
 		addViewport(new ScreenViewport());
 	}
@@ -48,13 +44,12 @@ public class GameScene extends Scene {
 
 	@Override
 	public void update(float deltatime) {
-		updateBackground();
-		
-		if(manager.getPlayerCharacter() != null) {
-			getViewport(GameplayViewport.class).setViewCenterToCharacter(manager.getPlayerCharacter(), 0, 1.5f);
-			background.setPosition(
-					-(background.getWidth() / 2f) + (manager.getPlayerCharacter().getData().x * 0.35f), 
-					-2f + (manager.getPlayerCharacter().getData().y * 0.35f));
+		if(manager.isGameReady()) {
+			if(manager.getPlayerCharacter() != null) {
+				getViewport(GameplayViewport.class).setViewCenterToCharacter(manager.getPlayerCharacter(), 0, 1.5f);
+			}
+			
+			updateBackground();
 		}
 	}
 	
@@ -62,21 +57,26 @@ public class GameScene extends Scene {
 	 * Update background to current background map.
 	 */
 	private void updateBackground() {
-		if((background.getTexture() == null || !background.getTexture().equals(manager.getCurrentMap().getBackground())) && manager.getCurrentMap() != null) {
-			float baseHeight = 17f;
+		if((background.getTexture() == null || !background.getTexture().equals(manager.getCurrentMap().getBackground())) && manager.getMapManager().isMapReady()) {
+			float baseHeight = getViewport(GameplayViewport.class).getWorldHeight();
 			Texture t = manager.getCurrentMap().getBackground();
 			background.setRegion(t);
 			background.setSize(baseHeight * (t.getWidth()/t.getHeight()), baseHeight);
-			background.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);			
+			background.getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);	
 		}
+		
+		background.setPosition(0, 0);
 	}
 	
 	@Override
 	public void draw(float deltatime) {
-		if(manager.getEntityManager().getAllCharacter().isEmpty() || manager.getMapManager().getAllMap().isEmpty()) return;
-		drawEntities();
-		drawGUI();
-		b2ddebug.render(manager.getWorld(), getViewport(GameplayViewport.class).getCamera().combined);
+		if(manager.isGameReady()) {
+			drawEntities();
+			drawGUI();
+			
+			b2ddebug.render(manager.getGameWorld(), getViewport(GameplayViewport.class).getCamera().combined);
+		}
+		
 	}
 	
 	/**
@@ -96,9 +96,7 @@ public class GameScene extends Scene {
 		useViewport(GameplayViewport.class);
 		batch.begin();
 			background.draw(batch);
-			for(Map m : manager.getMapManager().getAllMap().values()) {
-				m.draw(batch);
-			}
+			manager.getCurrentMap().draw(batch);
 			for(Character c : manager.getEntityManager().getAllCharacter().values()) {
 				if(c.equals(manager.getPlayerCharacter())) continue;
 				c.draw(batch);
@@ -114,8 +112,8 @@ public class GameScene extends Scene {
 		useViewport(ScreenViewport.class);
 		
 		batch.begin();
-			font.draw(batch, "FPS : "+Gdx.graphics.getFramesPerSecond(), 20, getViewport(ScreenViewport.class).getScreenHeight() - 20);
-			font.draw(batch, "Lantacy : "+ProjectRPG.client.network.net.getReturnTripTime()+" ms", 20, getViewport(ScreenViewport.class).getScreenHeight() - 40);
+			font.draw(batch, "[BLACK]FPS : "+Gdx.graphics.getFramesPerSecond(), 20, getViewport(ScreenViewport.class).getScreenHeight() - 20);
+			font.draw(batch, "[BLACK]Lantacy : "+ProjectRPG.client.network.net.getReturnTripTime()+" ms", 20, getViewport(ScreenViewport.class).getScreenHeight() - 40);
 		batch.end();
 	}
 	

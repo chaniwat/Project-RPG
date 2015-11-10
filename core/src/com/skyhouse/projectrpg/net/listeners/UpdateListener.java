@@ -34,7 +34,7 @@ public class UpdateListener {
 					
 					@Override
 					public void run() {
-						gamemanager.updateAllCharacter(response.data);
+						gamemanager.getEntityManager().updateAllCharacter(gamemanager.getUID(), response.data, false);
 					}
 					
 				});

@@ -1,102 +1,68 @@
 package com.skyhouse.projectrpg.manager;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.map.Map;
 import com.skyhouse.projectrpg.utils.asset.loader.MapLoader.MapLoaderParameter;
 
 /**
- * Manage map. Contain the collection of {@link Map}.
+ * Manage map.
  * @author Meranote
  */
 public class MapManager extends Manager {
 
 	private AssetManager assetmanager = ProjectRPG.client.assetmanager;
-	private ArrayList<String> loadingMapPath = new ArrayList<String>();
-	private ArrayList<String> finishLoadMapPath = new ArrayList<String>();
-	private HashMap<String, Map> maps = new HashMap<String, Map>();
+	
+	private String pathtomap = "";
+	private Map map;
+	private boolean isMapReady = false;
 	
 	@Override
 	public void update(float deltaTime) {
-		for(String path : loadingMapPath) {
-			if(assetmanager.isLoaded(path)) {
-				Map m = assetmanager.get(path, Map.class);
-				if(maps.containsKey(m.getData().name)) {
-					throw new GdxRuntimeException("duplicate map name found. exit.");
-				} else {
-					maps.put(m.getData().name, m);					
-				}
-				finishLoadMapPath.add(path);
-			}
+		if(assetmanager.isLoaded(pathtomap) && isMapReady == false) {
+			map = assetmanager.get(pathtomap, Map.class);
+			isMapReady = true;
 		}
-		while(!finishLoadMapPath.isEmpty()) loadingMapPath.remove(finishLoadMapPath.remove(0));
 	}
 	
+	@Override
+	public void dispose() {
+		if(isMapReady) {
+			assetmanager.unload(pathtomap);
+		}
+	}
+
 	/**
-	 * Add new map .
+	 * Change map.
 	 */
-	public void addMap(String pathToMap, World world) {
-		if(assetmanager.isLoaded(pathToMap)) {
-			Gdx.app.log(ProjectRPG.TITLE, "already load this map.");
-			return;
+	public void changeMap(String pathtomap, World world) {
+		if(this.pathtomap != "") {
+			assetmanager.unload(this.pathtomap);
 		}
-		if(loadingMapPath.contains(pathToMap)) {
-			Gdx.app.log(ProjectRPG.TITLE, "this map is in loading queue.");
-			return;
-		}
+		isMapReady = false;
+		this.pathtomap = pathtomap;
 		MapLoaderParameter params = new MapLoaderParameter();
 		params.world = world;
-		assetmanager.load(pathToMap, Map.class, params);
-		loadingMapPath.add(pathToMap);
+		assetmanager.load(pathtomap, Map.class, params);
 	}
 	
 	/**
 	 * Get the map by given map name.
 	 * @return {@link Map}
 	 */
-	public Map getMap(String name) {
-		if(!maps.containsKey(name)) {
-			assetmanager.finishLoadingAsset(loadingMapPath.get(loadingMapPath.size() - 1));
-			loadingMapPath.clear();
-		}
-		if(!maps.containsKey(name)) throw new GdxRuntimeException("No given map added.");
-		return maps.get(name);
+	public Map getCurrentMap() {
+		if(isMapReady) return map;
+		else return null;
 	}
 	
 	/**
-	 * Return the collection of {@link Map}. <br>
-	 * <b>Key is represent to map name</b>
-	 * @return {@link HashMap}<{@link String}, {@link Map}>
+	 * Check the map that was loaded or not.
+	 * @return
 	 */
-	public HashMap<String, Map> getAllMap() {
-		if(!loadingMapPath.isEmpty()) {
-			assetmanager.finishLoadingAsset(loadingMapPath.get(loadingMapPath.size() - 1));
-			loadingMapPath.clear();
-		}
-		return maps;
-	}
-	
-	/**
-	 * Remove the map by given map name.
-	 * @param name
-	 */
-	public void removeMap(String name) {
-		maps.get(name).dispose();
-	}
-
-	@Override
-	public void dispose() {
-		if(!loadingMapPath.isEmpty()) {
-			assetmanager.finishLoadingAsset(loadingMapPath.get(loadingMapPath.size() - 1));
-			loadingMapPath.clear();
-		}
-		maps.clear();
+	public boolean isMapReady() {
+		return isMapReady;
 	}
 	
 }

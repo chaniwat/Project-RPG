@@ -1,6 +1,6 @@
 package com.skyhouse.projectrpg.data;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Inventory data.
@@ -9,13 +9,21 @@ import java.util.ArrayList;
 public class InventoryData {
 	
 	public int money;
-	public ArrayList<Integer> inventory;
+	/**
+	 * Key is <b>position</b>, value is <b>item id</b>.
+	 */
+	public HashMap<Integer, Integer> itemPosition;
+	/**
+	 * Key is <b>position</b>, value is <b>quantity</b>.
+	 */
+	public HashMap<Integer, Integer> itemQuantity;
 	
 	/**
 	 * Construct a new InventoryData.
 	 */
 	public InventoryData() {
-		inventory = new ArrayList<Integer>();
+		itemPosition = new HashMap<Integer, Integer>();
+		itemQuantity = new HashMap<Integer, Integer>();
 	}
 
 }

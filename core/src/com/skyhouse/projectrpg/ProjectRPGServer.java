@@ -9,15 +9,16 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Server;
+import com.esotericsoftware.minlog.Log;
 import com.skyhouse.projectrpg.data.MapData;
 import com.skyhouse.projectrpg.net.database.Database;
 import com.skyhouse.projectrpg.net.instance.Instance;
+import com.skyhouse.projectrpg.net.instance.TownInstance;
 import com.skyhouse.projectrpg.net.listeners.CommandThread;
-import com.skyhouse.projectrpg.net.listeners.DisconnectListener;
 import com.skyhouse.projectrpg.net.listeners.GameDataListener;
 import com.skyhouse.projectrpg.net.listeners.LoginListener;
-import com.skyhouse.projectrpg.net.listeners.UpdateListener;
 import com.skyhouse.projectrpg.net.utils.NetworkUtils;
+import com.skyhouse.projectrpg.server.system.PlayerManagementSystem;
 
 /**
  * Server class of ProjectRPG.
@@ -27,14 +28,21 @@ public class ProjectRPGServer extends ApplicationAdapter {
 	
 	private Server server;
 	private boolean serverRunning;
+	
+	// System
+	private PlayerManagementSystem playermanagement;
+	
+	private TownInstance townInstance;
 	public static HashMap<String, Instance> instances;
 	private ArrayList<String> finishInstances;
-	
-	private Database database;
-	private CommandThread commandListener;
 		
+	private CommandThread commandListener;
+	private Database database;
+	
 	@Override
 	public void create() {
+		Log.set(Log.LEVEL_NONE);
+		
 		instances = new HashMap<String, Instance>();
 		finishInstances = new ArrayList<String>();
 		
@@ -57,19 +65,28 @@ public class ProjectRPGServer extends ApplicationAdapter {
 		database = new Database();
 		ProjectRPG.server.database = database;
 		
+		playermanagement = new PlayerManagementSystem();
+		ProjectRPG.server.system.playermanagement = playermanagement;
+		
 		server.addListener(new LoginListener.Server());
 		server.addListener(new GameDataListener.Server());
-		server.addListener(new DisconnectListener.Server());
-		server.addListener(new UpdateListener.Server());
 		
 		commandListener = new CommandThread();
 		commandListener.start();
 		
-		// New Instance
-		MapData data = new MapData(Gdx.files.internal("mapdata/L01.map"));
+		// TODO Make Town instance (Central instance)
+		townInstance = new TownInstance();
+		ProjectRPG.server.townInstance = townInstance;
 		
-		instances.put(data.name, new Instance(data.name, data));
-		instances.get(data.name).start();
+		instances.put(townInstance.getName(), townInstance);
+		townInstance.start();
+		
+		// New Instance
+//		MapData data = new MapData(Gdx.files.internal("mapdata/L01.map"));
+
+//		Instance instance = new Instance(data.name, data);
+//		instances.put(instance.getName(), instance);
+//		instance.start();
 	}
 
 	@Override

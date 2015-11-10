@@ -153,5 +153,19 @@ public class Instance extends Thread {
 			}
 		});
 	}
+	
+	/**
+	 * Get spawn position of this map.
+	 */
+	public Vector2 getSpawningPoint() {
+		return mapData.spawningPoint;
+	}
+	
+	/**
+	 * Get path to map file.
+	 */
+	public String getMapPath() {
+		return mapData.path;
+	}
 
 }

@@ -5,8 +5,8 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.skyhouse.projectrpg.data.ActorData.ActionState;
 import com.skyhouse.projectrpg.data.CharacterData;
-import com.skyhouse.projectrpg.data.Data.ActionState;
 import com.skyhouse.projectrpg.data.InputData;
 
 /**

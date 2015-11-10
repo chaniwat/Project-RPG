@@ -1,6 +1,7 @@
 package com.skyhouse.projectrpg.manager;
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import com.badlogic.gdx.physics.box2d.World;
 import com.skyhouse.projectrpg.data.CharacterData;
@@ -31,9 +32,6 @@ public class EntityManager extends Manager {
 	
 	/**
 	 * Add a new non-controllable character.
-	 * @param id
-	 * @param data
-	 * @param player
 	 */
 	public void addCharacter(int id, CharacterData data, SpriterPlayer player) {
 		addCharacter(id, data, player, null);
@@ -41,18 +39,11 @@ public class EntityManager extends Manager {
 	
 	/**
 	 * Add a new controllable character by given world.
-	 * @param id
-	 * @param data
-	 * @param player
-	 * @param world
 	 */
 	public void addCharacter(int id, CharacterData data, SpriterPlayer player, World world) {
 		Character c;
-		if(world == null) {
-			c = new Character(player, data);
-		} else {
-			c = new Character(world, player, data);
-		}
+		if(world == null) c = new Character(player, data);
+		else c = new Character(world, player, data);
 		characters.put(id, c);
 	}
 	
@@ -79,10 +70,32 @@ public class EntityManager extends Manager {
 	public void removeCharacter(int id) {
 		characters.remove(id).dispose();
 	}
+	
+	/**
+	 * Update all character by data that receive from current instance.
+	 * @param uid
+	 * @param data
+	 * @param syncCharacterPlayer need to update player character?
+	 */
+	public void updateAllCharacter(int uid, HashMap<Integer, CharacterData> data, boolean syncCharacterPlayer) {
+		for(Entry<Integer, CharacterData> entry : data.entrySet()) {
+			if(getAllCharacter().get(entry.getKey()) == null) {
+				addCharacter(entry.getKey(), entry.getValue(), new SpriterPlayer("entity/GreyGuy/player.scml"));
+			} else if(entry.getKey() == uid) continue;
+			getAllCharacter().get(entry.getKey()).updateCharacterByData(entry.getValue());
+		}
+	}
 
 	@Override
 	public void dispose() {
 		characters.clear();
+	}
+	
+	/**
+	 * Check all entity that loaded and ready.
+	 */
+	public boolean isEntityReady() {
+		return !getAllCharacter().isEmpty();
 	}
 
 }

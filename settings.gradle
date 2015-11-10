@@ -1,1 +1,1 @@
-include 'mapeditor', 'server', 'desktop', 'core', 'spriter'
+include 'itemeditor', 'mapeditor', 'server', 'desktop', 'core', 'spriter'

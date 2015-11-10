@@ -3,9 +3,13 @@
 	
 	<mapdata>
 		<name>TestLevel</name>
-		<type>World</type>
+		<type>Town</type>
 		<texture>greenland</texture>
 		<background>background</background>
+		<spawnpoint>
+			<x>5</x>
+			<y>6</y>
+		</spawnpoint>
 	</mapdata>
 	
 	<structures>
@@ -172,13 +176,5 @@
 	<npcs>
 		
 	</npcs>
-	
-	<connections>
-		<connection>
-			<pathtomap>L02</pathtomap> <!-- store in "assets/mapdata/" -->
-			<offsetx>70</offsetx>
-			<offsety>0</offsety>
-		</connection>
-	</connections>
 	
 </map>

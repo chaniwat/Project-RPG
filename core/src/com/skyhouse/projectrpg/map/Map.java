@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Disposable;
 import com.skyhouse.projectrpg.data.MapData;
 import com.skyhouse.projectrpg.data.StructureData;
 import com.skyhouse.projectrpg.data.MapData.MapStructureTexture;
@@ -19,7 +20,7 @@ import com.skyhouse.projectrpg.graphics.TileTexture.TileTexturePosition;
  * Map. Contain map data and collection of {@link Structure}.
  * @author Meranote
  */
-public class Map {
+public class Map implements Disposable {
 
 	private MapData data;
 	private HashMap<String, Structure> structures;
@@ -86,6 +87,7 @@ public class Map {
 	/**
 	 * Release the resource.
 	 */
+	@Override
 	public void dispose() {
 		for(Structure structure : structures.values()) {
 			structure.dispose();

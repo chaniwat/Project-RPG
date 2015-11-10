@@ -6,6 +6,10 @@
 		<type>World</type>
 		<texture>TextureFileName</texture> <!-- store in "assets/texture/structure/" -->
 		<background>BackgroudFileName</background> <!-- store in "assets/texture/background/" -->
+		<spawnpoint>
+			<x></x>
+			<y></y>
+		</spawnpoint>
 	</mapdata>
 	
 	<structures>
@@ -87,13 +91,5 @@
 			<positiony>0</positiony>
 		</npc>
 	</npcs>
-	
-	<connections>
-		<connection>
-			<pathtomap>L02</pathtomap> <!-- store in "assets/mapdata/" -->
-			<offsetx></offsetx>
-			<offsety></offsety>
-		</connection>
-	</connections>
 	
 </map>

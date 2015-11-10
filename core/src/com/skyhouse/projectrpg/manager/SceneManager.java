@@ -86,7 +86,7 @@ public class SceneManager {
 			Gdx.app.error(ProjectRPG.TITLE, "Cannot delete : no given scene added");
 			return;
 		}
-		scenes.remove(sceneClass);
+		scenes.remove(sceneClass).dispose();
 	}
 	
 	/**
@@ -117,6 +117,7 @@ public class SceneManager {
 	public void update(float deltatime) {
 		if(currentscene == null) throw new GdxRuntimeException("Set scene before call this.");
 		if(isChanged) {
+			scenes.get(currentscene).updateViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			scenes.get(currentscene).change();
 			isChanged = false;
 		}
@@ -128,10 +129,6 @@ public class SceneManager {
 	 */
 	public void updateFixed(float fixedtime) {
 		if(currentscene == null) throw new GdxRuntimeException("Set scene before call this.");
-		if(isChanged) {
-			scenes.get(currentscene).change();
-			isChanged = false;
-		}
 		scenes.get(currentscene).updateFixed(fixedtime);
 	}
 	
