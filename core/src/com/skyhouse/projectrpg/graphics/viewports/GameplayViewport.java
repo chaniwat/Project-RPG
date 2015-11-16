@@ -36,9 +36,14 @@ public class GameplayViewport extends Viewport {
 	/**
 	 * Set the view to the center of character and calculate the correct view with offset value.
 	 */
-	public void setViewCenterToCharacter(Character character, float offsetX, float offsetY) {
+	public void setViewCenterToCharacter(Character character, float offsetX, float offsetY, float maxwidth) {
 		if(!character.equals(null)) {
 				getCamera().position.set(character.getData().x + offsetX, character.getData().y + offsetY, 0.0f);
+				if(getCamera().position.x - (getCamera().viewportWidth / 2f) < 0f) {
+					getCamera().position.x = getCamera().viewportWidth / 2f;
+				} else if(getCamera().position.x + (getCamera().viewportWidth / 2f) > maxwidth) {
+					getCamera().position.x = maxwidth - (getCamera().viewportWidth / 2f);
+				}
 				getCamera().update();
 		}
 	}

@@ -227,7 +227,7 @@ public class MapViewer extends ApplicationAdapter {
 	
 	private void loadMap() {
 		String absolutePath = Gdx.files.getLocalStoragePath().replace("mapeditor\\", "").replace("\\", "/");
-		MapData data = new MapData(Gdx.files.absolute(absolutePath + "core/assets/mapdata/" + mapFileName + ".map"));
+		MapData data = new MapData(Gdx.files.absolute(absolutePath + "core/assets/data/map/" + mapFileName + ".map"));
 		
 		map = new Map(world, data);
 		background = new Sprite(map.getBackground());

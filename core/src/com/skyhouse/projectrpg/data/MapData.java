@@ -2,13 +2,9 @@ package com.skyhouse.projectrpg.data;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 
-import net.dermetfan.utils.ArrayUtils;
-
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
@@ -47,11 +43,13 @@ public class MapData extends Data {
 	public String name;
 	public Vector2 spawningPoint;
 	public int mapWidth, mapHeight;
+	public int mapBottomPoint, mapTopPoint, mapLeftPoint, MapRightPoint;
 	public MapType type;
 	public String mapTexturePackPath, mapBackgroundPath;
 	public HashMap<String, StructureData> structures;
 	public HashMap<String, MapStructureTexture> structureTextureMapper;
 	public HashMap<String, StructureBehavior> structureBehaviorMapper;
+	public ArrayList<NpcData> npcData;
 	
 	/**
 	 * @param handle
@@ -60,6 +58,7 @@ public class MapData extends Data {
 		structures = new HashMap<String, StructureData>();
 		structureTextureMapper = new HashMap<String, MapData.MapStructureTexture>(); 
 		structureBehaviorMapper = new HashMap<String, StructureData.StructureBehavior>();
+		npcData = new ArrayList<NpcData>();
 		
 		// Save internal map path
 		path = handle.path();
@@ -79,6 +78,7 @@ public class MapData extends Data {
 		getNPCData(root);
 		
 		calculateMapSize();
+		calculateMapPoint();
 	}
 	
 	/**
@@ -126,7 +126,13 @@ public class MapData extends Data {
 	 * Create a collection of NPC data.
 	 */
 	private void getNPCData(Element root) {
-		
+		for(Element npc : root.getChildByName("npcs").getChildrenByName("npc")) {
+			NpcData data = new NpcData();
+			data.id = Integer.parseInt(npc.getChildByName("id").getText());
+			data.x = Float.parseFloat(npc.getChildByName("positionx").getText());
+			data.y = Float.parseFloat(npc.getChildByName("positiony").getText());
+			npcData.add(data);
+		}
 	}
 	
 	private void calculateMapSize() {
@@ -150,6 +156,27 @@ public class MapData extends Data {
 		
 		mapWidth = Math.abs(x1.get(0) - x2.get(x2.size() - 1));
 		mapHeight = Math.abs(y1.get(0) - y2.get(y2.size() - 1));
+		
+		mapTopPoint = y2.get(y2.size() - 1);
+		mapBottomPoint = y1.get(0);
+		mapLeftPoint = x1.get(0);
+		MapRightPoint = x2.get(x2.size() - 1);
+	}
+	
+	private void calculateMapPoint() {
+		ArrayList<Integer> x, y;
+		x = new ArrayList<Integer>();
+		y = new ArrayList<Integer>();
+		
+		for(StructureData s : structures.values()) {
+			x.add((int)(s.x));
+			y.add((int)(s.y));
+		}
+		
+		Collections.sort(x);
+		Collections.sort(y);
+		
+		
 	}
 	
 }

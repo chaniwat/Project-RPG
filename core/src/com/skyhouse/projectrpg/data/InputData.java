@@ -6,19 +6,39 @@ package com.skyhouse.projectrpg.data;
  */
 public class InputData extends Data {
 
-	public boolean upPressed = false, 
-				  				 leftPressed = false, 
-				  				 rightPressed = false,
-				  				 bottomPressed = false,
-				  				 jumpPressed = false, 
-				  				 skillAPressed = false, 
-				  				 skillBPressed = false,
-				  				 atkAPressed = false,
-				  				 atkBPressed = false,
-				  				 healPressed = false,
-				  				 swapTrayPressed = false,
-				  				 actionPressed = false;
+	public boolean up = false, 
+				  				 left = false, 
+				  				 right = false,
+				  				 down = false,
+				  				 jump = false, 
+				  				 dash = false,
+				  				 skillA = false, 
+				  				 skillB = false,
+				  				 atkA = false,
+				  				 atkB = false,
+				  				 heal = false,
+				  				 action = false;
 	public float xAxisValue = 0f,
 						  yAxisValue = 0f;
+	
+	/**
+	 * Reset the input data.
+	 */
+	public void reset() {
+		up = false;
+		left = false;
+		right = false;
+		down = false;
+		jump = false; 
+		dash = false;
+		skillA = false;
+		skillB = false;
+		atkA = false;
+		atkB = false;
+		heal = false;
+		action = false;
+		xAxisValue = 0f;
+		yAxisValue = 0f;
+	}
 	
 }

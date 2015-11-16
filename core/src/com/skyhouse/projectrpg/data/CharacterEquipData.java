@@ -15,6 +15,7 @@ public class CharacterEquipData extends Data {
 					   boot = -1, 
 					   neck = -1, 
 					   ear = -1, 
-					   ring = -1;
+					   ring = -1,
+					   potion = -1;
 	
 }

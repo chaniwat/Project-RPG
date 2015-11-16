@@ -2,7 +2,7 @@ package com.skyhouse.projectrpg.data.item;
 
 public class BaseItem {
 	
-	public static enum ItemType {
+	public static enum ItemBaseType {
 		POTION,
 		QUEST,
 		WEAPON,
@@ -12,22 +12,19 @@ public class BaseItem {
 		PANT,
 		GLOVE,
 		BOOT,
-		NECK,
-		EAR,
-		RING,
-		SWORD,
-		BOW,
-		STAFF,
-		SHIELD,
-		QUIVER,
-		BOOK;
+		NECKLACE,
+		EARRING,
+		RING;
 	}
 
-	public int id, maxstack;
+	public int maxstack, requirelevel, requirejob;
+	public ItemBaseType type;
 	public String name, description, pathtoicon, pathtotexture;
+	public int str, agi, intel, damage, defense, heal;
 	
-	public BaseItem(int id) {
-		this.id = id;
+	public BaseItem(String name, ItemBaseType type) {
+		this.name = name;
+		this.type = type;
 	}
 	
 }

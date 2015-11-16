@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.skyhouse.projectrpg.data.StructureData;
+import com.skyhouse.projectrpg.data.StructureData.StructureBehavior;
 import com.skyhouse.projectrpg.graphics.TileTexture;
 import com.skyhouse.projectrpg.physics.B2DStructure;
 
@@ -25,7 +26,13 @@ public class Structure extends Actor {
 	 * @param tiletexture
 	 */
 	public Structure(World world, StructureData data, TileTexture tiletexture) {
-		body = new B2DStructure(world, data, BodyType.StaticBody);
+		if(data.behavior.equals(StructureBehavior.SOLID)) {
+			body = new B2DStructure(world, data, BodyType.StaticBody);
+		} else if(data.behavior.equals(StructureBehavior.CLUMBABLE)) {
+			body = new B2DStructure(world, data, BodyType.KinematicBody);
+		} else {
+			body = null;
+		}
 		this.data = data;
 		this.tiletexture = tiletexture;
 	}
@@ -35,7 +42,7 @@ public class Structure extends Actor {
 	
 	@Override
 	public void draw(SpriteBatch batch) {
-		tiletexture.draw(batch, new Vector2(data.x, data.y), new Vector2(data.width, data.height));
+		if(tiletexture != null) tiletexture.draw(batch, new Vector2(data.x, data.y), new Vector2(data.width, data.height));
 	}
 	
 	/**
@@ -56,7 +63,9 @@ public class Structure extends Actor {
 	
 	@Override
 	public void dispose() {
-		body.dispose();
+		if(!data.behavior.equals(StructureBehavior.NONE)) {
+			body.dispose();
+		}
 	}
 	
 }

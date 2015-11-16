@@ -15,8 +15,10 @@ import com.skyhouse.projectrpg.net.database.Database;
 import com.skyhouse.projectrpg.net.instance.Instance;
 import com.skyhouse.projectrpg.net.instance.TownInstance;
 import com.skyhouse.projectrpg.net.listeners.CommandThread;
+import com.skyhouse.projectrpg.net.listeners.DisconnectListener;
 import com.skyhouse.projectrpg.net.listeners.GameDataListener;
 import com.skyhouse.projectrpg.net.listeners.LoginListener;
+import com.skyhouse.projectrpg.net.listeners.UpdateListener;
 import com.skyhouse.projectrpg.net.utils.NetworkUtils;
 import com.skyhouse.projectrpg.server.system.PlayerManagementSystem;
 
@@ -70,11 +72,12 @@ public class ProjectRPGServer extends ApplicationAdapter {
 		
 		server.addListener(new LoginListener.Server());
 		server.addListener(new GameDataListener.Server());
+		server.addListener(new UpdateListener.Server());
+		server.addListener(new DisconnectListener.Server());
 		
 		commandListener = new CommandThread();
 		commandListener.start();
 		
-		// TODO Make Town instance (Central instance)
 		townInstance = new TownInstance();
 		ProjectRPG.server.townInstance = townInstance;
 		

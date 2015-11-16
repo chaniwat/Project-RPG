@@ -26,12 +26,10 @@ public class DisconnectListener {
 			if(object instanceof DisconnectResponse) {
 				final DisconnectResponse response = (DisconnectResponse)object;
 				Gdx.app.postRunnable(new Runnable() {
-					
 					@Override
 					public void run() {
-						ProjectRPG.client.gamemanager.getEntityManager().removeCharacter(response.connectionid);
+						ProjectRPG.client.gamemanager.getEntityManager().removeCharacter(response.uid);
 					}
-					
 				});
 			}
 		}
@@ -46,12 +44,15 @@ public class DisconnectListener {
 		@Override
 		public void received(Connection connection, Object object) {
 			if(object instanceof DisconnectRequest) {
-				DisconnectRequest request =(DisconnectRequest)object;
-				ProjectRPG.server.instances.get(request.instance).removeCharacter(connection.getID());
 				
-				DisconnectResponse response = new DisconnectResponse();
-				response.connectionid = connection.getID();
-				ProjectRPG.server.net.sendToAllExceptTCP(connection.getID(), response);
+			}
+		}
+		
+		@Override
+		public void disconnected(Connection connection) {
+			if(ProjectRPG.server.system.playermanagement.containConnectionID(connection.getID())) {
+				int uid = ProjectRPG.server.system.playermanagement.getUID(connection.getID());
+				ProjectRPG.server.system.playermanagement.disconnectPlayer(connection.getID());
 			}
 		}
 		

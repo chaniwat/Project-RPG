@@ -10,6 +10,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Server;
@@ -66,11 +67,14 @@ public class ProjectRPG {
 			 * @author Meranote
 			 */
 			public static class font {
+				public static ShaderProgram shader;
 				public static GlyphLayout layout;
-				public static BitmapFont regular;
-				public static BitmapFont smallregular;
-				public static BitmapFont bold;
-				public static BitmapFont smallbold;
+				public static BitmapFont uifont;
+				public static BitmapFont uifontsmall;
+				public static BitmapFont uifontbold;
+				public static BitmapFont uifontsmallbold;
+				public static BitmapFont spritefont;
+				public static BitmapFont spritefontbold;
 			}
 			
 			/**

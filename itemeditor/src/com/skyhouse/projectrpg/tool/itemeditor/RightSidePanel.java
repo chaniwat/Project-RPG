@@ -24,7 +24,7 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
-import com.skyhouse.projectrpg.data.item.BaseItem.ItemType;
+import com.skyhouse.projectrpg.data.item.BaseItem.ItemBaseType;
 
 import layout.SpringUtilities;
 
@@ -175,7 +175,7 @@ public class RightSidePanel extends JPanel {
 	public ItemData updateData() {
 		ItemData data = new ItemData();
 		data.itemid = Integer.parseInt(component.get("id").getText());
-		data.type = ItemType.valueOf((String) combocomponent.getSelectedItem());
+		data.type = ItemBaseType.valueOf((String) combocomponent.getSelectedItem());
 		data.name = component.get("name").getText();
 		data.maxstack = Integer.parseInt(component.get("maxstack").getText());
 		data.requirelevel = Integer.parseInt(component.get("requirelevel").getText());

@@ -27,16 +27,12 @@ public class UpdateListener {
 		@Override
 		public void received(Connection connection, Object object) {
 			if(object instanceof UpdateResponse) {
-				final GameManager gamemanager = ProjectRPG.client.gamemanager;
 				final UpdateResponse response = (UpdateResponse)object;
-				gamemanager.setCurrentInstance(response.currentInstance);
 				Gdx.app.postRunnable(new Runnable() {
-					
 					@Override
 					public void run() {
-						gamemanager.getEntityManager().updateAllCharacter(gamemanager.getUID(), response.data, false);
+						ProjectRPG.client.entitymanager.updateAllCharacter(ProjectRPG.client.gamemanager.getUID(), response.data, false);
 					}
-					
 				});
 			}
 		}
@@ -48,15 +44,13 @@ public class UpdateListener {
 	 * @author Meranote
 	 */
 	public static class Server extends Listener {
-		
 		@Override
 		public void received(Connection connection, Object object) {
 			if(object instanceof UpdateRequest) {
 				UpdateRequest request = (UpdateRequest)object;
-				ProjectRPGServer.instances.get(request.currentInstance).updateCharacter(connection.getID(), request.input);
+				ProjectRPGServer.instances.get(request.currentInstance).updateCharacter(request.uid, request.input);
 			}
 		}
-		
 	}
 	
 }

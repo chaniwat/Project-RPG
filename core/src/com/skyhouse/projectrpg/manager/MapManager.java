@@ -23,6 +23,7 @@ public class MapManager extends Manager {
 	public void update(float deltaTime) {
 		if(assetmanager.isLoaded(pathtomap) && isMapReady == false) {
 			map = assetmanager.get(pathtomap, Map.class);
+			ProjectRPG.client.entitymanager.updateNpc(map.getData().npcData);
 			isMapReady = true;
 		}
 	}

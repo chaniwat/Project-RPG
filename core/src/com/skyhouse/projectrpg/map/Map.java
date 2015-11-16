@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.Disposable;
 import com.skyhouse.projectrpg.data.MapData;
 import com.skyhouse.projectrpg.data.StructureData;
 import com.skyhouse.projectrpg.data.MapData.MapStructureTexture;
+import com.skyhouse.projectrpg.data.StructureData.StructureBehavior;
 import com.skyhouse.projectrpg.entity.Structure;
 import com.skyhouse.projectrpg.graphics.TileTexture;
 import com.skyhouse.projectrpg.graphics.TileTexture.TileTexturePosition;
@@ -53,9 +54,26 @@ public class Map implements Disposable {
 				tiletexture.setRegionPosition(mapTexture.findRegion(region.getValue()), region.getKey());
 			}
 			
+			sData.behavior = StructureBehavior.SOLID;
+			
 			structures.put(sName, new Structure(world, sData, tiletexture));
-
 		}
+		
+		StructureData edgewallleft = new StructureData();
+		edgewallleft.x = -2f;
+		edgewallleft.y = data.mapTopPoint + 10f;
+		edgewallleft.width = 2f;
+		edgewallleft.height = data.mapHeight + 10f;
+		edgewallleft.behavior = StructureBehavior.SOLID;
+		structures.put("edge_wall_left", new Structure(world, edgewallleft, null));
+		
+		StructureData edgewallright = new StructureData();
+		edgewallright.x = data.mapWidth;
+		edgewallright.y = data.mapTopPoint + 10f;
+		edgewallright.width = 2f;
+		edgewallright.height = data.mapHeight + 10f;
+		edgewallright.behavior = StructureBehavior.SOLID;
+		structures.put("edge_wall_right", new Structure(world, edgewallright, null));
 	}
 	
 	/**

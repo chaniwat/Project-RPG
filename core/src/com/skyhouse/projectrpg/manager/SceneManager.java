@@ -18,6 +18,8 @@ public class SceneManager {
 	private Class<? extends Scene> currentscene;
 	private boolean isChanged = false;
 	
+	private float screenwidth, screenheight;
+	
 	/**
 	 * Construct a SceneManager.
 	 */
@@ -90,11 +92,33 @@ public class SceneManager {
 	}
 	
 	/**
-	 * Set current scene.
+	 * Change to given scene in next game loop.
 	 * @param name
 	 */
-	@SuppressWarnings("unchecked")
 	public <T extends Scene> void setUseScene(Class<T> sceneClass) {
+		setUseScene(sceneClass, false);
+	}
+	
+	/**
+	 * Change to given scene in next game loop.
+	 * @param name
+	 * @param initial if this is initial game
+	 */
+	public <T extends Scene> void setUseScene(final Class<T> sceneClass, boolean initial) {
+		if(initial) {
+			changeToScene(sceneClass);
+		} else {
+			Gdx.app.postRunnable(new Runnable() {
+				@Override
+				public void run() {
+					changeToScene(sceneClass);
+				}
+			});
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	private <T extends Scene> void changeToScene(final Class<T> sceneClass) {
 		currentscene = sceneClass;
 		T o = (T)scenes.get(sceneClass);
 		if(o == null) throw new GdxRuntimeException("No given scene added.");
@@ -107,7 +131,10 @@ public class SceneManager {
 	 */
 	public void resize(int screenwidth, int screenheight) {
 		if(currentscene == null) throw new GdxRuntimeException("Set scene before call this.");
+		this.screenwidth = screenheight;
+		this.screenheight = screenheight;
 		scenes.get(currentscene).updateViewport(screenwidth, screenheight);
+		scenes.get(currentscene).resize(screenwidth, screenheight);
 	}
 	
 	/**
@@ -119,6 +146,7 @@ public class SceneManager {
 		if(isChanged) {
 			scenes.get(currentscene).updateViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 			scenes.get(currentscene).change();
+			scenes.get(currentscene).resize(screenwidth, screenheight);
 			isChanged = false;
 		}
 		scenes.get(currentscene).update(deltatime);

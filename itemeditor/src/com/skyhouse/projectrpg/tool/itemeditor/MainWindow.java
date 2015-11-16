@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 import com.skyhouse.projectrpg.ProjectRPG;
-import com.skyhouse.projectrpg.data.item.BaseItem.ItemType;
+import com.skyhouse.projectrpg.data.item.BaseItem.ItemBaseType;
 import com.sun.org.apache.xerces.internal.parsers.XMLParser;
 
 public class MainWindow extends JFrame {
@@ -60,7 +60,7 @@ public class MainWindow extends JFrame {
 		for(Element item : items) {
 			ItemData data = new ItemData();
 			data.itemid = Integer.parseInt(item.getChildByName("id").getText());
-			data.type = ItemType.valueOf(item.getChildByName("type").getText().toUpperCase());
+			data.type = ItemBaseType.valueOf(item.getChildByName("type").getText().toUpperCase());
 			data.name = item.getChildByName("name").getText();
 			data.maxstack = Integer.parseInt(item.getChildByName("maxstack").getText());
 			data.requirelevel = Integer.parseInt(item.getChildByName("requirelv").getText());

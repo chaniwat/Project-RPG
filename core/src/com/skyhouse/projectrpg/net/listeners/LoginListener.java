@@ -56,7 +56,12 @@ public class LoginListener {
 				LoginRequest request = (LoginRequest)object;
 				LoginResponse response = new LoginResponse();
 				response.uid = ProjectRPG.server.database.game.getLogin(request.username, request.password);
-				if(ProjectRPG.server.system.playermanagement.isUserLogin(response.uid)) response.uid = -2;
+				if(ProjectRPG.server.system.playermanagement.isUserLogin(response.uid)) {
+					response.uid = -2;
+				} 
+				if(response.uid > 0f){
+					ProjectRPG.server.system.playermanagement.addClientPlayer(connection.getID(), response.uid);
+				}
 				ProjectRPG.server.net.sendToTCP(connection.getID(), response);
 			}
 		}

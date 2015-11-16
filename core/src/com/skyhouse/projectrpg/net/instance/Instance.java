@@ -14,6 +14,7 @@ import com.skyhouse.projectrpg.data.CharacterData;
 import com.skyhouse.projectrpg.data.InputData;
 import com.skyhouse.projectrpg.data.MapData;
 import com.skyhouse.projectrpg.data.StructureData;
+import com.skyhouse.projectrpg.net.packets.DisconnectResponse;
 import com.skyhouse.projectrpg.net.packets.UpdateResponse;
 import com.skyhouse.projectrpg.physics.B2DCharacter;
 import com.skyhouse.projectrpg.physics.B2DStructure;
@@ -31,6 +32,8 @@ public class Instance extends Thread {
 	private HashMap<Integer, InputData> inputDataCollection;
 	
 	private ArrayList<Runnable> postRunnableList;
+	
+	private ArrayList<Integer> disconnectUIDLists;
 	
 	private double accumulator;
     private double currentTime;
@@ -55,6 +58,7 @@ public class Instance extends Thread {
 		characters = new HashMap<Integer, B2DCharacter>();
 		inputDataCollection = new HashMap<Integer, InputData>();
 		postRunnableList = new ArrayList<Runnable>();
+		disconnectUIDLists = new ArrayList<Integer>();
 		
 		world = new World(new Vector2(0, -10f), true);
 		for(Entry<String, StructureData> entry : map.structures.entrySet()) {
@@ -89,8 +93,18 @@ public class Instance extends Thread {
 			for(Entry<Integer, B2DCharacter> character : characters.entrySet()) {
 				update.data.put(character.getKey(), character.getValue().getData());
 			}
-			for(Integer id : characters.keySet()) {
-				ProjectRPG.server.net.sendToUDP(id, update);
+			for(Integer uid : characters.keySet()) {
+				if(ProjectRPG.server.system.playermanagement.containUID(uid) && 
+						ProjectRPG.server.system.playermanagement.getClientCurrentInstance(ProjectRPG.server.system.playermanagement.getConnectionIDOfUID(uid)).equals(getName())) {
+					ProjectRPG.server.net.sendToUDP(ProjectRPG.server.system.playermanagement.getConnectionIDOfUID(uid), update);
+				}
+			}
+			
+			while(!disconnectUIDLists.isEmpty()) {
+				int uid = disconnectUIDLists.remove(0);
+				DisconnectResponse response = new DisconnectResponse();
+				response.uid = uid;
+				ProjectRPG.server.net.sendToAllTCP(response);
 			}
 	        
 	        while(!postRunnableList.isEmpty()) {
@@ -132,6 +146,7 @@ public class Instance extends Thread {
 	 * Remove the given character id.
 	 */
 	public void removeCharacter(final int id) {
+		disconnectUIDLists.add(id);
 		postRunnableList.add(new Runnable() {
 			@Override
 			public void run() {

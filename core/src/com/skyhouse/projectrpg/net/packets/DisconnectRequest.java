@@ -6,6 +6,7 @@ package com.skyhouse.projectrpg.net.packets;
  */
 public class DisconnectRequest {
 	
+	public int uid;
 	public String instance;
 	
 }

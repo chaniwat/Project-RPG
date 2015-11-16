@@ -1,11 +1,11 @@
 package com.skyhouse.projectrpg.tool.itemeditor;
 
-import com.skyhouse.projectrpg.data.item.BaseItem.ItemType;
+import com.skyhouse.projectrpg.data.item.BaseItem.ItemBaseType;
 
 public class ItemData implements Comparable<ItemData> {
 
 	public int itemid;
-	public ItemType type;
+	public ItemBaseType type;
 	public String name;
 	public int maxstack;
 	public int requirelevel;

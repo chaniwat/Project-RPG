@@ -347,7 +347,17 @@ public class PlayerDatabaseUtils extends DatabaseUtils {
 				data.ring = result.getInt("ring");
 			}
 			
-			result.close();
+			statement.close();
+			
+			 sql = "SELECT * FROM game_quickslot WHERE uid = ?";
+			 statement = connection.prepareStatement(sql);
+			 statement.setInt(1, uid);
+			 result = statement.executeQuery();
+			
+			while(result.next()) {
+				data.potion = result.getInt("heal");
+			}
+			
 			statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();

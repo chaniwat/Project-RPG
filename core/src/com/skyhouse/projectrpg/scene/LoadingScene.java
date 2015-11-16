@@ -13,9 +13,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.graphics.viewports.GameplayViewport;
+import com.skyhouse.projectrpg.net.packets.ClientReadyRequest;
 import com.skyhouse.projectrpg.utils.color.HSL;
 
 /**
@@ -25,8 +25,8 @@ import com.skyhouse.projectrpg.utils.color.HSL;
  */
 public class LoadingScene extends Scene {
 
-	private static final float MINLOADINGTIME = 3f;
-	private static final float OVERLAYTIME = 2f;
+	private static final float MINLOADINGTIME = 1;
+	private static final float OVERLAYTIME = 0.4f;
 	private static final float HUEFROM = 0f;
 	private static final float HUETO = 180f;
 	
@@ -40,7 +40,7 @@ public class LoadingScene extends Scene {
 	
 	private ArrayList<String> messageLists;
 	
-	private BitmapFont font = ProjectRPG.client.graphic.font.regular;
+	private BitmapFont font = ProjectRPG.client.graphic.font.uifont;
 	private GlyphLayout layout = ProjectRPG.client.graphic.font.layout;
 	
 	/**
@@ -82,12 +82,8 @@ public class LoadingScene extends Scene {
 			if(accumulatorOverlayTime < OVERLAYTIME) {
 				accumulatorOverlayTime += deltatime;
 			} else {
-				Gdx.app.postRunnable(new Runnable() {
-					@Override
-					public void run() {
-						ProjectRPG.client.scenemanager.setUseScene(GameScene.class);
-					}
-				});
+				ProjectRPG.client.scenemanager.setUseScene(GameScene.class);
+				ProjectRPG.client.network.net.sendTCP(new ClientReadyRequest());
 			}
 		} else if(currentProgress < 0f) {
 			currentProgress = 1f - accumulatorLoadingTime / MINLOADINGTIME;
@@ -108,20 +104,17 @@ public class LoadingScene extends Scene {
 			background.draw(batch);
 		batch.end();
 	
+		// Calculate position and size
+		Vector2 position = new Vector2(screenwidth * 0.05f, screenheight * 0.07f);
+		Rectangle rect = new Rectangle(position.x, position.y, screenwidth - (position.x * 2f), layout.height + 50f);
+
 		ProjectRPG.client.graphic.enableGLAlphaBlend();
 		renderer.begin(ShapeType.Filled);
 			// Message & box
 			renderer.setColor(0, 0, 0, 0.75f);
 			layout.setText(font, "[WHITE]" + messageLists.get(0) + " " + ProjectRPG.client.mapmanager.isMapReady());
-			// Calculate position and size
-			Vector2 position = new Vector2(screenwidth * 0.05f, screenheight * 0.07f);
-			Rectangle rect = new Rectangle(position.x, position.y, screenwidth - (position.x * 2f), layout.height + 50f);
 			// Draw box
 			renderer.rect(rect.x, rect.y, rect.width, rect.height);
-			
-			// Loading progress bar
-			renderer.setColor(progressColor.toRGB());
-			renderer.rect(0, 0, screenwidth * currentProgress, screenheight * 0.011f);
 		renderer.end();
 		ProjectRPG.client.graphic.disableGLAlphaBlend();
 		
@@ -132,6 +125,9 @@ public class LoadingScene extends Scene {
 		
 		ProjectRPG.client.graphic.enableGLAlphaBlend();
 		renderer.begin(ShapeType.Filled);
+			// Loading progress bar
+			renderer.setColor(progressColor.toRGB());
+			renderer.rect(0, 0, screenwidth * currentProgress, screenheight * 0.011f);
 			// Overlay
 			if((accumulatorOverlayTime / OVERLAYTIME) > 0f) {
 				renderer.setColor(0, 0, 0, accumulatorOverlayTime / OVERLAYTIME);

@@ -79,7 +79,7 @@ public class CharacterCreatorScene extends Scene implements DialogGUI {
 		root.add(loginLabel).padBottom(10f);
 		root.row();
 		
-		final VisTextField nameTextInput = new VisTextField("");
+		nameTextInput = new VisTextField("");
 		root.add(nameTextInput);
 		root.row();
 		

@@ -8,6 +8,7 @@ import com.skyhouse.projectrpg.data.InputData;
  */
 public class UpdateRequest {
 
+	public int uid;
 	public InputData input;
 	public String currentInstance;
 	

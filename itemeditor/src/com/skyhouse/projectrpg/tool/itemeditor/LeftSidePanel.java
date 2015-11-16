@@ -15,7 +15,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import com.skyhouse.projectrpg.data.item.BaseItem.ItemType;
+import com.skyhouse.projectrpg.data.item.BaseItem.ItemBaseType;
 
 public class LeftSidePanel extends JPanel {
 	private static final long serialVersionUID = -5456412333616509059L;
@@ -75,7 +75,7 @@ public class LeftSidePanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				ItemData data = new ItemData();
 				data.itemid = 0;
-				data.type = ItemType.POTION;
+				data.type = ItemBaseType.POTION;
 				data.name = "_NewItem";
 				data.maxstack = 1;
 				data.requirelevel = 0;

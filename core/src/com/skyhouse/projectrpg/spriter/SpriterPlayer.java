@@ -18,7 +18,7 @@ public class SpriterPlayer extends PlayerTweener {
 	private static SpriteBatch batch;
 	private static ShapeRenderer renderer;
 	
-	private String newanimation = "";
+	private String newanimation = "idle";
 	private SpriterDrawer drawer;
 	
 	/**
@@ -34,6 +34,8 @@ public class SpriterPlayer extends PlayerTweener {
 		SpriterLoader loader = new SpriterLoader(data);
 		loader.load(handle.file());
 		drawer = new SpriterDrawer(loader, batch , renderer);
+		getFirstPlayer().setAnimation("idle");
+		getSecondPlayer().setAnimation("idle");
 		setWeight(0.0f);
 	}
 	

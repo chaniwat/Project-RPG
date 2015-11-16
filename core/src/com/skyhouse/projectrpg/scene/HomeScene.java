@@ -58,7 +58,7 @@ public class HomeScene extends Scene implements DialogGUI {
 		guicontainer = new GUILoginContainer(getViewport(ScreenViewport.class), batch);
 		ProjectRPG.client.inputmanager.addInputProcessor(guicontainer);
 
-		font = ProjectRPG.client.graphic.font.regular;
+		font = ProjectRPG.client.graphic.font.uifont;
 		layout = new GlyphLayout();
 		
 		accumulatorOverlayTime = MINOVERLAYTIME;
@@ -139,6 +139,9 @@ public class HomeScene extends Scene implements DialogGUI {
 			isFirstChange = false;
 		}
 		ProjectRPG.client.inputmanager.setInputProcessor(GUILoginContainer.class);
+		
+		// Debug
+		doLogin("tester", "tester001");
 	}
 
 	@Override

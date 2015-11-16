@@ -7,7 +7,7 @@ public class ActorData extends Data {
 	 * @author Meranote
 	 */
 	public static enum ActionState {
-		IDLE, WALK, JUMP, FALL, ACTION, DEATH
+		IDLE, WALK, DASH, JUMP, FALL, ATTACK1, ATTACK2, SKILL1, SKILL2, DEATH, CLUMB
 	}
 	
 }

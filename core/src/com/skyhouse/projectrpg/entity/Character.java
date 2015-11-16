@@ -7,6 +7,7 @@ import com.skyhouse.projectrpg.data.CharacterData;
 import com.skyhouse.projectrpg.data.InputData;
 import com.skyhouse.projectrpg.physics.B2DCharacter;
 import com.skyhouse.projectrpg.spriter.SpriterPlayer;
+import com.skyhouse.projectrpg.utils.JobType;
 
 /**
  * Character class. Contain a sprtier and physic body.
@@ -16,18 +17,24 @@ public class Character extends Actor {
 	
 	private CharacterData data;
 	private B2DCharacter body;
+	public B2DCharacter getBody() {
+		return body;
+	}
+
 	private SpriterPlayer player;
 	private InputData inputData;
 	private boolean isControlled = false;
 	private boolean flipflag = false;
+	
+	private JobType job;
 	
 	/**
 	 * Construct a new {@link Character} that not control by player.
 	 * @param spriter
 	 * @param data
 	 */
-	public Character(SpriterPlayer spriter, CharacterData data) {
-		this(false, null, spriter, data);
+	public Character(CharacterData data) {
+		this(false, null, data);
 	}
 	
 	/**
@@ -36,8 +43,8 @@ public class Character extends Actor {
 	 * @param player
 	 * @param data
 	 */
-	public Character(World world, SpriterPlayer player, CharacterData data) {
-		this(true, world, player, data);
+	public Character(World world, CharacterData data) {
+		this(true, world, data);
 	}
 	
 	/**
@@ -47,12 +54,12 @@ public class Character extends Actor {
 	 * @param player
 	 * @param data
 	 */
-	protected Character(boolean isControlled, World world, SpriterPlayer player, CharacterData data) {
+	protected Character(boolean isControlled, World world, CharacterData data) {
 		inputData = new InputData();
 		this.isControlled = isControlled;
 		this.data = data;
-		this.player = player;
-		this.player.setScale(2.7f / player.getBoundingRectangle(null).size.height);
+		this.player = new SpriterPlayer("entity/character/character.scml");
+		this.player.setScale(2.5f / player.getBoundingRectangle(null).size.height);
 		
 		if(isControlled) body = new B2DCharacter(world, data);
 	}
@@ -74,6 +81,8 @@ public class Character extends Actor {
 			case FALL:
 				player.setNewAnimation("fall");
 				break;
+			case DASH:
+				player.setNewAnimation("dash");
 			default:
 				break;
 		}
@@ -96,7 +105,7 @@ public class Character extends Actor {
 	 * Update this character by using given {@link CharacterData}.
 	 */
 	public void updateCharacterByData(CharacterData data) {
-		setPostion(data.x, data.y);
+		setPosition(data.x, data.y);
 		setFlipX(data.flipX);
 		setState(data.state);
 	}
@@ -112,7 +121,7 @@ public class Character extends Actor {
 	/**
 	 * Set the world position of this character.
 	 */
-	public void setPostion(float x, float y) {
+	public void setPosition(float x, float y) {
 		this.data.x = x;
 		this.data.y = y;
 	}
@@ -132,11 +141,35 @@ public class Character extends Actor {
 	}
 	
 	/**
+	 * Set scale of this character.
+	 * @param scale
+	 */
+	public void setScale(float scale) {
+		player.setScale(scale);
+	}
+	
+	/**
 	 * Get data of this character.
 	 * @return {@link CharacterData}
 	 */
 	public CharacterData getData() {
 		return data;
+	}
+	
+	/**
+	 * Get Spriter player.
+	 * @return
+	 */
+	public SpriterPlayer getSpriterPlayer() {
+		return player;
+	}
+
+	public JobType getJob() {
+		return job;
+	}
+
+	public void setJob(JobType job) {
+		this.job = job;
 	}
 
 	@Override

@@ -78,6 +78,10 @@ public abstract class Scene {
 	
 	/** Call every time when scene is changed to. Call before {@link #update(float)} and {@link #draw(float)}. */
 	public abstract void change();
+	/** Call when resize application. */
+	public void resize(float width, float height) {
+		
+	}
 	/** Update scene. */
 	public abstract void update(float deltatime);
 	/** Update scene with fixed time. */

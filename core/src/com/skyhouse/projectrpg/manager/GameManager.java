@@ -7,8 +7,11 @@ import com.skyhouse.projectrpg.data.InputData;
 import com.skyhouse.projectrpg.entity.Character;
 import com.skyhouse.projectrpg.input.listener.GameplayControllerListener;
 import com.skyhouse.projectrpg.input.listener.GameplayInputListener;
+import com.skyhouse.projectrpg.input.listener.MenuControllerListener;
+import com.skyhouse.projectrpg.input.listener.MenuInputListener;
 import com.skyhouse.projectrpg.map.Map;
 import com.skyhouse.projectrpg.net.packets.UpdateRequest;
+import com.skyhouse.projectrpg.scene.GameScene;
 
 /**
  * Manage and control the game state and logic.
@@ -33,6 +36,8 @@ public class GameManager extends Manager {
     	world = new World(new Vector2(0, -10f), true);
     	ProjectRPG.client.inputmanager.addInputProcessor(new GameplayInputListener(inputData));
     	ProjectRPG.client.inputmanager.addControllerProcessor(new GameplayControllerListener(inputData));
+    	ProjectRPG.client.inputmanager.addInputProcessor(new MenuInputListener());
+    	ProjectRPG.client.inputmanager.addControllerProcessor(new MenuControllerListener());
     }
     
 	@Override
@@ -45,11 +50,12 @@ public class GameManager extends Manager {
 				/** Update input data to simulate physics */
 				getPlayerCharacter().updateCharacterByInputData(inputData);
 				
-//				/** Send update request to current instance */
-//				UpdateRequest request = new UpdateRequest();
-//				request.input = inputData;
-//				request.currentInstance = currentInstance;
-//				ProjectRPG.client.network.net.sendUDP(request);
+				// TODO Send update request to current instance
+				UpdateRequest request = new UpdateRequest();
+				request.uid = uid;
+				request.input = inputData;
+				request.currentInstance = currentInstance;
+				ProjectRPG.client.network.net.sendUDP(request);
 			}
 		}
 	}
@@ -138,12 +144,20 @@ public class GameManager extends Manager {
 		this.uid = uid;
 	}
 	
+	public InputData getInputData() {
+		return inputData;
+	}
+	
 	/**
 	 * Check the game asset was ready.
 	 * @return
 	 */
 	public boolean isGameReady() {
 		return entitymanager.isEntityReady() && mapmanager.isMapReady();
+	}
+	
+	public void changeToMenuScene() {
+		ProjectRPG.client.scenemanager.getScene(GameScene.class).changeToMenuScene();
 	}
 	
 }

@@ -2,8 +2,9 @@ package com.skyhouse.projectrpg.input.listener;
 
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerAdapter;
-import com.badlogic.gdx.controllers.PovDirection;
+import com.skyhouse.projectrpg.ProjectRPG;
 import com.skyhouse.projectrpg.data.InputData;
+import com.skyhouse.projectrpg.input.InputMapper;
 
 /**
  * Gameplay controller listener.
@@ -11,15 +12,6 @@ import com.skyhouse.projectrpg.data.InputData;
  */
 public class GameplayControllerListener extends ControllerAdapter {
 
-	/**
-	 * Default button.
-	 * axisIndex : left-axis : 3
-	 * axisIndex : right-axis : _
-	 * button : heal : 0
-	 * button : jump : 2
-	 * button : skillA : 7
-	 * button : skillB : 6
-	 */
 	
 	private InputData inputData;
 	
@@ -32,68 +24,116 @@ public class GameplayControllerListener extends ControllerAdapter {
 	}
 	
 	@Override
-	public boolean buttonDown(Controller controller, int buttonIndex) {
+	public boolean buttonUp(Controller controller, int buttonIndex) {
 		switch(buttonIndex) {
-			/*case 0:
-				inputData.healPressed = true;
-				break;*/
-			case 2:
-				inputData.jumpPressed = true;
+			case InputMapper.controller.R1:
+				inputData.atkA = false;
 				break;
-			/*case 6:
-				inputData.skillBPressed = true;
+			case InputMapper.controller.L1:
+				inputData.atkB = false;
 				break;
-			case 7:
-				inputData.skillAPressed = true;
-				break;*/
+			case InputMapper.controller.R2:
+				inputData.skillA = false;
+				break;
+			case InputMapper.controller.L2:
+				inputData.skillB = false;
+				break;
+			case InputMapper.controller.B:
+				inputData.action = false;
+				break;
+			case InputMapper.controller.Y:
+				inputData.heal = false;
+				break;
+			case InputMapper.controller.A:
+				inputData.jump = false;
+				break;
+			case InputMapper.controller.X:
+				inputData.dash = false;
+				break;
 		}
 		return false;
 	}
 	
 	@Override
-	public boolean buttonUp(Controller controller, int buttonIndex) {
+	public boolean buttonDown(Controller controller, int buttonIndex) {
 		switch(buttonIndex) {
-			/*case 0:
-				inputData.healPressed = false;
-				break;*/
-			case 2:
-				inputData.jumpPressed = false;
+			case InputMapper.controller.R1:
+				inputData.atkA = true;
 				break;
-			/*case 6:
-				inputData.skillBPressed = false;
+			case InputMapper.controller.L1:
+				inputData.atkB = true;
 				break;
-			case 7:
-				inputData.skillAPressed = false;
-				break;*/
+			case InputMapper.controller.R2:
+				inputData.skillA = true;
+				break;
+			case InputMapper.controller.L2:
+				inputData.skillB = true;
+				break;
+			case InputMapper.controller.B:
+				inputData.action = true;
+				break;
+			case InputMapper.controller.Y:
+				inputData.heal = true;
+				break;
+			case InputMapper.controller.START:
+				ProjectRPG.client.gamemanager.changeToMenuScene();
+				break;
+			case InputMapper.controller.A:
+				inputData.jump = true;
+				break;
+			case InputMapper.controller.X:
+				inputData.dash = true;
+				break;
 		}
 		return false;
 	}
 	
 	@Override
 	public boolean axisMoved(Controller controller, int axisIndex, float value) {
+		float cValue = (float) Math.pow(value, 2);
 		switch(axisIndex) {
-			case 3:
-				if(value > 0.01) {
-					inputData.leftPressed = false;
-					inputData.rightPressed = true;
-					inputData.xAxisValue = value;
-				} else if(value < -0.01) {
-					inputData.leftPressed = true;
-					inputData.rightPressed = false;
-					inputData.xAxisValue = (float) Math.pow(value, 2);
+			case InputMapper.controller.LEFTXAXIS:
+				if(cValue > 0.01) {
+					if(value > 0) {
+						inputData.left = false;
+						inputData.right = true;
+					} else if(value < 0) {
+						inputData.left = true;
+						inputData.right = false;
+					}
+					if(InputMapper.controller.INVERTLEFTXAXIS) {
+						inputData.left = !inputData.left;
+						inputData.right = !inputData.right;
+					}
+					inputData.xAxisValue = cValue;
 				} else {
-					inputData.rightPressed = false;
-					inputData.leftPressed = false;
-					inputData.xAxisValue = 0;
+					inputData.right = false;
+					inputData.left = false;
+					inputData.xAxisValue = 0f;
 				}
+				break;
+			case InputMapper.controller.LEFTYAXIS:
+				if(cValue > 0.01) {
+					if(value > 0) {
+						inputData.up = false;
+						inputData.down = true;
+					} else if(value < 0) {
+						inputData.up = true;
+						inputData.down = false;
+					}
+					if(InputMapper.controller.INVERTLEFTYAXIS) {
+						inputData.up = !inputData.up;
+						inputData.down = !inputData.down;
+					}
+					inputData.yAxisValue = cValue;
+				} else {
+					inputData.up = false;
+					inputData.down = false;
+					inputData.yAxisValue = 0f;
+				}
+				break;
 		}
 		return false;
-	}
-	
-	@Override
-	public boolean povMoved(Controller controller, int povIndex, PovDirection value) {
-		//Gdx.app.log(ProjectRPG.TITLE, "Controller:" + controller.getName() + " | POV: " + povIndex + " | value: " + value);
-		return true;
 	}
 	
 }
